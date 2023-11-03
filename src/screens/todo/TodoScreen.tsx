@@ -1,15 +1,15 @@
 import React, { FC } from "react";
-import { BottomTabScreenProps, MainStackParamList } from "@/navigators";
-import { RecipeItem, Screen, TodoItem } from "@/components";
-import { ScrollView, TouchableOpacity, RefreshControl } from "react-native";
+import { ScrollView, RefreshControl } from "react-native";
 import styled from "styled-components/native";
-import { theme } from "@/theme";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
+import { Screen, TodoItem } from "@/components";
+import { theme } from "@/theme";
 import { useTodoStore } from "@/stores";
 
 type ScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<"Todo">,
+  HomeTabScreenProps<"Todo">,
   NativeStackScreenProps<MainStackParamList>
 >;
 
@@ -29,16 +29,15 @@ const Container = styled.View`
 `;
 
 export const TodoScreen: FC<ScreenProps> = (props) => {
-  const { navigation } = props;
   const todos = useTodoStore((s) => s.todos);
-  const fetchStorages = useTodoStore((s) => s.fetchTodos);
+  const fetchTodos = useTodoStore((s) => s.fetchTodos);
   const fetching = useTodoStore((s) => s.fetching);
 
   return (
     <Screen>
       <ScrollView
         refreshControl={
-          <RefreshControl onRefresh={fetchStorages} refreshing={fetching} />
+          <RefreshControl onRefresh={fetchTodos} refreshing={fetching} />
         }
       >
         <Container onStartShouldSetResponder={() => true}>

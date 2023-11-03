@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { BottomTabScreenProps, MainStackParamList } from "@/navigators";
+import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
 import { RecipeItem, Screen } from "@/components";
 import { ScrollView, TouchableOpacity, RefreshControl } from "react-native";
 import styled from "styled-components/native";
@@ -9,7 +9,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useStorageStore } from "@/stores";
 
 type ScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<"Storage">,
+  HomeTabScreenProps<"Storage">,
   NativeStackScreenProps<MainStackParamList>
 >;
 

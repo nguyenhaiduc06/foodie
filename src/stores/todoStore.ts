@@ -6,6 +6,7 @@ interface TodoStoreState {
   todos: Todo[];
   date: Date;
   fetching: boolean;
+  initTodoStore: () => void;
   fetchTodos: () => void;
   addTodo: (name: string, amount: number) => void;
   updateTodo: (
@@ -24,6 +25,13 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
   todos: [],
   date: new Date(),
   fetching: false,
+  initTodoStore: async () => {
+    useUserStore.subscribe((s) => {
+      if (s.user?.id) {
+        get().fetchTodos();
+      }
+    });
+  },
   fetchTodos: async () => {
     set({ fetching: true });
 

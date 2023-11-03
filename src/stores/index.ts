@@ -1,4 +1,5 @@
-export * from "./todoStore";
 export * from "./userStore";
-export * from "./recipeStore";
+export * from "./todoStore";
+export * from "./dishStore";
 export * from "./storageStore";
+export * from "./recipeStore";

@@ -1,8 +1,13 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import type {
-  BottomTabNavigationProp,
-  BottomTabScreenProps as RNBottomTabScreenProps,
+import {
+  createBottomTabNavigator,
+  type BottomTabScreenProps,
 } from "@react-navigation/bottom-tabs";
+import {
+  Archive,
+  BookOpenText,
+  ClipboardList,
+  User,
+} from "lucide-react-native";
 import {
   DishesScreen,
   ProfileScreen,
@@ -10,14 +15,8 @@ import {
   StorageScreen,
   TodoScreen,
 } from "@/screens";
-import {
-  Archive,
-  BookOpenText,
-  ClipboardList,
-  User,
-} from "lucide-react-native";
 
-export type BottomTabParamList = {
+export type HomeTabParamList = {
   Todo: undefined;
   Dishes: undefined;
   Storage: undefined;
@@ -25,13 +24,10 @@ export type BottomTabParamList = {
   Profile: undefined;
 };
 
-export type BottomTabNavigatorProp =
-  BottomTabNavigationProp<BottomTabParamList>;
+export type HomeTabScreenProps<T extends keyof HomeTabParamList> =
+  BottomTabScreenProps<HomeTabParamList, T>;
 
-export type BottomTabScreenProps<T extends keyof BottomTabParamList> =
-  RNBottomTabScreenProps<BottomTabParamList, T>;
-
-const Home = createBottomTabNavigator<BottomTabParamList>();
+const Home = createBottomTabNavigator<HomeTabParamList>();
 
 export const HomeTab = () => {
   return (

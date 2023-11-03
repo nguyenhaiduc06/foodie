@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { BottomTabScreenProps, MainStackParamList } from "@/navigators";
+import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
 import { RecipeItem, Screen } from "@/components";
 import {
   StyleSheet,
@@ -14,7 +14,7 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type ScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<"Recipes">,
+  HomeTabScreenProps<"Recipes">,
   NativeStackScreenProps<MainStackParamList>
 >;
 
