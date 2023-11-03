@@ -1,11 +1,11 @@
 import React, { FC } from "react";
-import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { RecipeItem, Screen } from "@/components";
 import { ScrollView, TouchableOpacity, RefreshControl } from "react-native";
 import styled from "styled-components/native";
-import { theme } from "@/theme";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
+import { Screen, RecipeItem } from "@/components";
+import { theme } from "@/theme";
 import { useStorageStore } from "@/stores";
 
 type ScreenProps = CompositeScreenProps<
@@ -47,11 +47,11 @@ export const StorageScreen: FC<ScreenProps> = (props) => {
       >
         <Container onStartShouldSetResponder={() => true}>
           <Section>
-            {storages.map((recipe, index) => (
-              <React.Fragment key={recipe.id}>
+            {storages.map((storage, index) => (
+              <React.Fragment key={storage.id}>
                 {index != 0 && <Divider />}
-                <TouchableOpacity onPress={() => viewStorageDetails(recipe)}>
-                  <RecipeItem recipe={recipe} />
+                <TouchableOpacity onPress={() => viewStorageDetails(storage)}>
+                  <RecipeItem recipe={storage} />
                 </TouchableOpacity>
               </React.Fragment>
             ))}

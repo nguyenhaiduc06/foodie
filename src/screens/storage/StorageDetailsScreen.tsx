@@ -1,8 +1,8 @@
-import { Screen, Text, Space } from "@/components";
-import { MainStackScreenProps } from "@/navigators";
-import { theme } from "@/theme";
 import { FC, useEffect } from "react";
 import styled from "styled-components/native";
+import { MainStackScreenProps } from "@/navigators";
+import { Screen, Text, Space } from "@/components";
+import { theme } from "@/theme";
 
 type ScreenProps = MainStackScreenProps<"StorageDetails">;
 
@@ -30,9 +30,9 @@ export const StorageDetailsScreen: FC<ScreenProps> = (props) => {
       <Container>
         <CoverImage />
         <Space height={8} />
-        <Text preset="title">Recipe name</Text>
+        <Text preset="title">Storage title</Text>
         <Space height={16} />
-        <Text>Recipe name</Text>
+        <Text>Storage content</Text>
       </Container>
     </Screen>
   );
