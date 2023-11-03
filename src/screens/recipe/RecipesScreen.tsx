@@ -1,17 +1,12 @@
 import React, { FC } from "react";
-import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { RecipeItem, Screen } from "@/components";
-import {
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  RefreshControl,
-} from "react-native";
-import { useRecipeStore } from "@/stores/recipeStore";
+import { ScrollView, TouchableOpacity, RefreshControl } from "react-native";
 import styled from "styled-components/native";
-import { theme } from "@/theme";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
+import { Screen, RecipeItem } from "@/components";
+import { theme } from "@/theme";
+import { useRecipeStore } from "@/stores";
 
 type ScreenProps = CompositeScreenProps<
   HomeTabScreenProps<"Recipes">,

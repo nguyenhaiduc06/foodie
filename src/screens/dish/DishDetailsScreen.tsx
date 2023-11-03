@@ -1,22 +1,15 @@
-import React, { FC } from "react";
-import { ScrollView, TouchableOpacity, RefreshControl } from "react-native";
+import { FC, useEffect } from "react";
 import styled from "styled-components/native";
 import { MainStackScreenProps } from "@/navigators";
-import { DishItem, Screen } from "@/components";
+import { Screen, Text, Space } from "@/components";
 import { theme } from "@/theme";
-import { useDishStore } from "@/stores";
 
 type ScreenProps = MainStackScreenProps<"DishDetails">;
 
-const Section = styled.View`
-  background-color: white;
+const CoverImage = styled.Image`
+  height: 200px;
   border-radius: 16px;
-`;
-
-const Divider = styled.View`
-  height: 1px;
-  background-color: ${theme.colors.border};
-  width: 100%;
+  background-color: ${theme.colors.foreground};
 `;
 
 const Container = styled.View`
@@ -25,33 +18,22 @@ const Container = styled.View`
 
 export const DishDetailsScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
-  const dishes = useDishStore((s) => s.dishes);
-  const fetchDishes = useDishStore((s) => s.fetchDishes);
-  const fetching = useDishStore((s) => s.fetching);
 
-  const viewDishDetails = (dish) => {
-    navigation.navigate("DishDetails");
-  };
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <Text>Edit</Text>,
+    });
+  }, [navigation]);
+
   return (
     <Screen>
-      <ScrollView
-        refreshControl={
-          <RefreshControl onRefresh={fetchDishes} refreshing={fetching} />
-        }
-      >
-        <Container onStartShouldSetResponder={() => true}>
-          <Section>
-            {dishes.map((dish, index) => (
-              <React.Fragment key={dish.id}>
-                {index != 0 && <Divider />}
-                <TouchableOpacity onPress={() => viewDishDetails(dish)}>
-                  <DishItem dish={dish} />
-                </TouchableOpacity>
-              </React.Fragment>
-            ))}
-          </Section>
-        </Container>
-      </ScrollView>
+      <Container>
+        <CoverImage />
+        <Space height={8} />
+        <Text preset="title">Dish title</Text>
+        <Space height={16} />
+        <Text>Dish content</Text>
+      </Container>
     </Screen>
   );
 };
