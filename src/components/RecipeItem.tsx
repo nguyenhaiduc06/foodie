@@ -9,10 +9,11 @@ const Container = styled.View`
   padding: 0 16px;
 `;
 
-export const RecipeItem = () => {
+export const RecipeItem = (props) => {
+  const { recipe } = props;
   return (
     <Container>
-      <Text preset="title">Cơm rang thập cẩm</Text>
+      <Text preset="title">{recipe.name}</Text>
     </Container>
   );
 };

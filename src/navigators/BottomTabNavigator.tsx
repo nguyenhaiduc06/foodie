@@ -1,15 +1,20 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs/lib/typescript/src/types";
+import {
+  BottomTabNavigationProp,
+  BottomTabScreenProps as RNBottomTabScreenProps,
+} from "@react-navigation/bottom-tabs/lib/typescript/src/types";
 import {
   DishesScreen,
+  HomeScreen,
   ProfileScreen,
   RecipesScreen,
   StorageScreen,
   TodoScreen,
 } from "@/screens";
+import { Plus } from "lucide-react-native";
 
 export type BottomTabParamList = {
-  Todo: undefined;
+  Home: undefined;
   Dishes: undefined;
   Storage: undefined;
   Recipes: undefined;
@@ -19,21 +24,29 @@ export type BottomTabParamList = {
 export type BottomTabNavigatorProp =
   BottomTabNavigationProp<BottomTabParamList>;
 
+export type BottomTabScreenProps<T extends keyof BottomTabParamList> =
+  RNBottomTabScreenProps<BottomTabParamList, T>;
+
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator>
       <BottomTab.Screen
-        name="Todo"
-        component={TodoScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
           headerShown: false,
         }}
       />
-      <BottomTab.Screen name="Dishes" component={DishesScreen} />
       <BottomTab.Screen name="Storage" component={StorageScreen} />
-      <BottomTab.Screen name="Recipes" component={RecipesScreen} />
+      <BottomTab.Screen
+        name="Recipes"
+        component={RecipesScreen}
+        options={{
+          headerRight: () => <Plus />,
+        }}
+      />
       <BottomTab.Screen name="Profile" component={ProfileScreen} />
     </BottomTab.Navigator>
   );

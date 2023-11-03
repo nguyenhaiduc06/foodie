@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { useUserStore } from "./userStore";
+import { useRecipeStore } from "./recipeStore";
 
 interface AppStoreState {
   initializing: boolean;
@@ -9,9 +10,8 @@ interface AppStoreState {
 export const useAppStore = create<AppStoreState>()((set) => ({
   initializing: true,
   initStores: async () => {
-    console.log("before init");
     await useUserStore.getState().initUserStore();
-    console.log("after init");
     set({ initializing: false });
+    useRecipeStore.getState().initRecipeStore();
   },
 }));

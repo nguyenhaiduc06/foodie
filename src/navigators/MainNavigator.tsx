@@ -1,9 +1,15 @@
 import {
   NativeStackNavigationProp,
+  NativeStackScreenProps,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import { BottomTabNavigator } from "./BottomTabNavigator";
-import { AddTodoScreen, ManageGroupScreen, SelectGroupScreen } from "@/screens";
+import {
+  AddTodoScreen,
+  ManageGroupScreen,
+  RecipeDetailsScreen,
+  SelectGroupScreen,
+} from "@/screens";
 import { useUserStore } from "@/stores";
 import { useEffect } from "react";
 import { AuthenticateStack } from "./AuthenticateStack";
@@ -12,10 +18,14 @@ export type MainStackParamList = {
   AuthenticateStack: undefined;
   BottomTab: undefined;
   AddTodo: undefined;
+  RecipeDetails: undefined;
 };
 
 export type MainStackNavigatorProp =
   NativeStackNavigationProp<MainStackParamList>;
+
+export type MainStackScreenProps<T extends keyof MainStackParamList> =
+  NativeStackScreenProps<MainStackParamList, T>;
 
 const Main = createNativeStackNavigator<MainStackParamList>();
 
@@ -74,6 +84,7 @@ export const MainNavigator = () => {
               presentation: "modal",
             }}
           />
+          <Main.Screen name="RecipeDetails" component={RecipeDetailsScreen} />
         </>
       )}
     </Main.Navigator>

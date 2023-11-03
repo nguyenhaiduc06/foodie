@@ -7,7 +7,7 @@ import {
   Space,
   Text,
   TodoItem,
-} from "../components";
+} from "@/components";
 import {
   StyleSheet,
   ScrollView,
@@ -17,8 +17,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { styled } from "styled-components/native";
-import { useTodoStore } from "../stores";
-import { theme } from "../theme";
+import { useTodoStore } from "@/stores";
+import { theme } from "@/theme";
 import {
   ChevronLeft,
   ChevronRight,
@@ -29,23 +29,9 @@ import {
 import { Calendar } from "react-native-calendars";
 import PagerView from "react-native-pager-view";
 import { boolean } from "yargs";
-
-const Divider = styled.View`
-  height: 1px;
-  background-color: ${theme.colors.border};
-  width: 100%;
-`;
-
-const DateContainer = styled.View`
-  height: 40px;
-  padding: 0 8px;
-  gap: 4px;
-  border-radius: 50%;
-  background-color: ${theme.colors.foreground};
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`;
+import { ListTodos } from "./ListTodos";
+import { DateSelector } from "./DateSelector";
+import { ListDishes } from "./ListDishes";
 
 const Row = styled.View`
   flex-direction: row;
@@ -53,7 +39,7 @@ const Row = styled.View`
   padding: 0px 16px;
 `;
 
-const PagerTab = styled.View<{ focused: boolean }>`
+const PagerTab = styled.View<{ focused?: boolean }>`
   flex: 1;
   border-bottom-width: 2px;
   border-block-color: ${(p) => (p.focused ? "black" : "transparent")};
@@ -77,21 +63,9 @@ const PlusButton = styled.TouchableOpacity`
   border: 1px solid rgba(255, 255, 255, 0.5);
 `;
 
-export const TodoScreen = (props) => {
-  const [selected, setSelected] = useState("");
-  const [showModal, setShowDateModal] = useState(false);
-  const selectDateModal = useRef(null);
+export const HomeScreen = (props) => {
   const { navigation } = props;
-  const todos = useTodoStore((state) => state.todos);
   const date = useTodoStore((state) => state.date);
-  console.log(date.toDateString());
-
-  const fetchTodos = useTodoStore((state) => state.fetchTodos);
-  const setDate = useTodoStore((state) => state.setDate);
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
 
   const addTodo = () => {
     navigation.navigate("AddTodo");
@@ -113,18 +87,9 @@ export const TodoScreen = (props) => {
 
       <Space height={16} />
 
-      {/* <Row>
-        <Space />
-        <DateContainer>
-          <ChevronLeft />
-          <TouchableOpacity onPress={() => setShowDateModal(true)}>
-            <Text>{date.toDateString()}</Text>
-          </TouchableOpacity>
-          <ChevronRight />
-        </DateContainer>
-      </Row>
+      <DateSelector />
 
-      <Space height={16} /> */}
+      <Space height={16} />
 
       <Row>
         <PagerTab focused>
@@ -138,53 +103,15 @@ export const TodoScreen = (props) => {
       <Space height={16} />
 
       <PagerView style={styles.viewPager} initialPage={0}>
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.scrollViewContainer}>
-            <View style={styles.todosContainer}>
-              {todos.map((todo, index) => (
-                <>
-                  {index != 0 && <Divider />}
-                  <TodoItem key={todo.id} todo={todo} />
-                </>
-              ))}
-            </View>
-          </View>
-        </ScrollView>
-        <View style={styles.page} key="2">
-          <Text>Second page</Text>
-        </View>
+        <ListTodos />
+
+        <ListDishes />
       </PagerView>
 
       <PlusButton onPress={addTodo}>
         <Text color={theme.colors.textInverted}>Add</Text>
         <Plus color={theme.colors.textInverted} size={20} />
       </PlusButton>
-
-      <Modal visible={showModal} transparent={true} animationType="fade">
-        <TouchableWithoutFeedback onPress={() => setShowDateModal(false)}>
-          <View style={styles.modalContainer}>
-            <Space height={200} />
-            <Calendar
-              onDayPress={(day) => {
-                setDate(day.timestamp);
-                setShowDateModal(false);
-              }}
-              style={{
-                padding: 8,
-                borderRadius: 16,
-              }}
-              current={date.toString()}
-              theme={{
-                arrowColor: theme.colors.primary,
-                textSectionTitleColor: theme.colors.primary,
-                todayTextColor: theme.colors.primary,
-                dayTextColor: theme.colors.text,
-                textDisabledColor: theme.colors.textDim,
-              }}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
     </Screen>
   );
 };

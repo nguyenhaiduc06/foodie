@@ -1,13 +1,16 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { FC } from "react";
+import { Image, StyleSheet, View } from "react-native";
+import { Text } from "./Text";
+import { Space } from "./Space";
 
-export const DishItem = () => {
+type DishItemProps = {};
+
+export const DishItem: FC<DishItemProps> = (props) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <Image source={{ uri: "" }} style={styles.icon} />
-      <View>
-        <Text style={styles.title}>Trứng</Text>
-        <Text style={styles.subtitle}>12 quả</Text>
-      </View>
+      <Text preset="title">Món ăn</Text>
+      <Space />
     </View>
   );
 };
@@ -25,19 +28,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: "black",
+    alignItems: "center",
+    justifyContent: "center",
   },
   icon: {
     width: 40,
     height: 40,
     borderRadius: 999,
     backgroundColor: "black",
-    opacity: 0.1,
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: "600",
-  },
-  subtitle: {
-    fontSize: 15,
+    opacity: 0.05,
   },
 });
