@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { MainNavigator } from "./src/navigators";
+import { MainStack } from "./src/navigators";
 import {
   useFonts,
   Inter_600SemiBold,
@@ -40,7 +40,7 @@ export default function App() {
   return (
     <NavigationContainer theme={theme}>
       <StatusBar style="auto" />
-      <MainNavigator />
+      <MainStack />
     </NavigationContainer>
   );
 }

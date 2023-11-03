@@ -4,6 +4,8 @@ import { theme } from "@/theme";
 import { FC, useEffect } from "react";
 import styled from "styled-components/native";
 
+type ScreenProps = MainStackScreenProps<"RecipeDetails">;
+
 const CoverImage = styled.Image`
   height: 200px;
   border-radius: 16px;
@@ -14,9 +16,7 @@ const Container = styled.View`
   padding: 16px;
 `;
 
-export const RecipeDetailsScreen: FC<MainStackScreenProps<"RecipeDetails">> = (
-  props
-) => {
+export const RecipeDetailsScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
 
   useEffect(() => {

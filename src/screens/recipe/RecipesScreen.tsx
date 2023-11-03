@@ -1,17 +1,22 @@
-import { FC, useState } from "react";
-import { BottomTabNavigatorProp, BottomTabScreenProps } from "@/navigators";
+import React, { FC } from "react";
+import { BottomTabScreenProps, MainStackParamList } from "@/navigators";
 import { RecipeItem, Screen } from "@/components";
 import {
   StyleSheet,
   ScrollView,
-  View,
   TouchableOpacity,
-  Text,
   RefreshControl,
 } from "react-native";
 import { useRecipeStore } from "@/stores/recipeStore";
 import styled from "styled-components/native";
 import { theme } from "@/theme";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+type ScreenProps = CompositeScreenProps<
+  BottomTabScreenProps<"Recipes">,
+  NativeStackScreenProps<MainStackParamList>
+>;
 
 const Section = styled.View`
   background-color: white;
@@ -28,7 +33,7 @@ const Container = styled.View`
   padding: 16px;
 `;
 
-export const RecipesScreen: FC<BottomTabScreenProps<"Recipes">> = (props) => {
+export const RecipesScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
   const recipes = useRecipeStore((s) => s.recipes);
   const fetchRecipes = useRecipeStore((s) => s.fetchRecipes);
@@ -47,12 +52,12 @@ export const RecipesScreen: FC<BottomTabScreenProps<"Recipes">> = (props) => {
         <Container onStartShouldSetResponder={() => true}>
           <Section>
             {recipes.map((recipe, index) => (
-              <>
+              <React.Fragment key={recipe.id}>
                 {index != 0 && <Divider />}
                 <TouchableOpacity onPress={() => viewRecipeDetails(recipe)}>
-                  <RecipeItem key={recipe.id} recipe={recipe} />
+                  <RecipeItem recipe={recipe} />
                 </TouchableOpacity>
-              </>
+              </React.Fragment>
             ))}
           </Section>
         </Container>
@@ -60,27 +65,3 @@ export const RecipesScreen: FC<BottomTabScreenProps<"Recipes">> = (props) => {
     </Screen>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  todosContainer: {
-    backgroundColor: "white",
-    borderRadius: 16,
-    margin: 16,
-  },
-  button: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    margin: 16,
-    backgroundColor: "blue",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 999,
-  },
-});

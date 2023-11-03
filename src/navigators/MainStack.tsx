@@ -1,9 +1,8 @@
+import { useEffect } from "react";
 import {
-  NativeStackNavigationProp,
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
-import { BottomTabNavigator } from "./BottomTabNavigator";
 import {
   AddTodoScreen,
   ManageGroupScreen,
@@ -11,25 +10,26 @@ import {
   SelectGroupScreen,
 } from "@/screens";
 import { useUserStore } from "@/stores";
-import { useEffect } from "react";
+import { HomeTab } from "./HomeTab";
 import { AuthenticateStack } from "./AuthenticateStack";
 
 export type MainStackParamList = {
   AuthenticateStack: undefined;
-  BottomTab: undefined;
+  HomeTab: undefined;
+
+  SelectGroup: undefined;
+  ManageGroup: undefined;
+
   AddTodo: undefined;
   RecipeDetails: undefined;
 };
-
-export type MainStackNavigatorProp =
-  NativeStackNavigationProp<MainStackParamList>;
 
 export type MainStackScreenProps<T extends keyof MainStackParamList> =
   NativeStackScreenProps<MainStackParamList, T>;
 
 const Main = createNativeStackNavigator<MainStackParamList>();
 
-export const MainNavigator = () => {
+export const MainStack = () => {
   const session = useUserStore((s) => s.session);
   const profile = useUserStore((s) => s.profile);
   const initUserStore = useUserStore((s) => s.initUserStore);
@@ -44,9 +44,7 @@ export const MainNavigator = () => {
 
   return (
     <Main.Navigator
-      initialRouteName={
-        shouldShowAppContent ? "BottomTab" : "AuthenticateStack"
-      }
+      initialRouteName={shouldShowAppContent ? "HomeTab" : "AuthenticateStack"}
     >
       {!shouldShowAppContent ? (
         <Main.Screen
@@ -57,8 +55,8 @@ export const MainNavigator = () => {
       ) : (
         <>
           <Main.Screen
-            name="BottomTab"
-            component={BottomTabNavigator}
+            name="HomeTab"
+            component={HomeTab}
             options={{
               headerShown: false,
             }}

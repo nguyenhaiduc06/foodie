@@ -1,3 +1,3 @@
-export * from "./BottomTabNavigator";
-export * from "./MainNavigator";
+export * from "./HomeTab";
+export * from "./MainStack";
 export * from "./AuthenticateStack";
