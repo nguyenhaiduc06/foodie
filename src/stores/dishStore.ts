@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { supabase } from "@/lib";
-import { Dish } from "@/types";
+import { supabase, Dish } from "@/lib";
 import { useUserStore } from "./userStore";
 
 interface DishStoreState {

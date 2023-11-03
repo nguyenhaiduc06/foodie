@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import { supabase } from "../lib";
+import { Todo, supabase } from "@/lib";
 import { useUserStore } from "./userStore";
 
-interface TodoState {
-  todos: any[];
+interface TodoStoreState {
+  todos: Todo[];
   date: Date;
   fetching: boolean;
   fetchTodos: () => void;
@@ -20,7 +20,7 @@ interface TodoState {
   setDate: (timestamp: number) => void;
 }
 
-export const useTodoStore = create<TodoState>()((set, get) => ({
+export const useTodoStore = create<TodoStoreState>()((set, get) => ({
   todos: [],
   date: new Date(),
   fetching: false,
@@ -43,7 +43,8 @@ export const useTodoStore = create<TodoState>()((set, get) => ({
     const { data: newTodo, error } = await supabase
       .from("todos")
       .insert({ name, amount, user_id: userId })
-      .select();
+      .select()
+      .single();
     set((state) => ({ todos: [newTodo, ...state.todos] }));
   },
   updateTodo: async (id, newData) => {
@@ -51,7 +52,8 @@ export const useTodoStore = create<TodoState>()((set, get) => ({
       .from("todos")
       .update(newData)
       .eq("id", id)
-      .select();
+      .select()
+      .single();
     if (error) return error;
     const newTodos = get().todos.map((todo) =>
       todo.id == id ? updatedTodo : todo

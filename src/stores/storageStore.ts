@@ -1,5 +1,5 @@
 import { supabase } from "@/lib";
-import { Storage } from "@/types";
+import { Storage } from "@/lib";
 import { create } from "zustand";
 import { useUserStore } from "./userStore";
 

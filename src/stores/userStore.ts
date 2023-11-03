@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/lib";
-import { Profile } from "@/types";
+import { Profile } from "@/lib";
 
 interface UserStoreState {
   session: Session | null;

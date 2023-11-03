@@ -1,9 +1,8 @@
 import { create } from "zustand";
-import { Recipe } from "../types";
-import { supabase } from "@/lib";
+import { supabase, Recipe } from "@/lib";
 import { useUserStore } from "./userStore";
 
-interface RecipeState {
+interface RecipeStoreState {
   recipes: Recipe[];
   date: number;
   fetching: boolean;
@@ -14,7 +13,7 @@ interface RecipeState {
   deleteRecipe: () => void;
   setDate: () => void;
 }
-export const useRecipeStore = create<RecipeState>()((set, get) => ({
+export const useRecipeStore = create<RecipeStoreState>()((set, get) => ({
   recipes: [],
   date: Date.now(),
   fetching: false,
@@ -27,12 +26,17 @@ export const useRecipeStore = create<RecipeState>()((set, get) => ({
   },
   fetchRecipes: async () => {
     set({ fetching: true });
-    const user_id = useUserStore.getState().user.id;
+
+    const user_id = useUserStore.getState().user?.id;
+    if (!user_id) return;
+
     const { data: recipes, error } = await supabase
       .from("recipes")
       .select("*")
       .eq("user_id", user_id);
+
     set({ fetching: false });
+
     if (!error) {
       set({ recipes });
     }
