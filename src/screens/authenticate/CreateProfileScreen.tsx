@@ -5,7 +5,6 @@ import { useUserStore } from "@/stores";
 
 export const CreateProfileScreen = () => {
   const session = useUserStore((s) => s.session);
-  console.log(session?.user);
   const profile = useUserStore((s) => s.profile);
   const createProfile = useUserStore((s) => s.createProfile);
   const [name, setName] = useState("");

@@ -12,7 +12,7 @@ interface TodoState {
     data: {
       name: string;
       amount: number;
-    },
+    }
   ) => void;
   deleteTodo: (id: number) => void;
   setTodoChecked: (id: number, checked: boolean) => void;
@@ -26,7 +26,6 @@ export const useTodoStore = create<TodoState>()((set, get) => ({
     let { data: todos, error } = await supabase
       .from("todos")
       .select("*, categories(*)");
-    console.log({ todos });
     set({ todos });
   },
   addTodo: async (name, amount) => {
@@ -45,7 +44,7 @@ export const useTodoStore = create<TodoState>()((set, get) => ({
       .select();
     if (error) return error;
     const newTodos = get().todos.map((todo) =>
-      todo.id == id ? updatedTodo : todo,
+      todo.id == id ? updatedTodo : todo
     );
     set({ todos: newTodos });
   },

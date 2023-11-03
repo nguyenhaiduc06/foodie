@@ -8,6 +8,7 @@ import {
   ManageGroupScreen,
   RecipeDetailsScreen,
   SelectGroupScreen,
+  StorageDetailsScreen,
 } from "@/screens";
 import { useUserStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
@@ -22,6 +23,8 @@ export type MainStackParamList = {
 
   AddTodo: undefined;
   RecipeDetails: undefined;
+
+  StorageDetails: undefined;
 };
 
 export type MainStackScreenProps<T extends keyof MainStackParamList> =
@@ -33,8 +36,6 @@ export const MainStack = () => {
   const session = useUserStore((s) => s.session);
   const profile = useUserStore((s) => s.profile);
   const initUserStore = useUserStore((s) => s.initUserStore);
-
-  console.log({ profile });
 
   useEffect(() => {
     initUserStore();
@@ -83,6 +84,7 @@ export const MainStack = () => {
             }}
           />
           <Main.Screen name="RecipeDetails" component={RecipeDetailsScreen} />
+          <Main.Screen name="StorageDetails" component={StorageDetailsScreen} />
         </>
       )}
     </Main.Navigator>

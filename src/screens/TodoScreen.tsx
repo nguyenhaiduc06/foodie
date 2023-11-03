@@ -84,7 +84,6 @@ export const TodoScreen = (props) => {
   const { navigation } = props;
   const todos = useTodoStore((state) => state.todos);
   const date = useTodoStore((state) => state.date);
-  console.log(date.toDateString());
 
   const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const setDate = useTodoStore((state) => state.setDate);

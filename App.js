@@ -22,7 +22,6 @@ export default function App() {
   });
 
   const initializing = useAppStore((s) => s.initializing);
-  console.log({ initializing });
   const initStores = useAppStore((s) => s.initStores);
 
   useEffect(() => {
