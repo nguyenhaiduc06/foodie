@@ -1,5 +1,4 @@
 import {
-  NativeStackNavigationProp,
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
@@ -10,8 +9,8 @@ export type AuthenticateStackParamList = {
   CreateProfile: undefined;
 };
 
-export type AuthenticateScreenProps<
-  T extends keyof AuthenticateStackParamList,
+export type AuthenticateStackScreenProps<
+  T extends keyof AuthenticateStackParamList
 > = NativeStackScreenProps<AuthenticateStackParamList, T>;
 
 const Authenticate = createNativeStackNavigator<AuthenticateStackParamList>();

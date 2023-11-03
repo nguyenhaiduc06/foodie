@@ -1,10 +1,11 @@
 import { create } from "zustand";
 import { supabase } from "../lib";
-import { useUserStore } from "@/stores";
+import { useUserStore } from "./userStore";
 
 interface TodoState {
   todos: any[];
   date: Date;
+  fetching: boolean;
   fetchTodos: () => void;
   addTodo: (name: string, amount: number) => void;
   updateTodo: (
@@ -22,11 +23,20 @@ interface TodoState {
 export const useTodoStore = create<TodoState>()((set, get) => ({
   todos: [],
   date: new Date(),
+  fetching: false,
   fetchTodos: async () => {
-    let { data: todos, error } = await supabase
-      .from("todos")
-      .select("*, categories(*)");
-    set({ todos });
+    set({ fetching: true });
+
+    const user_id = useUserStore.getState().user?.id;
+    if (!user_id) return;
+
+    const { data: todos, error } = await supabase.from("todos").select("*");
+
+    set({ fetching: false });
+
+    if (!error) {
+      set({ todos });
+    }
   },
   addTodo: async (name, amount) => {
     const userId = useUserStore.getState().session.user.id;

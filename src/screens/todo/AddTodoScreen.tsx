@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
-import { Button, Input, Screen, Space, Text } from "../components";
+import { Button, Input, Screen, Space, Text } from "../../components";
 import { useRef, useState } from "react";
-import { useTodoStore } from "../stores";
+import { useTodoStore } from "../../stores";
 
 export const AddTodoScreen = (props) => {
   const { navigation } = props;

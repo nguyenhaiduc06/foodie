@@ -1,5 +1,5 @@
 import { Button, View } from "react-native";
-import { useUserStore } from "../stores";
+import { useUserStore } from "@/stores";
 
 export const ProfileScreen = () => {
   const signOut = useUserStore((s) => s.signOut);

@@ -5,9 +5,7 @@ import {
 } from "@react-navigation/native-stack";
 import {
   AddTodoScreen,
-  ManageGroupScreen,
   RecipeDetailsScreen,
-  SelectGroupScreen,
   StorageDetailsScreen,
 } from "@/screens";
 import { useUserStore } from "@/stores";
@@ -18,13 +16,19 @@ export type MainStackParamList = {
   AuthenticateStack: undefined;
   HomeTab: undefined;
 
-  SelectGroup: undefined;
-  ManageGroup: undefined;
-
   AddTodo: undefined;
-  RecipeDetails: undefined;
+
+  DishDetails: undefined;
+  AddDish: undefined;
+  UpdateDish: undefined;
 
   StorageDetails: undefined;
+  AddStorage: undefined;
+  UpdateStorage: undefined;
+
+  RecipeDetails: undefined;
+  AddRecipe: undefined;
+  UpdateRecipe: undefined;
 };
 
 export type MainStackScreenProps<T extends keyof MainStackParamList> =
@@ -65,20 +69,6 @@ export const MainStack = () => {
           <Main.Screen
             name="AddTodo"
             component={AddTodoScreen}
-            options={{
-              presentation: "modal",
-            }}
-          />
-          <Main.Screen
-            name="ManageGroup"
-            component={ManageGroupScreen}
-            options={{
-              presentation: "modal",
-            }}
-          />
-          <Main.Screen
-            name="SelectGroup"
-            component={SelectGroupScreen}
             options={{
               presentation: "modal",
             }}

@@ -2,9 +2,9 @@ import React, { FC, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Button, Input, Screen, Space, Text } from "@/components";
 import { useUserStore } from "@/stores";
-import { AuthenticateScreenProps } from "@/navigators";
+import { AuthenticateStackScreenProps } from "@/navigators";
 
-export const AccountScreen: FC<AuthenticateScreenProps<"Account">> = (
+export const AccountScreen: FC<AuthenticateStackScreenProps<"Account">> = (
   props
 ) => {
   const { navigation } = props;

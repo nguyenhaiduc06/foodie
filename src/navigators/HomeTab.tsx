@@ -4,13 +4,13 @@ import type {
   BottomTabScreenProps as RNBottomTabScreenProps,
 } from "@react-navigation/bottom-tabs";
 import {
-  HomeScreen,
+  DishesScreen,
   ProfileScreen,
   RecipesScreen,
   StorageScreen,
+  TodoScreen,
 } from "@/screens";
 import {
-  AlignJustify,
   Archive,
   BookOpenText,
   ClipboardList,
@@ -18,7 +18,7 @@ import {
 } from "lucide-react-native";
 
 export type BottomTabParamList = {
-  Home: undefined;
+  Todo: undefined;
   Dishes: undefined;
   Storage: undefined;
   Recipes: undefined;
@@ -37,10 +37,16 @@ export const HomeTab = () => {
   return (
     <Home.Navigator>
       <Home.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Todo"
+        component={TodoScreen}
         options={{
-          headerShown: false,
+          tabBarIcon: ({ color }) => <ClipboardList color={color} />,
+        }}
+      />
+      <Home.Screen
+        name="Dishes"
+        component={DishesScreen}
+        options={{
           tabBarIcon: ({ color }) => <ClipboardList color={color} />,
         }}
       />

@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
-import { BottomTabNavigatorProp } from "../navigators";
-import { DishItem } from "../components";
+import { BottomTabNavigatorProp } from "../../navigators";
+import { DishItem } from "../../components";
 import {
   StyleSheet,
   ScrollView,
