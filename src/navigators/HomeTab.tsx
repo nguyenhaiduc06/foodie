@@ -9,6 +9,13 @@ import {
   RecipesScreen,
   StorageScreen,
 } from "@/screens";
+import {
+  AlignJustify,
+  Archive,
+  BookOpenText,
+  ClipboardList,
+  User,
+} from "lucide-react-native";
 
 export type BottomTabParamList = {
   Home: undefined;
@@ -34,11 +41,30 @@ export const HomeTab = () => {
         component={HomeScreen}
         options={{
           headerShown: false,
+          tabBarIcon: ({ color }) => <ClipboardList color={color} />,
         }}
       />
-      <Home.Screen name="Storage" component={StorageScreen} />
-      <Home.Screen name="Recipes" component={RecipesScreen} />
-      <Home.Screen name="Profile" component={ProfileScreen} />
+      <Home.Screen
+        name="Storage"
+        component={StorageScreen}
+        options={{
+          tabBarIcon: ({ color }) => <Archive color={color} />,
+        }}
+      />
+      <Home.Screen
+        name="Recipes"
+        component={RecipesScreen}
+        options={{
+          tabBarIcon: ({ color }) => <BookOpenText color={color} />,
+        }}
+      />
+      <Home.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ color }) => <User color={color} />,
+        }}
+      />
     </Home.Navigator>
   );
 };
