@@ -1,17 +1,12 @@
 import React, { FC } from "react";
 import { ScrollView, TouchableOpacity, RefreshControl } from "react-native";
 import styled from "styled-components/native";
-import { CompositeScreenProps } from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
+import { MainStackScreenProps } from "@/navigators";
 import { DishItem, Screen } from "@/components";
 import { theme } from "@/theme";
 import { useDishStore } from "@/stores";
 
-type ScreenProps = CompositeScreenProps<
-  HomeTabScreenProps<"Dishes">,
-  NativeStackScreenProps<MainStackParamList>
->;
+type ScreenProps = MainStackScreenProps<"DishDetails">;
 
 const Section = styled.View`
   background-color: white;
