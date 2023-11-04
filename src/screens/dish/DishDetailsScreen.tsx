@@ -17,7 +17,8 @@ const Container = styled.View`
 `;
 
 export const DishDetailsScreen: FC<ScreenProps> = (props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
+  const { dish } = route.params;
 
   useEffect(() => {
     navigation.setOptions({
@@ -28,11 +29,11 @@ export const DishDetailsScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen>
       <Container>
-        <CoverImage />
+        <CoverImage source={{ uri: dish.image_url }} />
         <Space height={8} />
-        <Text preset="title">Dish title</Text>
+        <Text preset="title">{dish.name}</Text>
         <Space height={16} />
-        <Text>Dish content</Text>
+        <Text>{dish.meal}</Text>
       </Container>
     </Screen>
   );

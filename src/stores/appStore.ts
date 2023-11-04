@@ -3,6 +3,7 @@ import { useUserStore } from "./userStore";
 import { useRecipeStore } from "./recipeStore";
 import { useStorageStore } from "./storageStore";
 import { useTodoStore } from "./todoStore";
+import { useDishStore } from "./dishStore";
 
 interface AppStoreState {
   initializing: boolean;
@@ -15,6 +16,7 @@ export const useAppStore = create<AppStoreState>()((set) => ({
     await useUserStore.getState().initUserStore();
     set({ initializing: false });
     useTodoStore.getState().initTodoStore();
+    useDishStore.getState().initDishStore();
     useRecipeStore.getState().initRecipeStore();
     useStorageStore.getState().initStorageStore();
   },

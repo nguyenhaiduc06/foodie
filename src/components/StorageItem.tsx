@@ -28,9 +28,9 @@ export const StorageItem: FC<StorageItemProps> = (props) => {
       </Row>
       <Space height={4} />
       <Row>
-        <Text>{storage.amount} Kg</Text>
+        <Text dim>{storage.amount} Kg</Text>
         <Space />
-        <Text>{storage.stored_in}</Text>
+        <Text dim>{storage.stored_in}</Text>
       </Row>
     </Container>
   );

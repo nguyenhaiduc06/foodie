@@ -34,28 +34,28 @@ export interface Database {
         Row: {
           created_at: string
           id: number
-          meal: string | null
+          meal: number | null
           name: string | null
-          user: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           id?: number
-          meal?: string | null
+          meal?: number | null
           name?: string | null
-          user?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           id?: number
-          meal?: string | null
+          meal?: number | null
           name?: string | null
-          user?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "dishes_user_fkey"
-            columns: ["user"]
+            foreignKeyName: "dishes_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]

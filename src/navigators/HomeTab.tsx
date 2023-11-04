@@ -6,6 +6,7 @@ import {
   Archive,
   BookOpenText,
   ClipboardList,
+  ShoppingCart,
   User,
 } from "lucide-react-native";
 import {
@@ -36,13 +37,15 @@ export const HomeTab = () => {
         name="Todos"
         component={TodosScreen}
         options={{
-          tabBarIcon: ({ color }) => <ClipboardList color={color} />,
+          title: "Cần mua",
+          tabBarIcon: ({ color }) => <ShoppingCart color={color} />,
         }}
       />
       <Home.Screen
         name="Dishes"
         component={DishesScreen}
         options={{
+          title: "Thực đơn",
           tabBarIcon: ({ color }) => <ClipboardList color={color} />,
         }}
       />
@@ -50,6 +53,7 @@ export const HomeTab = () => {
         name="Storages"
         component={StoragesScreen}
         options={{
+          title: "Lưu trữ",
           tabBarIcon: ({ color }) => <Archive color={color} />,
         }}
       />
@@ -57,6 +61,7 @@ export const HomeTab = () => {
         name="Recipes"
         component={RecipesScreen}
         options={{
+          title: "Công thức",
           tabBarIcon: ({ color }) => <BookOpenText color={color} />,
         }}
       />
@@ -64,6 +69,7 @@ export const HomeTab = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
+          title: "Tài khoản",
           tabBarIcon: ({ color }) => <User color={color} />,
         }}
       />

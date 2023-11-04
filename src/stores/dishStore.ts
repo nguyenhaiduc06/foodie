@@ -5,14 +5,17 @@ import { useUserStore } from "./userStore";
 interface DishStoreState {
   dishes: Dish[];
   fetching: boolean;
+  date: Date;
   initDishStore: () => void;
   fetchDishes: () => void;
   createDish: () => void;
+  setDate: (date: Date) => void;
 }
 
 export const useDishStore = create<DishStoreState>()((set, get) => ({
   dishes: [],
   fetching: false,
+  date: new Date(Date.now()),
   initDishStore: async () => {
     useUserStore.subscribe((s) => {
       if (s.user?.id) {
@@ -38,4 +41,7 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
     }
   },
   createDish: () => {},
+  setDate: (date) => {
+    set({ date });
+  },
 }));

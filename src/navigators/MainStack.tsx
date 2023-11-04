@@ -5,13 +5,14 @@ import {
 } from "@react-navigation/native-stack";
 import {
   AddTodosScreen,
+  DishDetailsScreen,
   RecipeDetailsScreen,
   StorageDetailsScreen,
 } from "@/screens";
 import { useUserStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
 import { AuthenticateStack } from "./AuthenticateStack";
-import { Recipe, Storage } from "@/lib";
+import { Dish, Recipe, Storage } from "@/lib";
 
 export type MainStackParamList = {
   AuthenticateStack: undefined;
@@ -19,7 +20,9 @@ export type MainStackParamList = {
 
   AddTodo: undefined;
 
-  DishDetails: undefined;
+  DishDetails: {
+    dish: Dish;
+  };
   AddDish: undefined;
   UpdateDish: undefined;
 
@@ -78,6 +81,7 @@ export const MainStack = () => {
               presentation: "modal",
             }}
           />
+          <Main.Screen name="DishDetails" component={DishDetailsScreen} />
           <Main.Screen name="RecipeDetails" component={RecipeDetailsScreen} />
           <Main.Screen name="StorageDetails" component={StorageDetailsScreen} />
         </>
