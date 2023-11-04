@@ -1,12 +1,13 @@
 import React, { FC } from "react";
-import { ScrollView, RefreshControl } from "react-native";
+import { ScrollView, RefreshControl, View } from "react-native";
 import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { DateSelector, Screen, TodoItem } from "@/components";
+import { ActionButton, DateSelector, Screen, TodoItem } from "@/components";
 import { theme } from "@/theme";
 import { useTodoStore } from "@/stores";
+import { Plus } from "lucide-react-native";
 
 type ScreenProps = CompositeScreenProps<
   HomeTabScreenProps<"Todos">,
@@ -28,12 +29,25 @@ const Container = styled.View`
   padding: 16px;
 `;
 
+const ActionButtonContainer = styled.View`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 16px;
+  align-items: flex-end;
+`;
+
 export const TodosScreen: FC<ScreenProps> = (props) => {
+  const { navigation } = props;
   const todos = useTodoStore((s) => s.todos);
   const fetchTodos = useTodoStore((s) => s.fetchTodos);
   const fetching = useTodoStore((s) => s.fetching);
   const date = useTodoStore((s) => s.date);
   const setDate = useTodoStore((s) => s.setDate);
+
+  const addTodo = () => {
+    navigation.navigate("AddTodo");
+  };
 
   return (
     <Screen>
@@ -56,6 +70,13 @@ export const TodosScreen: FC<ScreenProps> = (props) => {
           </Section>
         </Container>
       </ScrollView>
+      <ActionButtonContainer>
+        <ActionButton
+          label="Thêm"
+          left={<Plus color={theme.colors.textInverted} size={22} />}
+          onPress={addTodo}
+        />
+      </ActionButtonContainer>
     </Screen>
   );
 };
