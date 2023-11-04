@@ -1,42 +1,53 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  TouchableOpacityProps,
-} from "react-native";
+import { TouchableOpacityProps } from "react-native";
 import { theme } from "../theme";
 import { FC } from "react";
+import styled from "styled-components/native";
+import { Text } from "./Text";
+
+const PRESETS = {
+  primary: {
+    backgroundColor: theme.colors.primary,
+    labelColor: theme.colors.textInverted,
+    shadowColor: "rgba(0,0,0,0.05)",
+  },
+  secondary: {
+    backgroundColor: theme.colors.foreground,
+    labelColor: theme.colors.text,
+    shadowColor: "rgba(0,0,0,0.05)",
+  },
+};
 
 type ButtonProps = TouchableOpacityProps & {
+  preset: keyof typeof PRESETS;
   label: string;
 };
 
+const Container = styled.TouchableOpacity<{
+  backgroundColor: string;
+}>`
+  background-color: ${(p) => p.backgroundColor};
+  height: 56px;
+  border-radius: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+`;
+
 export const Button: FC<ButtonProps> = (props) => {
-  const { label, ...rest } = props;
+  const { preset = "secondary", label, ...rest } = props;
   const { disabled } = props;
   const backgroundColor = disabled
     ? theme.colors.foreground
-    : theme.colors.primary;
+    : PRESETS[preset].backgroundColor;
   const labelColor = disabled
     ? theme.palette.gray[400]
-    : theme.colors.textInverted;
+    : PRESETS[preset].labelColor;
   return (
-    <TouchableOpacity style={[styles.container, { backgroundColor }]} {...rest}>
-      <Text style={[styles.label, { color: labelColor }]}>{label}</Text>
-    </TouchableOpacity>
+    <Container backgroundColor={backgroundColor} {...rest}>
+      <Text color={labelColor}>{label}</Text>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    height: 56,
-    borderRadius: 999,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  label: {
-    fontSize: 18,
-    fontFamily: "Inter_500Medium",
-  },
-});

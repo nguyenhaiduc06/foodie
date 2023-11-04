@@ -13,9 +13,9 @@ type RecipeItemProps = {
 const Container = styled.View<{ size: number }>`
   height: ${(p) => p.size}px;
   width: ${(p) => p.size}px;
-  padding: 8px;
+  padding: 10px;
   background-color: white;
-  border-radius: 16px;
+  border-radius: 12px;
   align-items: start;
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.05);
 `;
@@ -23,7 +23,7 @@ const Container = styled.View<{ size: number }>`
 const Image = styled.Image<{ width: number; height: number }>`
   flex: 1;
   width: 100%;
-  border-radius: 12px;
+  border-radius: 8px;
   background-color: ${theme.colors.foreground};
 `;
 
@@ -33,7 +33,7 @@ export const RecipeItem: FC<RecipeItemProps> = (props) => {
     <Container size={size}>
       <Image source={{ uri: recipe.image_url }} width={size} height={size} />
       <Space height={12} />
-      <Text preset="title">{recipe.name}</Text>
+      <Text weight={500}>{recipe.name}</Text>
     </Container>
   );
 };
