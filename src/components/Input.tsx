@@ -1,36 +1,43 @@
-import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
+import { TextInputProps } from "react-native";
 import { theme } from "../theme";
-import { FC } from "react";
+import React, { FC } from "react";
+import styled from "styled-components/native";
 
-type InputProps = TextInputProps & {};
-
-export const Input: FC<InputProps> = (props) => {
-  const { ...rest } = props;
-  return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.textInput}
-        placeholderTextColor={theme.palette.gray[400]}
-        {...rest}
-      />
-    </View>
-  );
+type InputProps = TextInputProps & {
+  left?: React.ReactNode;
+  right?: React.ReactNode;
 };
 
-const styles = StyleSheet.create({
-  container: {
-    height: 56,
-    borderRadius: 16,
-    backgroundColor: theme.colors.foreground,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-  },
-  textInput: {
-    fontSize: 16,
-    height: 56,
-    fontFamily: "Inter_500Medium",
-    color: theme.colors.text,
-    flex: 1,
-  },
-});
+const Container = styled.View`
+  height: 56px;
+  border-radius: 16px;
+  background-color: ${theme.colors.foreground};
+  padding: 0 16px;
+  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+`;
+
+const TextInput = styled.TextInput`
+  font-size: 16px;
+  height: 56;
+  font-family: "Inter_500Medium";
+  color: ${theme.colors.text};
+  flex: 1;
+`;
+
+export const Input: FC<InputProps> = (props) => {
+  const { left, right, children, ...rest } = props;
+  return (
+    <Container>
+      {left}
+      <TextInput
+        placeholderTextColor={theme.palette.gray[400]}
+        clearButtonMode="while-editing"
+        {...rest}
+      />
+      {right}
+    </Container>
+  );
+};
