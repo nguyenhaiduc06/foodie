@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Todo, supabase } from "@/lib";
 import { useUserStore } from "./userStore";
+import dayjs from "dayjs";
 
 interface TodoStoreState {
   todos: Todo[];
@@ -38,7 +39,15 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
     const user_id = useUserStore.getState().user?.id;
     if (!user_id) return;
 
-    const { data: todos, error } = await supabase.from("todos").select("*");
+    const date = get().date;
+    const startOfDate = dayjs(date).startOf("date").toISOString();
+    const endOfDate = dayjs(date).endOf("date").toISOString();
+
+    const { data: todos, error } = await supabase
+      .from("todos")
+      .select("*")
+      .lte("date", endOfDate)
+      .gte("date", startOfDate);
 
     set({ fetching: false });
 
@@ -81,5 +90,6 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
   },
   setDate: (date) => {
     set({ date });
+    get().fetchTodos();
   },
 }));
