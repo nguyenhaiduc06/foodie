@@ -1,15 +1,15 @@
 import React, { FC } from "react";
-import { ScrollView, TouchableOpacity, RefreshControl } from "react-native";
+import { ScrollView, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { Screen, RecipeItem } from "@/components";
+import { Screen, TodoItem } from "@/components";
 import { theme } from "@/theme";
-import { useStorageStore } from "@/stores";
+import { useTodoStore } from "@/stores";
 
 type ScreenProps = CompositeScreenProps<
-  HomeTabScreenProps<"Storage">,
+  HomeTabScreenProps<"Todo">,
   NativeStackScreenProps<MainStackParamList>
 >;
 
@@ -28,31 +28,24 @@ const Container = styled.View`
   padding: 16px;
 `;
 
-export const StorageScreen: FC<ScreenProps> = (props) => {
-  const { navigation } = props;
-  const storages = useStorageStore((s) => s.storages);
-  const fetchStorages = useStorageStore((s) => s.fetchStorages);
-  const fetching = useStorageStore((s) => s.fetching);
-
-  const viewStorageDetails = (storage) => {
-    navigation.navigate("StorageDetails");
-  };
+export const TodosScreen: FC<ScreenProps> = (props) => {
+  const todos = useTodoStore((s) => s.todos);
+  const fetchTodos = useTodoStore((s) => s.fetchTodos);
+  const fetching = useTodoStore((s) => s.fetching);
 
   return (
     <Screen>
       <ScrollView
         refreshControl={
-          <RefreshControl onRefresh={fetchStorages} refreshing={fetching} />
+          <RefreshControl onRefresh={fetchTodos} refreshing={fetching} />
         }
       >
         <Container onStartShouldSetResponder={() => true}>
           <Section>
-            {storages.map((storage, index) => (
-              <React.Fragment key={storage.id}>
+            {todos.map((todo, index) => (
+              <React.Fragment key={todo.id}>
                 {index != 0 && <Divider />}
-                <TouchableOpacity onPress={() => viewStorageDetails(storage)}>
-                  <RecipeItem recipe={storage} />
-                </TouchableOpacity>
+                <TodoItem todo={todo} />
               </React.Fragment>
             ))}
           </Section>

@@ -1,2 +1,2 @@
-export * from "./StorageScreen";
+export * from "./StoragesScreen";
 export * from "./StorageDetailsScreen";

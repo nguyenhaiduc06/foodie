@@ -3,7 +3,7 @@ import { Button, Input, Screen, Space, Text } from "../../components";
 import { useRef, useState } from "react";
 import { useTodoStore } from "../../stores";
 
-export const AddTodoScreen = (props) => {
+export const AddTodosScreen = (props) => {
   const { navigation } = props;
   const selectDateModal = useRef();
   const [name, setName] = useState("");

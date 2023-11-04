@@ -4,7 +4,7 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import {
-  AddTodoScreen,
+  AddTodosScreen,
   RecipeDetailsScreen,
   StorageDetailsScreen,
 } from "@/screens";
@@ -71,7 +71,7 @@ export const MainStack = () => {
           />
           <Main.Screen
             name="AddTodo"
-            component={AddTodoScreen}
+            component={AddTodosScreen}
             options={{
               presentation: "modal",
             }}

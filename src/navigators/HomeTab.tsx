@@ -12,14 +12,14 @@ import {
   DishesScreen,
   ProfileScreen,
   RecipesScreen,
-  StorageScreen,
-  TodoScreen,
+  StoragesScreen,
+  TodosScreen,
 } from "@/screens";
 
 export type HomeTabParamList = {
-  Todo: undefined;
+  Todos: undefined;
   Dishes: undefined;
-  Storage: undefined;
+  Storages: undefined;
   Recipes: undefined;
   Profile: undefined;
 };
@@ -33,8 +33,8 @@ export const HomeTab = () => {
   return (
     <Home.Navigator>
       <Home.Screen
-        name="Todo"
-        component={TodoScreen}
+        name="Todos"
+        component={TodosScreen}
         options={{
           tabBarIcon: ({ color }) => <ClipboardList color={color} />,
         }}
@@ -47,8 +47,8 @@ export const HomeTab = () => {
         }}
       />
       <Home.Screen
-        name="Storage"
-        component={StorageScreen}
+        name="Storages"
+        component={StoragesScreen}
         options={{
           tabBarIcon: ({ color }) => <Archive color={color} />,
         }}
