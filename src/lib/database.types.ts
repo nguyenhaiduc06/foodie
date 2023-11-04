@@ -188,6 +188,7 @@ export interface Database {
           category_id: number | null
           checked: boolean
           created_at: string
+          date: string | null
           group_id: number | null
           id: number
           name: string | null
@@ -197,6 +198,7 @@ export interface Database {
           category_id?: number | null
           checked?: boolean
           created_at?: string
+          date?: string | null
           group_id?: number | null
           id?: number
           name?: string | null
@@ -206,6 +208,7 @@ export interface Database {
           category_id?: number | null
           checked?: boolean
           created_at?: string
+          date?: string | null
           group_id?: number | null
           id?: number
           name?: string | null
