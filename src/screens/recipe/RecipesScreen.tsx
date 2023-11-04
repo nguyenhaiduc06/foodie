@@ -10,8 +10,9 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
 import { Screen, RecipeItem, Input, Space } from "@/components";
-import { theme } from "@/theme";
 import { useRecipeStore } from "@/stores";
+import { Search } from "lucide-react-native";
+import { theme } from "@/theme";
 
 const SCREEN_PADDING = 16;
 const GAP = 16;
@@ -57,11 +58,17 @@ export const RecipesScreen: FC<ScreenProps> = (props) => {
         }
       >
         <Container onStartShouldSetResponder={() => true}>
-          <Input placeholder="Search recipe by name" />
+          <Input
+            placeholder="Search recipe by name"
+            left={<Search color={theme.colors.textDim} />}
+          />
           <Space height={16} />
           <Section>
             {recipes.map((recipe, index) => (
-              <TouchableOpacity onPress={() => viewRecipeDetails(recipe)}>
+              <TouchableOpacity
+                key={recipe.id}
+                onPress={() => viewRecipeDetails(recipe)}
+              >
                 <RecipeItem size={RECIPE_ITEM_SIZE} recipe={recipe} />
               </TouchableOpacity>
             ))}
