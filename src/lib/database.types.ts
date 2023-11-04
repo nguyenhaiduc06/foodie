@@ -56,6 +56,7 @@ export interface Database {
           {
             foreignKeyName: "dishes_user_fkey"
             columns: ["user"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -102,6 +103,7 @@ export interface Database {
           {
             foreignKeyName: "profiles_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -112,27 +114,31 @@ export interface Database {
           content: string | null
           created_at: string
           id: number
+          image_url: string | null
           name: string | null
-          user: string | null
+          user_id: string | null
         }
         Insert: {
           content?: string | null
           created_at?: string
           id?: number
+          image_url?: string | null
           name?: string | null
-          user?: string | null
+          user_id?: string | null
         }
         Update: {
           content?: string | null
           created_at?: string
           id?: number
+          image_url?: string | null
           name?: string | null
-          user?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "recipes_user_fkey"
-            columns: ["user"]
+            foreignKeyName: "recipes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -141,33 +147,37 @@ export interface Database {
       storages: {
         Row: {
           amount: number | null
-          category: number | null
           created_at: string
           expire_date: string | null
           id: number
           name: string | null
+          stored_in: string | null
+          user_id: string | null
         }
         Insert: {
           amount?: number | null
-          category?: number | null
           created_at?: string
           expire_date?: string | null
           id?: number
           name?: string | null
+          stored_in?: string | null
+          user_id?: string | null
         }
         Update: {
           amount?: number | null
-          category?: number | null
           created_at?: string
           expire_date?: string | null
           id?: number
           name?: string | null
+          stored_in?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "storages_category_fkey"
-            columns: ["category"]
-            referencedRelation: "categories"
+            foreignKeyName: "storages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
@@ -204,12 +214,14 @@ export interface Database {
           {
             foreignKeyName: "todos_category_id_fkey"
             columns: ["category_id"]
+            isOneToOne: false
             referencedRelation: "categories"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "todos_group_id_fkey"
             columns: ["group_id"]
+            isOneToOne: false
             referencedRelation: "groups"
             referencedColumns: ["id"]
           }
@@ -244,12 +256,14 @@ export interface Database {
           {
             foreignKeyName: "user_group_group_fkey"
             columns: ["group"]
+            isOneToOne: false
             referencedRelation: "groups"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_group_user_fkey"
             columns: ["user"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           }

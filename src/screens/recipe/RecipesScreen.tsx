@@ -1,31 +1,41 @@
 import React, { FC } from "react";
-import { ScrollView, TouchableOpacity, RefreshControl } from "react-native";
+import {
+  ScrollView,
+  TouchableOpacity,
+  RefreshControl,
+  Dimensions,
+} from "react-native";
 import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { Screen, RecipeItem } from "@/components";
+import { Screen, RecipeItem, Input, Space } from "@/components";
 import { theme } from "@/theme";
 import { useRecipeStore } from "@/stores";
+
+const SCREEN_PADDING = 16;
+const GAP = 16;
+const COLUMN_COUNT = 2;
+const RECIPE_ITEM_SIZE =
+  (Dimensions.get("window").width -
+    2 * SCREEN_PADDING -
+    (COLUMN_COUNT - 1) * GAP) /
+  COLUMN_COUNT;
 
 type ScreenProps = CompositeScreenProps<
   HomeTabScreenProps<"Recipes">,
   NativeStackScreenProps<MainStackParamList>
 >;
 
-const Section = styled.View`
-  background-color: white;
-  border-radius: 16px;
-`;
-
-const Divider = styled.View`
-  height: 1px;
-  background-color: ${theme.colors.border};
-  width: 100%;
-`;
-
 const Container = styled.View`
   padding: 16px;
+`;
+
+const Section = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-radius: 16px;
 `;
 
 export const RecipesScreen: FC<ScreenProps> = (props) => {
@@ -35,7 +45,9 @@ export const RecipesScreen: FC<ScreenProps> = (props) => {
   const fetching = useRecipeStore((s) => s.fetching);
 
   const viewRecipeDetails = (recipe) => {
-    navigation.navigate("RecipeDetails");
+    navigation.navigate("RecipeDetails", {
+      recipe,
+    });
   };
   return (
     <Screen>
@@ -45,14 +57,13 @@ export const RecipesScreen: FC<ScreenProps> = (props) => {
         }
       >
         <Container onStartShouldSetResponder={() => true}>
+          <Input placeholder="Search recipe by name" />
+          <Space height={16} />
           <Section>
             {recipes.map((recipe, index) => (
-              <React.Fragment key={recipe.id}>
-                {index != 0 && <Divider />}
-                <TouchableOpacity onPress={() => viewRecipeDetails(recipe)}>
-                  <RecipeItem recipe={recipe} />
-                </TouchableOpacity>
-              </React.Fragment>
+              <TouchableOpacity onPress={() => viewRecipeDetails(recipe)}>
+                <RecipeItem size={RECIPE_ITEM_SIZE} recipe={recipe} />
+              </TouchableOpacity>
             ))}
           </Section>
         </Container>

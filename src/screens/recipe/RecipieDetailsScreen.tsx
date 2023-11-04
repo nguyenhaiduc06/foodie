@@ -17,7 +17,8 @@ const Container = styled.View`
 `;
 
 export const RecipeDetailsScreen: FC<ScreenProps> = (props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
+  const { recipe } = route.params;
 
   useEffect(() => {
     navigation.setOptions({
@@ -28,11 +29,11 @@ export const RecipeDetailsScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen>
       <Container>
-        <CoverImage />
+        <CoverImage source={{ uri: recipe.image_url }} />
         <Space height={8} />
-        <Text preset="title">Recipe title</Text>
+        <Text preset="title">{recipe.name}</Text>
         <Space height={16} />
-        <Text>Recipe content</Text>
+        <Text>{recipe.content}</Text>
       </Container>
     </Screen>
   );

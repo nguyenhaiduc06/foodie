@@ -34,7 +34,7 @@ export const lightTheme: Theme = {
   statusBarStyle: "dark",
   colors: {
     background: "#FBF6FA",
-    foreground: "#F0EDF1",
+    foreground: "#F4F1F4",
     text: palette.black[90],
     textDim: palette.black[50],
     textInverted: palette.white[100],

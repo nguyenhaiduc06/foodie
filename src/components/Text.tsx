@@ -1,5 +1,6 @@
 import { styled } from "styled-components/native";
 import { theme } from "../theme";
+
 const Heading = styled.Text<{ color: any }>`
   font-family: "Inter_600SemiBold";
   font-size: 24px;
