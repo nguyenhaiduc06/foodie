@@ -11,7 +11,7 @@ import {
 import { useUserStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
 import { AuthenticateStack } from "./AuthenticateStack";
-import { Recipe } from "@/lib";
+import { Recipe, Storage } from "@/lib";
 
 export type MainStackParamList = {
   AuthenticateStack: undefined;
@@ -23,7 +23,9 @@ export type MainStackParamList = {
   AddDish: undefined;
   UpdateDish: undefined;
 
-  StorageDetails: undefined;
+  StorageDetails: {
+    storage: Storage;
+  };
   AddStorage: undefined;
   UpdateStorage: undefined;
 

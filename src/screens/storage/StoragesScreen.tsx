@@ -4,18 +4,20 @@ import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { Screen, RecipeItem } from "@/components";
+import { Screen, StorageItem, Input, Space } from "@/components";
 import { theme } from "@/theme";
 import { useStorageStore } from "@/stores";
+import { Search } from "lucide-react-native";
 
 type ScreenProps = CompositeScreenProps<
-  HomeTabScreenProps<"Storage">,
+  HomeTabScreenProps<"Storages">,
   NativeStackScreenProps<MainStackParamList>
 >;
 
 const Section = styled.View`
   background-color: white;
   border-radius: 16px;
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.05);
 `;
 
 const Divider = styled.View`
@@ -35,7 +37,9 @@ export const StoragesScreen: FC<ScreenProps> = (props) => {
   const fetching = useStorageStore((s) => s.fetching);
 
   const viewStorageDetails = (storage) => {
-    navigation.navigate("StorageDetails");
+    navigation.navigate("StorageDetails", {
+      storage,
+    });
   };
 
   return (
@@ -46,12 +50,17 @@ export const StoragesScreen: FC<ScreenProps> = (props) => {
         }
       >
         <Container onStartShouldSetResponder={() => true}>
+          <Input
+            placeholder="Search storage by name"
+            left={<Search color={theme.colors.textDim} />}
+          />
+          <Space height={16} />
           <Section>
             {storages.map((storage, index) => (
               <React.Fragment key={storage.id}>
                 {index != 0 && <Divider />}
                 <TouchableOpacity onPress={() => viewStorageDetails(storage)}>
-                  <RecipeItem recipe={storage} />
+                  <StorageItem storage={storage} />
                 </TouchableOpacity>
               </React.Fragment>
             ))}

@@ -10,3 +10,4 @@ export * from "./Chip";
 export * from "./GroupSelector";
 export * from "./GroupMemberItem";
 export * from "./GroupItem";
+export * from "./StorageItem";

@@ -17,7 +17,8 @@ const Container = styled.View`
 `;
 
 export const StorageDetailsScreen: FC<ScreenProps> = (props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
+  const { storage } = route.params;
 
   useEffect(() => {
     navigation.setOptions({
@@ -28,11 +29,11 @@ export const StorageDetailsScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen>
       <Container>
-        <CoverImage />
+        <CoverImage source={{ uri: storage.image_url }} />
         <Space height={8} />
-        <Text preset="title">Storage title</Text>
+        <Text preset="title">{storage.name}</Text>
         <Space height={16} />
-        <Text>Storage content</Text>
+        <Text>{storage.stored_in}</Text>
       </Container>
     </Screen>
   );
