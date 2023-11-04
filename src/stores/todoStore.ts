@@ -18,7 +18,7 @@ interface TodoStoreState {
   ) => void;
   deleteTodo: (id: number) => void;
   setTodoChecked: (id: number, checked: boolean) => void;
-  setDate: (timestamp: number) => void;
+  setDate: (date: Date) => void;
 }
 
 export const useTodoStore = create<TodoStoreState>()((set, get) => ({
@@ -79,7 +79,7 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
       .eq("id", id)
       .select();
   },
-  setDate: (timestamp) => {
-    set({ date: new Date(timestamp) });
+  setDate: (date) => {
+    set({ date });
   },
 }));

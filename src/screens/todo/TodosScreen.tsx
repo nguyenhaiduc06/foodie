@@ -4,12 +4,12 @@ import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { Screen, TodoItem } from "@/components";
+import { DateSelector, Screen, TodoItem } from "@/components";
 import { theme } from "@/theme";
 import { useTodoStore } from "@/stores";
 
 type ScreenProps = CompositeScreenProps<
-  HomeTabScreenProps<"Todo">,
+  HomeTabScreenProps<"Todos">,
   NativeStackScreenProps<MainStackParamList>
 >;
 
@@ -32,9 +32,14 @@ export const TodosScreen: FC<ScreenProps> = (props) => {
   const todos = useTodoStore((s) => s.todos);
   const fetchTodos = useTodoStore((s) => s.fetchTodos);
   const fetching = useTodoStore((s) => s.fetching);
+  const date = useTodoStore((s) => s.date);
+  const setDate = useTodoStore((s) => s.setDate);
 
   return (
     <Screen>
+      <Container>
+        <DateSelector date={date} onChangeDate={setDate} />
+      </Container>
       <ScrollView
         refreshControl={
           <RefreshControl onRefresh={fetchTodos} refreshing={fetching} />
