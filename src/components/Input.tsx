@@ -21,7 +21,7 @@ const Container = styled.View`
 
 const TextInput = styled.TextInput`
   font-size: 16px;
-  height: 56;
+  height: 56px;
   font-family: "Inter_500Medium";
   color: ${theme.colors.text};
   flex: 1;
