@@ -11,8 +11,11 @@ interface UserStoreState {
   signInWithEmail: (
     email: string,
     password: string
-  ) => Promise<{ data: any; error: any }>;
-  signUpWithEmail: (email: string, password: string) => void;
+  ) => Promise<{ error?: Error }>;
+  signUpWithEmail: (
+    email: string,
+    password: string
+  ) => Promise<{ error?: Error }>;
   signOut: () => void;
   createProfile: (name) => void;
   updateProfile: (newName) => void;
@@ -51,28 +54,20 @@ export const useUserStore = create<UserStoreState>()((set, get) => ({
     });
   },
   signInWithEmail: async (email, password) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-    if (error) return { data: null, error };
-    return supabase
-      .from("profiles")
-      .select("*")
-      .eq("user_id", data.user.id)
-      .single();
-  },
-  signUpWithEmail: async (email, password) => {
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
 
-    if (error) return error;
-    set({ session });
+    return { error };
+  },
+  signUpWithEmail: async (email, password) => {
+    const { error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+
+    return { error };
   },
   signOut: async () => {
     await supabase.auth.signOut();

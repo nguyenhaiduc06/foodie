@@ -2,6 +2,7 @@ import { useUserStore } from "@/stores";
 import { Text, Screen, Space, Button } from "@/components";
 import styled from "styled-components/native";
 import { theme } from "@/theme";
+import { useState } from "react";
 
 const Container = styled.View`
   flex: 1;
@@ -21,7 +22,9 @@ const Avatar = styled.View`
 `;
 
 export const ProfileScreen = () => {
+  const [loading, setLoading] = useState(false);
   const signOut = useUserStore((s) => s.signOut);
+
   return (
     <Screen>
       <Container>
@@ -31,7 +34,16 @@ export const ProfileScreen = () => {
         <Space />
       </Container>
       <ButtonContainer>
-        <Button label="Sign out" />
+        <Button
+          preset="secondary"
+          label="Đăng xuất"
+          loading={loading}
+          onPress={async () => {
+            setLoading(false);
+            await signOut();
+            setLoading(true);
+          }}
+        />
       </ButtonContainer>
     </Screen>
   );
