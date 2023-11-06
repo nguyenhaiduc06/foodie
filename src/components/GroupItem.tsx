@@ -43,10 +43,13 @@ const EditButton = styled.TouchableOpacity`
 `;
 export const GroupItem: FC<GroupItemProps> = (props) => {
   const { group, active, onSelect } = props;
+  console.log(group);
   const navigation =
     useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const manageGroup = () => {
-    navigation.navigate("ManageGroup");
+    navigation.navigate("ManageGroup", {
+      groupId: group.id,
+    });
   };
   return (
     <Container active={active} onPress={() => onSelect(group.id)}>
@@ -54,9 +57,9 @@ export const GroupItem: FC<GroupItemProps> = (props) => {
         <Text size={30}>🍔</Text>
       </Icon>
       <View>
-        <Text preset="title">Tên nhóm</Text>
+        <Text preset="title">{group.name}</Text>
         <Text preset="body" dim>
-          5 thành viên
+          {group.profiles[0].count} thành viên
         </Text>
       </View>
       <Space />

@@ -17,7 +17,7 @@ import {
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
 import { AuthenticateStack } from "./AuthenticateStack";
-import { Dish, Recipe, Storage } from "@/lib";
+import { Dish, Group, Recipe, Storage } from "@/lib";
 
 export type MainStackParamList = {
   Authenticate: undefined;
@@ -46,7 +46,9 @@ export type MainStackParamList = {
   UpdateRecipe: undefined;
 
   SelectGroup: undefined;
-  ManageGroup: undefined;
+  ManageGroup: {
+    groupId: number;
+  };
 };
 
 export type MainStackScreenProps<T extends keyof MainStackParamList> =
@@ -62,8 +64,6 @@ export const MainStack = () => {
   useEffect(() => {
     initUserStore();
   }, []);
-
-  console.log(profile);
 
   const initialRouteName = profile
     ? "HomeTab"
@@ -114,6 +114,7 @@ export const MainStack = () => {
         name="ManageGroup"
         component={ManageGroupScreen}
         options={{
+          title: "Thông tin nhóm",
           presentation: "modal",
         }}
       />

@@ -22,7 +22,11 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     });
   },
   fetchGroups: async () => {
-    const { data: groups, error } = await supabase.from("groups").select("*");
+    const profile_id = useAuthStore.getState().profile?.id;
+    const { data: groups, error } = await supabase
+      .from("groups")
+      .select("*, profiles(count)")
+      .eq("profiles.id", profile_id);
     if (error) return { error: new Error(error.message) };
     if (groups.length == 0) {
       get().createGroup({ name: "Nhóm" });

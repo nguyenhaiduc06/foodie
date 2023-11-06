@@ -27,19 +27,22 @@ const Avatar = styled.View`
   height: 100px;
   border-radius: 100%;
   background-color: ${theme.colors.foreground};
+  align-self: center;
 `;
 
 export const ProfileScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
   const [loading, setLoading] = useState(false);
+  const profile = useAuthStore((s) => s.profile);
   const signOut = useAuthStore((s) => s.signOut);
 
   return (
     <Screen>
       <Container>
         <Avatar />
-        <Space height={8} />
-        <Text preset="title">Nguyen Hai Duc</Text>
+        <Text preset="title" style={{ textAlign: "center" }}>
+          {profile.name}
+        </Text>
         <Space />
       </Container>
       <ButtonContainer>

@@ -72,7 +72,7 @@ export const useAuthStore = create<AuthStoreState>()((set, get) => ({
     await supabase.auth.signOut();
   },
   fetchProfile: async () => {
-    const user_id = get().user.id;
+    const user_id = get().user?.id;
     if (!user_id) {
       set({ profile: null });
       return;
