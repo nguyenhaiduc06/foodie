@@ -17,9 +17,9 @@ export const useAppStore = create<AppStoreState>()((set) => ({
     await useAuthStore.getState().initUserStore();
     useGroupStore.getState().initGroupStore();
     set({ initializing: false });
-    useTodoStore.getState().initTodoStore();
-    useDishStore.getState().initDishStore();
-    useRecipeStore.getState().initRecipeStore();
-    useStorageStore.getState().initStorageStore();
+    // useTodoStore.getState().initTodoStore();
+    // useDishStore.getState().initDishStore();
+    // useRecipeStore.getState().initRecipeStore();
+    // useStorageStore.getState().initStorageStore();
   },
 }));

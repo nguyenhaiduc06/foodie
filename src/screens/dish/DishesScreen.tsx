@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import {
   ScrollView,
   RefreshControl,
@@ -61,11 +61,17 @@ const ActionButtonContainer = styled.View`
 
 export const DishesScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
+  const initDishStore = useDishStore((s) => s.initDishStore);
   const dishes = useDishStore((s) => s.dishes);
   const fetchDishes = useDishStore((s) => s.fetchDishes);
   const fetching = useDishStore((s) => s.fetching);
   const date = useDishStore((s) => s.date);
   const setDate = useDishStore((s) => s.setDate);
+
+  useEffect(() => {
+    initDishStore();
+  }, []);
+
   const dishesByMeal = dishes.reduce(
     (acc, dish) => {
       acc[dish.meal].push(dish);

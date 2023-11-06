@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { ScrollView, TouchableOpacity, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
@@ -32,9 +32,14 @@ const Container = styled.View`
 
 export const StoragesScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
+  const initStorageStore = useStorageStore((s) => s.initStorageStore);
   const storages = useStorageStore((s) => s.storages);
   const fetchStorages = useStorageStore((s) => s.fetchStorages);
   const fetching = useStorageStore((s) => s.fetching);
+
+  useEffect(() => {
+    initStorageStore();
+  }, []);
 
   const viewStorageDetails = (storage) => {
     navigation.navigate("StorageDetails", {

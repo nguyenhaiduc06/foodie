@@ -4,7 +4,7 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import {
-  AccountScreen,
+  AuthenticateScreen,
   AddDishScreen,
   AddTodosScreen,
   CreateProfileScreen,
@@ -73,7 +73,7 @@ export const MainStack = () => {
 
   return (
     <Main.Navigator initialRouteName={initialRouteName}>
-      <Main.Screen name="Authenticate" component={AccountScreen} />
+      <Main.Screen name="Authenticate" component={AuthenticateScreen} />
       <Main.Screen name="CreateProfile" component={CreateProfileScreen} />
       <Main.Screen
         name="HomeTab"

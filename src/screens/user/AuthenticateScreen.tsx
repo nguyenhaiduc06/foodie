@@ -11,7 +11,7 @@ const Container = styled.View`
   gap: 16px;
 `;
 
-export const AccountScreen: FC<MainStackScreenProps<"Authenticate">> = (
+export const AuthenticateScreen: FC<MainStackScreenProps<"Authenticate">> = (
   props
 ) => {
   const { navigation } = props;

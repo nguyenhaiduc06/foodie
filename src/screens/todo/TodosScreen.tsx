@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { ScrollView, RefreshControl, View } from "react-native";
 import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
@@ -46,11 +46,16 @@ const ActionButtonContainer = styled.View`
 
 export const TodosScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
+  const initTodoStore = useTodoStore((s) => s.initTodoStore);
   const todos = useTodoStore((s) => s.todos);
   const fetchTodos = useTodoStore((s) => s.fetchTodos);
   const fetching = useTodoStore((s) => s.fetching);
   const date = useTodoStore((s) => s.date);
   const setDate = useTodoStore((s) => s.setDate);
+
+  useEffect(() => {
+    initTodoStore();
+  }, []);
 
   const addTodo = () => {
     navigation.navigate("AddTodo");
@@ -58,7 +63,6 @@ export const TodosScreen: FC<ScreenProps> = (props) => {
 
   return (
     <Screen>
-      {/* <Header title="Danh sách cần mua" /> */}
       <Container>
         <DateSelector date={date} onChangeDate={setDate} />
       </Container>

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import {
   ScrollView,
   TouchableOpacity,
@@ -41,9 +41,14 @@ const Section = styled.View`
 
 export const RecipesScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
+  const initRecipeStore = useRecipeStore((s) => s.initRecipeStore);
   const recipes = useRecipeStore((s) => s.recipes);
   const fetchRecipes = useRecipeStore((s) => s.fetchRecipes);
   const fetching = useRecipeStore((s) => s.fetching);
+
+  useEffect(() => {
+    initRecipeStore();
+  }, []);
 
   const viewRecipeDetails = (recipe) => {
     navigation.navigate("RecipeDetails", {

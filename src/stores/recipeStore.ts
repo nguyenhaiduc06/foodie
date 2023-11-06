@@ -18,6 +18,8 @@ export const useRecipeStore = create<RecipeStoreState>()((set, get) => ({
   date: Date.now(),
   fetching: false,
   initRecipeStore: async () => {
+    get().fetchRecipes();
+
     useAuthStore.subscribe((s) => {
       if (s.user?.id) {
         get().fetchRecipes();

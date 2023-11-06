@@ -25,6 +25,8 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
   fetching: false,
   date: new Date(Date.now()),
   initDishStore: async () => {
+    get().fetchDishes();
+
     useAuthStore.subscribe((s) => {
       if (s.user?.id) {
         get().fetchDishes();

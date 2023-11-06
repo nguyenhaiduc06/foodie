@@ -24,7 +24,11 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
   fetchGroups: async () => {
     const { data: groups, error } = await supabase.from("groups").select("*");
     if (error) return { error: new Error(error.message) };
-    set((s) => ({ groups, currentGroup: s.currentGroup ?? groups[0] }));
+    if (groups.length == 0) {
+      get().createGroup({ name: "Nhóm" });
+    } else {
+      set((s) => ({ groups, currentGroup: s.currentGroup ?? groups[0] }));
+    }
   },
   createGroup: async ({ name }) => {
     const user_id = useAuthStore.getState().user.id;
@@ -32,6 +36,10 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
       .from("groups")
       .insert({ name, user_id });
     if (error) return { error: new Error(error.message) };
+    set((s) => ({
+      groups: [...s.groups, group],
+      currentGroup: s.currentGroup ?? group,
+    }));
   },
   activateGroup: (id: number) => {
     const groupToActivate = get().groups.filter((g) => g.id == id)[0];

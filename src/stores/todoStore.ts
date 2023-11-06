@@ -31,6 +31,8 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
   date: new Date(),
   fetching: false,
   initTodoStore: async () => {
+    get().fetchTodos();
+
     useAuthStore.subscribe((s) => {
       if (s.user?.id) {
         get().fetchTodos();

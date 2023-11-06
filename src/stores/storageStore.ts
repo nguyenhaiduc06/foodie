@@ -15,6 +15,8 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
   storages: [],
   fetching: false,
   initStorageStore: async () => {
+    get().fetchStorages();
+
     useAuthStore.subscribe((s) => {
       if (s.user?.id) {
         get().fetchStorages();
