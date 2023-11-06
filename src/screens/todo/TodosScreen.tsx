@@ -28,7 +28,7 @@ const Section = styled.View`
 
 const Divider = styled.View`
   height: 1px;
-  background-color: ${theme.colors.border};
+  background-color: ${theme.palette.black[10]};
   width: 100%;
 `;
 
