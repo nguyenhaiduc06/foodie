@@ -22,7 +22,7 @@ const Container = styled.TouchableOpacity<{ active: boolean }>`
   flex-direction: row;
   align-items: center;
   border: 1px solid
-    ${(p) => (p.active ? theme.colors.primary : theme.colors.foreground)};
+    ${(p) => (p.active ? theme.colors.primary : "rgba(0,0,0,0.05)")};
   background-color: ${(p) =>
     p.active ? theme.palette.orange[100] : theme.colors.foreground};
 `;

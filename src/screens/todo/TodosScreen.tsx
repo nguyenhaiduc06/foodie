@@ -24,6 +24,7 @@ type ScreenProps = CompositeScreenProps<
 const Section = styled.View`
   background-color: white;
   border-radius: 16px;
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.05);
 `;
 
 const Divider = styled.View`
