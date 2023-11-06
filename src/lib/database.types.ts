@@ -12,34 +12,34 @@ export interface Database {
       dishes: {
         Row: {
           date: string | null
+          group_id: number | null
           id: string
           image_url: string | null
           meal: string | null
           name: string | null
-          user_id: string | null
         }
         Insert: {
           date?: string | null
+          group_id?: number | null
           id?: string
           image_url?: string | null
           meal?: string | null
           name?: string | null
-          user_id?: string | null
         }
         Update: {
           date?: string | null
+          group_id?: number | null
           id?: string
           image_url?: string | null
           meal?: string | null
           name?: string | null
-          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "dishes_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "dishes_group_id_fkey"
+            columns: ["group_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "groups"
             referencedColumns: ["id"]
           }
         ]

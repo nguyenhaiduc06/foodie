@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { supabase, Dish } from "@/lib";
-import { useAuthStore } from "./authStore";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
+import { useGroupStore } from "./groupStore";
+import dayjs from "dayjs";
 
 interface DishStoreState {
   dishes: Dish[];
@@ -27,8 +28,8 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
   initDishStore: async () => {
     get().fetchDishes();
 
-    useAuthStore.subscribe((s) => {
-      if (s.user?.id) {
+    useGroupStore.subscribe((s) => {
+      if (s.currentGroup?.id) {
         get().fetchDishes();
       }
     });
@@ -36,13 +37,19 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
   fetchDishes: async () => {
     set({ fetching: true });
 
-    const user_id = useAuthStore.getState().user?.id;
-    if (!user_id) return;
+    const group_id = useGroupStore.getState().currentGroup?.id;
+    if (!group_id) return;
+
+    const date = get().date;
+    const startOfDate = dayjs(date).startOf("date").toISOString();
+    const endOfDate = dayjs(date).endOf("date").toISOString();
 
     const { data: dishes, error } = await supabase
       .from("dishes")
       .select("*")
-      .eq("user_id", user_id);
+      .lte("date", endOfDate)
+      .gte("date", startOfDate)
+      .eq("group_id", group_id);
 
     set({ fetching: false });
 
@@ -51,13 +58,13 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
     }
   },
   createDish: async ({ name, meal, date, image }) => {
-    const user_id = useAuthStore.getState().user.id;
+    const group_id = useGroupStore.getState().currentGroup?.id;
 
     const image_url = image ? ((await uploadImage(image)) as string) : "";
 
     const { data: newDish, error: dishCreateError } = await supabase
       .from("dishes")
-      .insert({ name, meal, image_url, date: date.toISOString(), user_id })
+      .insert({ name, meal, image_url, date: date.toISOString(), group_id })
       .select()
       .single();
     if (dishCreateError) return { error: new Error(dishCreateError.message) };
@@ -67,16 +74,17 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
   },
   setDate: (date) => {
     set({ date });
+    get().fetchDishes();
   },
 }));
 
 const uploadImage = async (image) => {
-  const user_id = useAuthStore.getState().user.id;
+  const group_id = useGroupStore.getState().currentGroup?.id;
   const base64 = await FileSystem.readAsStringAsync(image.uri, {
     encoding: "base64",
   });
   const id = 2;
-  const filePath = `${user_id}/images/dish/${id}.png`;
+  const filePath = `${group_id}/images/dish/${id}.png`;
 
   const { error: fileUploadError } = await supabase.storage
     .from("files")
