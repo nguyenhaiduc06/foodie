@@ -1,8 +1,16 @@
-import { useUserStore } from "@/stores";
+import { useAuthStore } from "@/stores";
 import { Text, Screen, Space, Button, GroupItem } from "@/components";
 import styled from "styled-components/native";
 import { theme } from "@/theme";
-import { useState } from "react";
+import { FC, useState } from "react";
+import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+type ScreenProps = CompositeScreenProps<
+  HomeTabScreenProps<"Profile">,
+  NativeStackScreenProps<MainStackParamList>
+>;
 
 const Container = styled.View`
   flex: 1;
@@ -21,9 +29,10 @@ const Avatar = styled.View`
   background-color: ${theme.colors.foreground};
 `;
 
-export const ProfileScreen = () => {
+export const ProfileScreen: FC<ScreenProps> = (props) => {
+  const { navigation } = props;
   const [loading, setLoading] = useState(false);
-  const signOut = useUserStore((s) => s.signOut);
+  const signOut = useAuthStore((s) => s.signOut);
 
   return (
     <Screen>
@@ -31,9 +40,6 @@ export const ProfileScreen = () => {
         <Avatar />
         <Space height={8} />
         <Text preset="title">Nguyen Hai Duc</Text>
-        <GroupItem />
-        <GroupItem active />
-        <GroupItem />
         <Space />
       </Container>
       <ButtonContainer>
@@ -45,6 +51,7 @@ export const ProfileScreen = () => {
             setLoading(false);
             await signOut();
             setLoading(true);
+            navigation.replace("Authenticate");
           }}
         />
       </ButtonContainer>

@@ -1,7 +1,7 @@
 import { supabase } from "@/lib";
 import { Storage } from "@/lib";
 import { create } from "zustand";
-import { useUserStore } from "./userStore";
+import { useAuthStore } from "./authStore";
 
 interface StorageStoreState {
   storages: Storage[];
@@ -15,7 +15,7 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
   storages: [],
   fetching: false,
   initStorageStore: async () => {
-    useUserStore.subscribe((s) => {
+    useAuthStore.subscribe((s) => {
       if (s.user?.id) {
         get().fetchStorages();
       }
@@ -24,7 +24,7 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
   fetchStorages: async () => {
     set({ fetching: true });
 
-    const user_id = useUserStore.getState().user?.id;
+    const user_id = useAuthStore.getState().user?.id;
     if (!user_id) return;
 
     const { data: storages, error } = await supabase

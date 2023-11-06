@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { supabase, Recipe } from "@/lib";
-import { useUserStore } from "./userStore";
+import { useAuthStore } from "./authStore";
 
 interface RecipeStoreState {
   recipes: Recipe[];
@@ -18,7 +18,7 @@ export const useRecipeStore = create<RecipeStoreState>()((set, get) => ({
   date: Date.now(),
   fetching: false,
   initRecipeStore: async () => {
-    useUserStore.subscribe((s) => {
+    useAuthStore.subscribe((s) => {
       if (s.user?.id) {
         get().fetchRecipes();
       }
@@ -27,7 +27,7 @@ export const useRecipeStore = create<RecipeStoreState>()((set, get) => ({
   fetchRecipes: async () => {
     set({ fetching: true });
 
-    const user_id = useUserStore.getState().user?.id;
+    const user_id = useAuthStore.getState().user?.id;
     if (!user_id) return;
 
     const { data: recipes, error } = await supabase

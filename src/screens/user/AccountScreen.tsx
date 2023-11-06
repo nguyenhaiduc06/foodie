@@ -1,8 +1,8 @@
 import React, { FC, useState } from "react";
 import { Alert, StyleSheet } from "react-native";
 import { Button, Input, Screen, Space, Text } from "@/components";
-import { useUserStore } from "@/stores";
-import { AuthenticateStackScreenProps } from "@/navigators";
+import { useAuthStore } from "@/stores";
+import { MainStackScreenProps } from "@/navigators";
 import styled from "styled-components/native";
 
 const Container = styled.View`
@@ -11,7 +11,7 @@ const Container = styled.View`
   gap: 16px;
 `;
 
-export const AccountScreen: FC<AuthenticateStackScreenProps<"Account">> = (
+export const AccountScreen: FC<MainStackScreenProps<"Authenticate">> = (
   props
 ) => {
   const { navigation } = props;
@@ -19,16 +19,22 @@ export const AccountScreen: FC<AuthenticateStackScreenProps<"Account">> = (
   const [password, setPassword] = useState("123456");
   const [loadingSignIn, setLoadingSignIn] = useState(false);
   const [loadingSignUp, setLoadingSignUp] = useState(false);
-  const signInWithEmail = useUserStore((s) => s.signInWithEmail);
-  const signUpWithEmail = useUserStore((s) => s.signUpWithEmail);
+  const signInWithEmail = useAuthStore((s) => s.signInWithEmail);
+  const signUpWithEmail = useAuthStore((s) => s.signUpWithEmail);
+
   const submitSignIn = async () => {
     setLoadingSignIn(true);
-    const { error } = await signInWithEmail(email, password);
+    const { profile, error } = await signInWithEmail(email, password);
     setLoadingSignIn(false);
     if (error) {
       Alert.alert(error.message);
       return;
     }
+    if (!profile) {
+      navigation.navigate("CreateProfile");
+      return;
+    }
+    navigation.replace("HomeTab");
   };
   const submitSignUp = async () => {
     setLoadingSignUp(true);
@@ -38,6 +44,7 @@ export const AccountScreen: FC<AuthenticateStackScreenProps<"Account">> = (
       Alert.alert(error.message);
       return;
     }
+    navigation.navigate("CreateProfile");
   };
   return (
     <Screen safeBottom>

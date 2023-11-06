@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { useUserStore } from "./userStore";
+import { useAuthStore } from "./authStore";
 import { useRecipeStore } from "./recipeStore";
 import { useStorageStore } from "./storageStore";
 import { useTodoStore } from "./todoStore";
@@ -14,7 +14,7 @@ interface AppStoreState {
 export const useAppStore = create<AppStoreState>()((set) => ({
   initializing: true,
   initStores: async () => {
-    await useUserStore.getState().initUserStore();
+    await useAuthStore.getState().initUserStore();
     useGroupStore.getState().initGroupStore();
     set({ initializing: false });
     useTodoStore.getState().initTodoStore();

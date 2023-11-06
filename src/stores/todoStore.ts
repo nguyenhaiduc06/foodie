@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { Todo, supabase } from "@/lib";
-import { useUserStore } from "./userStore";
+import { useAuthStore } from "./authStore";
 import dayjs from "dayjs";
 
 interface TodoStoreState {
@@ -31,7 +31,7 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
   date: new Date(),
   fetching: false,
   initTodoStore: async () => {
-    useUserStore.subscribe((s) => {
+    useAuthStore.subscribe((s) => {
       if (s.user?.id) {
         get().fetchTodos();
       }
@@ -40,7 +40,7 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
   fetchTodos: async () => {
     set({ fetching: true });
 
-    const user_id = useUserStore.getState().user?.id;
+    const user_id = useAuthStore.getState().user?.id;
     if (!user_id) return;
 
     const date = get().date;
@@ -60,7 +60,7 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
     }
   },
   addTodo: async ({ name, amount, date }) => {
-    const user_id = useUserStore.getState().session.user.id;
+    const user_id = useAuthStore.getState().session.user.id;
     const { data: newTodo, error } = await supabase
       .from("todos")
       .insert({ name, amount, date: date.toISOString(), user_id })

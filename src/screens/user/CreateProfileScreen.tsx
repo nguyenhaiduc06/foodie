@@ -1,15 +1,25 @@
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { FC, useState } from "react";
+import { Alert, StyleSheet } from "react-native";
 import { Button, Input, Screen, Space, Text } from "@/components";
-import { useUserStore } from "@/stores";
+import { useAuthStore } from "@/stores";
+import { MainStackScreenProps } from "@/navigators";
 
-export const CreateProfileScreen = () => {
-  const session = useUserStore((s) => s.session);
-  const profile = useUserStore((s) => s.profile);
-  const createProfile = useUserStore((s) => s.createProfile);
+type ScreenProps = MainStackScreenProps<"CreateProfile">;
+
+export const CreateProfileScreen: FC<ScreenProps> = (props) => {
+  const { navigation } = props;
   const [name, setName] = useState("");
-  const submit = () => {
-    createProfile(name);
+  const [loading, setLoading] = useState(false);
+  const createProfile = useAuthStore((s) => s.createProfile);
+  const submit = async () => {
+    setLoading(true);
+    const { error } = await createProfile({ name });
+    setLoading(false);
+    if (error) {
+      Alert.alert(error.message);
+      return;
+    }
+    navigation.replace("HomeTab");
   };
   return (
     <Screen style={styles.container} safeBottom>
@@ -18,9 +28,15 @@ export const CreateProfileScreen = () => {
       <Space height={24} />
       <Text>Name</Text>
       <Space height={4} />
-      <Input placeholder={"Your name"} onChangeText={setName} />
+      <Input placeholder={"Tên của bạn"} onChangeText={setName} />
       <Space />
-      <Button disabled={!name} label={"Continue"} onPress={submit} />
+      <Button
+        preset="primary"
+        disabled={!name}
+        loading={loading}
+        label={"Tiếp tục"}
+        onPress={submit}
+      />
       <Space height={16} />
     </Screen>
   );

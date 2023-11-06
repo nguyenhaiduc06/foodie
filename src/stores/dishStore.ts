@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { supabase, Dish } from "@/lib";
-import { useUserStore } from "./userStore";
+import { useAuthStore } from "./authStore";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
@@ -25,7 +25,7 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
   fetching: false,
   date: new Date(Date.now()),
   initDishStore: async () => {
-    useUserStore.subscribe((s) => {
+    useAuthStore.subscribe((s) => {
       if (s.user?.id) {
         get().fetchDishes();
       }
@@ -34,7 +34,7 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
   fetchDishes: async () => {
     set({ fetching: true });
 
-    const user_id = useUserStore.getState().user?.id;
+    const user_id = useAuthStore.getState().user?.id;
     if (!user_id) return;
 
     const { data: dishes, error } = await supabase
@@ -49,7 +49,7 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
     }
   },
   createDish: async ({ name, meal, date, image }) => {
-    const user_id = useUserStore.getState().user.id;
+    const user_id = useAuthStore.getState().user.id;
 
     const image_url = image ? ((await uploadImage(image)) as string) : "";
 
@@ -69,7 +69,7 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
 }));
 
 const uploadImage = async (image) => {
-  const user_id = useUserStore.getState().user.id;
+  const user_id = useAuthStore.getState().user.id;
   const base64 = await FileSystem.readAsStringAsync(image.uri, {
     encoding: "base64",
   });
