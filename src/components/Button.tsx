@@ -61,7 +61,7 @@ export const Button: FC<ButtonProps> = (props) => {
       {loading ? (
         <ActivityIndicator />
       ) : (
-        <Text preset="title" color={labelColor}>
+        <Text size={17} weight={500} color={labelColor}>
           {label}
         </Text>
       )}
