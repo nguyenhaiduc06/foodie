@@ -13,3 +13,4 @@ export * from "./GroupItem";
 export * from "./StorageItem";
 export * from "./DateSelector";
 export * from "./ActionButton";
+export * from "./Options";

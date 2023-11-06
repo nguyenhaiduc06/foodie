@@ -71,7 +71,11 @@ export const DishesScreen: FC<ScreenProps> = (props) => {
       acc[dish.meal].push(dish);
       return acc;
     },
-    [[], [], []]
+    {
+      breakfast: [],
+      lunch: [],
+      dinner: [],
+    }
   );
 
   const viewDishDetails = (dish) => {
@@ -96,7 +100,7 @@ export const DishesScreen: FC<ScreenProps> = (props) => {
           <Text preset="title">Bữa sáng</Text>
           <Space height={8} />
           <Section>
-            {dishesByMeal[0].map((dish, index) => (
+            {dishesByMeal.breakfast.map((dish, index) => (
               <TouchableOpacity
                 key={dish.id}
                 onPress={() => viewDishDetails(dish)}
@@ -109,7 +113,7 @@ export const DishesScreen: FC<ScreenProps> = (props) => {
           <Text preset="title">Bữa trưa</Text>
           <Space height={8} />
           <Section>
-            {dishesByMeal[1].map((dish, index) => (
+            {dishesByMeal.lunch.map((dish, index) => (
               <TouchableOpacity
                 key={dish.id}
                 onPress={() => viewDishDetails(dish)}
@@ -122,7 +126,7 @@ export const DishesScreen: FC<ScreenProps> = (props) => {
           <Text preset="title">Bữa tối</Text>
           <Space height={8} />
           <Section>
-            {dishesByMeal[2].map((dish, index) => (
+            {dishesByMeal.dinner.map((dish, index) => (
               <TouchableOpacity
                 key={dish.id}
                 onPress={() => viewDishDetails(dish)}
