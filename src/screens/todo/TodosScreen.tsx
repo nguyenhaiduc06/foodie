@@ -4,7 +4,13 @@ import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { ActionButton, DateSelector, Screen, TodoItem } from "@/components";
+import {
+  ActionButton,
+  DateSelector,
+  Screen,
+  Space,
+  TodoItem,
+} from "@/components";
 import { theme } from "@/theme";
 import { useTodoStore } from "@/stores";
 import { Plus } from "lucide-react-native";
@@ -68,6 +74,9 @@ export const TodosScreen: FC<ScreenProps> = (props) => {
               </React.Fragment>
             ))}
           </Section>
+
+          {/* Add a space with a height of 72px to avoid being covered by the floating action button */}
+          <Space height={72} />
         </Container>
       </ScrollView>
       <ActionButtonContainer>

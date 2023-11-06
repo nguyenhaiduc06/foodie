@@ -4,6 +4,7 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import {
+  AddDishScreen,
   AddTodosScreen,
   DishDetailsScreen,
   RecipeDetailsScreen,
@@ -82,6 +83,15 @@ export const MainStack = () => {
             }}
           />
           <Main.Screen name="DishDetails" component={DishDetailsScreen} />
+          <Main.Screen
+            name="AddDish"
+            component={AddDishScreen}
+            options={{
+              title: "Thêm món ăn vào thực đơn",
+              presentation: "modal",
+            }}
+          />
+
           <Main.Screen name="RecipeDetails" component={RecipeDetailsScreen} />
           <Main.Screen name="StorageDetails" component={StorageDetailsScreen} />
         </>

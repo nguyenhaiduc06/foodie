@@ -9,9 +9,17 @@ import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { Screen, DishItem, Text, Space, DateSelector } from "@/components";
+import {
+  Screen,
+  DishItem,
+  Text,
+  Space,
+  DateSelector,
+  ActionButton,
+} from "@/components";
 import { theme } from "@/theme";
 import { useDishStore } from "@/stores";
+import { Plus } from "lucide-react-native";
 
 const SCREEN_PADDING = 16;
 const GAP = 16;
@@ -43,6 +51,14 @@ const Container = styled.View`
   padding: 16px;
 `;
 
+const ActionButtonContainer = styled.View`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 16px;
+  align-items: flex-end;
+`;
+
 export const DishesScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
   const dishes = useDishStore((s) => s.dishes);
@@ -60,6 +76,10 @@ export const DishesScreen: FC<ScreenProps> = (props) => {
 
   const viewDishDetails = (dish) => {
     navigation.navigate("DishDetails", { dish });
+  };
+
+  const addDish = () => {
+    navigation.navigate("AddDish");
   };
 
   return (
@@ -111,8 +131,18 @@ export const DishesScreen: FC<ScreenProps> = (props) => {
               </TouchableOpacity>
             ))}
           </Section>
+
+          {/* Add a space with a height of 72px to avoid being covered by the floating action button */}
+          <Space height={72} />
         </Container>
       </ScrollView>
+      <ActionButtonContainer>
+        <ActionButton
+          left={<Plus size={22} color={theme.colors.textInverted} />}
+          label="Thêm"
+          onPress={addDish}
+        />
+      </ActionButtonContainer>
     </Screen>
   );
 };
