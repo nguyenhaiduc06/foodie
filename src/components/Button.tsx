@@ -47,7 +47,9 @@ export const Button: FC<ButtonProps> = (props) => {
     : PRESETS[preset].labelColor;
   return (
     <Container backgroundColor={backgroundColor} {...rest}>
-      <Text color={labelColor}>{label}</Text>
+      <Text preset="title" color={labelColor}>
+        {label}
+      </Text>
     </Container>
   );
 };
