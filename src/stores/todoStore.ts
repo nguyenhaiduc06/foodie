@@ -9,7 +9,11 @@ interface TodoStoreState {
   fetching: boolean;
   initTodoStore: () => void;
   fetchTodos: () => void;
-  addTodo: (name: string, amount: number) => void;
+  addTodo: (data: {
+    name: string;
+    amount: string;
+    date: Date;
+  }) => Promise<{ error: Error | null }>;
   updateTodo: (
     id: number,
     data: {
@@ -55,14 +59,17 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
       set({ todos });
     }
   },
-  addTodo: async (name, amount) => {
-    const userId = useUserStore.getState().session.user.id;
+  addTodo: async ({ name, amount, date }) => {
+    const user_id = useUserStore.getState().session.user.id;
     const { data: newTodo, error } = await supabase
       .from("todos")
-      .insert({ name, amount, user_id: userId })
+      .insert({ name, amount, date: date.toISOString(), user_id })
       .select()
       .single();
+    if (error) return { error: new Error(error.message) };
+
     set((state) => ({ todos: [newTodo, ...state.todos] }));
+    return { error: null };
   },
   updateTodo: async (id, newData) => {
     const { data: updatedTodo, error } = await supabase

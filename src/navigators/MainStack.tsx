@@ -79,6 +79,7 @@ export const MainStack = () => {
             name="AddTodo"
             component={AddTodosScreen}
             options={{
+              title: "Thêm thực phẩm cần mua",
               presentation: "modal",
             }}
           />

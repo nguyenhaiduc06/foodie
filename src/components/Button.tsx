@@ -1,8 +1,9 @@
-import { TouchableOpacityProps } from "react-native";
+import { ActivityIndicator, TouchableOpacityProps } from "react-native";
 import { theme } from "../theme";
 import { FC } from "react";
 import styled from "styled-components/native";
 import { Text } from "./Text";
+import { Loader } from "lucide-react-native";
 
 const PRESETS = {
   primary: {
@@ -20,6 +21,7 @@ const PRESETS = {
 type ButtonProps = TouchableOpacityProps & {
   preset: keyof typeof PRESETS;
   label: string;
+  loading?: boolean;
 };
 
 const Container = styled.TouchableOpacity<{
@@ -37,19 +39,32 @@ const Container = styled.TouchableOpacity<{
 `;
 
 export const Button: FC<ButtonProps> = (props) => {
-  const { preset = "secondary", label, ...rest } = props;
-  const { disabled } = props;
-  const backgroundColor = disabled
-    ? theme.colors.foreground
-    : PRESETS[preset].backgroundColor;
-  const labelColor = disabled
-    ? theme.palette.gray[400]
-    : PRESETS[preset].labelColor;
+  const {
+    preset = "secondary",
+    label,
+    loading = false,
+    disabled = false,
+    ...rest
+  } = props;
+  const backgroundColor =
+    disabled || loading
+      ? theme.colors.foreground
+      : PRESETS[preset].backgroundColor;
+  const labelColor =
+    disabled || loading ? theme.palette.gray[400] : PRESETS[preset].labelColor;
   return (
-    <Container backgroundColor={backgroundColor} {...rest}>
-      <Text preset="title" color={labelColor}>
-        {label}
-      </Text>
+    <Container
+      backgroundColor={backgroundColor}
+      disabled={disabled || loading}
+      {...rest}
+    >
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <Text preset="title" color={labelColor}>
+          {label}
+        </Text>
+      )}
     </Container>
   );
 };

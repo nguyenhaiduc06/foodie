@@ -32,23 +32,26 @@ export interface Database {
       }
       dishes: {
         Row: {
-          created_at: string
-          id: number
-          meal: number | null
+          date: string | null
+          id: string
+          image_url: string | null
+          meal: string | null
           name: string | null
           user_id: string | null
         }
         Insert: {
-          created_at?: string
-          id?: number
-          meal?: number | null
+          date?: string | null
+          id?: string
+          image_url?: string | null
+          meal?: string | null
           name?: string | null
           user_id?: string | null
         }
         Update: {
-          created_at?: string
-          id?: number
-          meal?: number | null
+          date?: string | null
+          id?: string
+          image_url?: string | null
+          meal?: string | null
           name?: string | null
           user_id?: string | null
         }
@@ -184,48 +187,38 @@ export interface Database {
       }
       todos: {
         Row: {
-          amount: number | null
-          category_id: number | null
+          amount: string | null
           checked: boolean
           created_at: string
           date: string | null
-          group_id: number | null
           id: number
           name: string | null
+          user_id: string | null
         }
         Insert: {
-          amount?: number | null
-          category_id?: number | null
+          amount?: string | null
           checked?: boolean
           created_at?: string
           date?: string | null
-          group_id?: number | null
           id?: number
           name?: string | null
+          user_id?: string | null
         }
         Update: {
-          amount?: number | null
-          category_id?: number | null
+          amount?: string | null
           checked?: boolean
           created_at?: string
           date?: string | null
-          group_id?: number | null
           id?: number
           name?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "todos_category_id_fkey"
-            columns: ["category_id"]
+            foreignKeyName: "todos_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "categories"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "todos_group_id_fkey"
-            columns: ["group_id"]
-            isOneToOne: false
-            referencedRelation: "groups"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
