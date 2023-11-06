@@ -1,7 +1,7 @@
 import { supabase } from "@/lib";
 import { Storage } from "@/lib";
 import { create } from "zustand";
-import { useAuthStore } from "./authStore";
+import { useGroupStore } from "./groupStore";
 
 interface StorageStoreState {
   storages: Storage[];
@@ -17,8 +17,8 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
   initStorageStore: async () => {
     get().fetchStorages();
 
-    useAuthStore.subscribe((s) => {
-      if (s.user?.id) {
+    useGroupStore.subscribe((s) => {
+      if (s.currentGroup?.id) {
         get().fetchStorages();
       }
     });
@@ -26,13 +26,13 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
   fetchStorages: async () => {
     set({ fetching: true });
 
-    const user_id = useAuthStore.getState().user?.id;
-    if (!user_id) return;
+    const group_id = useGroupStore.getState().currentGroup?.id;
+    if (!group_id) return;
 
     const { data: storages, error } = await supabase
       .from("storages")
       .select("*")
-      .eq("user_id", user_id);
+      .eq("group_id", group_id);
 
     set({ fetching: false });
 

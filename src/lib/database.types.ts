@@ -175,38 +175,38 @@ export interface Database {
       }
       storages: {
         Row: {
-          amount: number | null
+          amount: string | null
           created_at: string
           expire_date: string | null
+          group_id: number | null
           id: number
           name: string | null
           stored_in: string | null
-          user_id: string | null
         }
         Insert: {
-          amount?: number | null
+          amount?: string | null
           created_at?: string
           expire_date?: string | null
+          group_id?: number | null
           id?: number
           name?: string | null
           stored_in?: string | null
-          user_id?: string | null
         }
         Update: {
-          amount?: number | null
+          amount?: string | null
           created_at?: string
           expire_date?: string | null
+          group_id?: number | null
           id?: number
           name?: string | null
           stored_in?: string | null
-          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "storages_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "storages_group_id_fkey"
+            columns: ["group_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "groups"
             referencedColumns: ["id"]
           }
         ]
