@@ -1,13 +1,13 @@
 import { useUserStore } from "@/stores";
-import { Text, Screen, Space, Button } from "@/components";
+import { Text, Screen, Space, Button, GroupItem } from "@/components";
 import styled from "styled-components/native";
 import { theme } from "@/theme";
 import { useState } from "react";
 
 const Container = styled.View`
   flex: 1;
-  align-items: center;
   padding: 16px;
+  gap: 16px;
 `;
 
 const ButtonContainer = styled.View`
@@ -31,6 +31,9 @@ export const ProfileScreen = () => {
         <Avatar />
         <Space height={8} />
         <Text preset="title">Nguyen Hai Duc</Text>
+        <GroupItem />
+        <GroupItem active />
+        <GroupItem />
         <Space />
       </Container>
       <ButtonContainer>

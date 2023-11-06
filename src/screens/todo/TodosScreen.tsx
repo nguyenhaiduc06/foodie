@@ -7,6 +7,7 @@ import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
 import {
   ActionButton,
   DateSelector,
+  Header,
   Screen,
   Space,
   TodoItem,
@@ -57,6 +58,7 @@ export const TodosScreen: FC<ScreenProps> = (props) => {
 
   return (
     <Screen>
+      {/* <Header title="Danh sách cần mua" /> */}
       <Container>
         <DateSelector date={date} onChangeDate={setDate} />
       </Container>

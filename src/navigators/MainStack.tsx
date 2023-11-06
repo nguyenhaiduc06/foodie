@@ -7,7 +7,9 @@ import {
   AddDishScreen,
   AddTodosScreen,
   DishDetailsScreen,
+  ManageGroupScreen,
   RecipeDetailsScreen,
+  SelectGroupScreen,
   StorageDetailsScreen,
 } from "@/screens";
 import { useUserStore } from "@/stores";
@@ -38,6 +40,9 @@ export type MainStackParamList = {
   };
   AddRecipe: undefined;
   UpdateRecipe: undefined;
+
+  SelectGroup: undefined;
+  ManageGroup: undefined;
 };
 
 export type MainStackScreenProps<T extends keyof MainStackParamList> =
@@ -95,6 +100,21 @@ export const MainStack = () => {
 
           <Main.Screen name="RecipeDetails" component={RecipeDetailsScreen} />
           <Main.Screen name="StorageDetails" component={StorageDetailsScreen} />
+
+          <Main.Screen
+            name="SelectGroup"
+            component={SelectGroupScreen}
+            options={{
+              title: "Chọn nhóm",
+            }}
+          />
+          <Main.Screen
+            name="ManageGroup"
+            component={ManageGroupScreen}
+            options={{
+              presentation: "modal",
+            }}
+          />
         </>
       )}
     </Main.Navigator>

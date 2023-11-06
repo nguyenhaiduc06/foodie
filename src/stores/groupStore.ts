@@ -1,20 +1,32 @@
-import { supabase } from "@/lib";
+import { Group, supabase } from "@/lib";
 import { create } from "zustand";
 import { useUserStore } from "./userStore";
 
-export const useGroupStore = create((set) => ({
+interface GroupStoreState {
+  groups: Group[];
+  currentGroup: Group;
+  initGroupStore: () => void;
+  fetchGroups: () => Promise<{ error?: Error }>;
+  activateGroup: (id: number) => void;
+}
+
+export const useGroupStore = create<GroupStoreState>()((set, get) => ({
   groups: [],
   currentGroup: null,
+  initGroupStore: () => {
+    useUserStore.subscribe((s) => {
+      if (s.user?.id) {
+        get().fetchGroups();
+      }
+    });
+  },
   fetchGroups: async () => {
     const { data: groups, error } = await supabase.from("groups").select("*");
-    set({ groups, currentGroup: groups[0] });
+    if (error) return { error: new Error(error.message) };
+    set((s) => ({ groups, currentGroup: s.currentGroup ?? groups[0] }));
   },
-  createGroup: async (name) => {
-    const profile_id = useUserStore.getState().profile.id;
-    const { data: newGroup, error } = await supabase
-      .from("groups")
-      .insert({ name, profile_id })
-      .select();
-    set((s) => ({ groups: [newGroup, ...s.group] }));
+  activateGroup: (id: number) => {
+    const groupToActivate = get().groups.filter((g) => g.id == id)[0];
+    set({ currentGroup: groupToActivate });
   },
 }));

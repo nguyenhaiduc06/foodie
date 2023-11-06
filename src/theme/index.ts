@@ -47,7 +47,7 @@ export const lightTheme: Theme = {
 
     card: "#F4F1F4",
     primary: palette.orange[500],
-    border: "#F4F1F4",
+    border: palette.black[30],
     notification: palette.blue[500],
   },
   palette,

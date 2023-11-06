@@ -1,28 +1,32 @@
-import {
-  Button,
-  GroupItem,
-  GroupMemberItem,
-  Input,
-  Screen,
-  Space,
-  Text,
-} from "@/components";
-import { StyleSheet } from "react-native";
+import { GroupItem, Screen } from "@/components";
+import { useGroupStore } from "@/stores/groupStore";
+import { useEffect } from "react";
+import styled from "styled-components/native";
+
+const Container = styled.View`
+  flex: 1;
+  padding: 16px;
+  gap: 16px;
+`;
 
 export const SelectGroupScreen = () => {
+  const groups = useGroupStore((s) => s.groups);
+  const fetchGroups = useGroupStore((s) => s.fetchGroups);
+  const currentGroup = useGroupStore((s) => s.currentGroup);
+  const activateGroup = useGroupStore((s) => s.activateGroup);
+
   return (
-    <Screen style={styles.container} safeBottom>
-      <Text>Your groups</Text>
-      <Space height={4} />
-      <GroupItem />
-      <Space height={8} />
-      <GroupItem />
+    <Screen safeBottom>
+      <Container>
+        {groups.map((group) => (
+          <GroupItem
+            key={group.id}
+            active={group.id == currentGroup.id}
+            group={group}
+            onSelect={activateGroup}
+          />
+        ))}
+      </Container>
     </Screen>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-});

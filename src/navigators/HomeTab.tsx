@@ -8,6 +8,7 @@ import {
   ClipboardList,
   ShoppingCart,
   User,
+  Users2,
 } from "lucide-react-native";
 import {
   DishesScreen,
@@ -16,6 +17,9 @@ import {
   StoragesScreen,
   TodosScreen,
 } from "@/screens";
+import { Text } from "@/components";
+import { TouchableOpacity } from "react-native";
+import { theme } from "@/theme";
 
 export type HomeTabParamList = {
   Todos: undefined;
@@ -32,7 +36,26 @@ const Home = createBottomTabNavigator<HomeTabParamList>();
 
 export const HomeTab = () => {
   return (
-    <Home.Navigator>
+    <Home.Navigator
+      screenOptions={({ navigation }) => ({
+        headerRight({}) {
+          return (
+            <TouchableOpacity
+              style={{
+                width: 56,
+                height: 56,
+                // backgroundColor: "red",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => navigation.navigate("SelectGroup")}
+            >
+              <Users2 size={24} color={theme.colors.text} />
+            </TouchableOpacity>
+          );
+        },
+      })}
+    >
       <Home.Screen
         name="Todos"
         component={TodosScreen}
