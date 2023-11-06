@@ -142,33 +142,33 @@ export interface Database {
         Row: {
           content: string | null
           created_at: string
+          group_id: number | null
           id: number
           image_url: string | null
           name: string | null
-          user_id: string | null
         }
         Insert: {
           content?: string | null
           created_at?: string
+          group_id?: number | null
           id?: number
           image_url?: string | null
           name?: string | null
-          user_id?: string | null
         }
         Update: {
           content?: string | null
           created_at?: string
+          group_id?: number | null
           id?: number
           image_url?: string | null
           name?: string | null
-          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "recipes_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "recipes_group_id_fkey"
+            columns: ["group_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "groups"
             referencedColumns: ["id"]
           }
         ]
