@@ -25,7 +25,7 @@ export const ActionButton: FC<ActionButtonProps> = (props) => {
   return (
     <Container {...rest}>
       {left}
-      <Text weight={500} size={18} color={theme.colors.textInverted}>
+      <Text weight={500} size={17} color={theme.colors.textInverted}>
         {label}
       </Text>
       {right}
