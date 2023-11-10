@@ -1,39 +1,40 @@
-import { theme } from "@/theme";
-
 import styled from "styled-components/native";
-import { Text } from "./Text";
-import { View } from "react-native";
+import { ChevronRight } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { MainStackParamList } from "@/navigators";
+import { theme } from "@/theme";
+import { useGroupStore } from "@/stores";
+import { Text } from "./Text";
+import { Space } from "./Space";
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
-  gap: 8px;
 `;
 
 const Icon = styled.View`
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: ${theme.palette.yellow[300]};
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background-color: rgba(0, 0, 0, 0.1);
   align-items: center;
   justify-content: center;
 `;
 
 export const GroupSelector = () => {
-  const navigation = useNavigation();
+  const currentGroup = useGroupStore((s) => s.currentGroup);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const openManageGroupScreen = () => {
     navigation.navigate("SelectGroup");
   };
   return (
     <Container onPress={openManageGroupScreen}>
-      <Icon>
-        <Text preset="heading">🍔</Text>
-      </Icon>
-      <View>
-        <Text preset="title">Group</Text>
-        <Text preset="body">5 members</Text>
-      </View>
+      <Icon />
+      <Space width={8} />
+      <Text preset="title">{currentGroup?.name}</Text>
+      <ChevronRight size={20} color={theme.colors.text} />
     </Container>
   );
 };
