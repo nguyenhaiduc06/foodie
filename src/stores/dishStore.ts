@@ -80,15 +80,16 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
 
 const uploadImage = async (image) => {
   const group_id = useGroupStore.getState().currentGroup?.id;
-  const base64 = await FileSystem.readAsStringAsync(image.uri, {
-    encoding: "base64",
-  });
-  const id = 2;
+  const id = dayjs().toISOString();
   const filePath = `${group_id}/images/dish/${id}.png`;
 
   const { error: fileUploadError } = await supabase.storage
     .from("files")
-    .upload(filePath, decode(base64), { contentType: "image/png" });
+    .upload(filePath, decode(image.base64), {
+      contentType: "image/png",
+      upsert: true,
+    });
+  console.log({ fileUploadError });
   if (fileUploadError) return { error: new Error(fileUploadError.message) };
 
   const {

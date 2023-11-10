@@ -49,8 +49,6 @@ export const AuthenticateScreen: FC<MainStackScreenProps<"Authenticate">> = (
   return (
     <Screen safeBottom>
       <Container>
-        <Space height={16} />
-        <Text preset="heading">Đăng nhập hoặc đăng ký để sử dụng ứng dụng</Text>
         <Input placeholder={"Email"} onChangeText={setEmail} />
         <Input placeholder={"Mật khẩu"} onChangeText={setPassword} />
         <Space height={16} />
@@ -61,13 +59,13 @@ export const AuthenticateScreen: FC<MainStackScreenProps<"Authenticate">> = (
           label={"Đăng nhập"}
           onPress={submitSignIn}
         />
-        <Button
+        {/* <Button
           preset="secondary"
           disabled={!email || !password}
           loading={loadingSignUp}
           label={"Đăng ký"}
           onPress={submitSignUp}
-        />
+        /> */}
       </Container>
     </Screen>
   );

@@ -41,7 +41,7 @@ export const ProfileScreen: FC<ScreenProps> = (props) => {
       <Container>
         <Avatar />
         <Text preset="title" style={{ textAlign: "center" }}>
-          {profile.name}
+          {profile?.name}
         </Text>
         <Space />
       </Container>

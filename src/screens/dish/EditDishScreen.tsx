@@ -5,7 +5,7 @@ import { Screen, Text, Space } from "@/components";
 import { theme } from "@/theme";
 import { TouchableOpacity } from "react-native";
 
-type ScreenProps = MainStackScreenProps<"DishDetails">;
+type ScreenProps = MainStackScreenProps<"EditDish">;
 
 const CoverImage = styled.Image`
   height: 200px;
@@ -17,22 +17,17 @@ const Container = styled.View`
   padding: 16px;
 `;
 
-export const DishDetailsScreen: FC<ScreenProps> = (props) => {
+export const EditDishScreen: FC<ScreenProps> = (props) => {
   const { navigation, route } = props;
   const { dish } = route.params;
 
-  const openEditDishScreen = () => {
-    navigation.navigate("EditDish", {
-      dish,
-    });
-  };
-
   useEffect(() => {
     navigation.setOptions({
+      title: dish.name,
       headerRight: () => (
-        <TouchableOpacity onPress={openEditDishScreen}>
-          <Text size={18} weight={500} color={theme.colors.text}>
-            Sửa
+        <TouchableOpacity>
+          <Text color={theme.colors.danger} weight={500} size={18}>
+            Xóa
           </Text>
         </TouchableOpacity>
       ),

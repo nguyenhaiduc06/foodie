@@ -13,6 +13,7 @@ import {
   RecipeDetailsScreen,
   SelectGroupScreen,
   StorageDetailsScreen,
+  EditDishScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
@@ -31,7 +32,9 @@ export type MainStackParamList = {
     dish: Dish;
   };
   AddDish: undefined;
-  UpdateDish: undefined;
+  EditDish: {
+    dish: Dish;
+  };
 
   StorageDetails: {
     storage: Storage;
@@ -73,8 +76,20 @@ export const MainStack = () => {
 
   return (
     <Main.Navigator initialRouteName={initialRouteName}>
-      <Main.Screen name="Authenticate" component={AuthenticateScreen} />
-      <Main.Screen name="CreateProfile" component={CreateProfileScreen} />
+      <Main.Screen
+        name="Authenticate"
+        component={AuthenticateScreen}
+        options={{
+          title: "Đăng nhập",
+        }}
+      />
+      <Main.Screen
+        name="CreateProfile"
+        component={CreateProfileScreen}
+        options={{
+          title: "Thông tin cá nhân",
+        }}
+      />
       <Main.Screen
         name="HomeTab"
         component={HomeTab}
@@ -99,6 +114,7 @@ export const MainStack = () => {
           presentation: "modal",
         }}
       />
+      <Main.Screen name="EditDish" component={EditDishScreen} />
 
       <Main.Screen name="RecipeDetails" component={RecipeDetailsScreen} />
       <Main.Screen name="StorageDetails" component={StorageDetailsScreen} />

@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import * as ImagePicker from "expo-image-picker";
 import { useDishStore } from "@/stores";
 import { Alert } from "react-native";
+import { ImageResult, SaveFormat, manipulateAsync } from "expo-image-manipulator";
 
 type ScreenProps = MainStackScreenProps<"AddDish">;
 
@@ -53,10 +54,10 @@ export const AddDishScreen: FC<ScreenProps> = (props) => {
   const [name, setName] = useState("");
   const [meal, setMeal] = useState("breakfast");
   const [date, setDate] = useState(dayjs().toDate());
-  const [image, setImage] = useState<ImagePicker.ImagePickerAsset>();
+  const [image, setImage] = useState<ImageResult>();
   const [loading, setLoading] = useState(false);
   const createDish = useDishStore((s) => s.createDish);
-
+  
   const submit = async () => {
     setLoading(true);
     const { error } = await createDish({
@@ -74,13 +75,17 @@ export const AddDishScreen: FC<ScreenProps> = (props) => {
   };
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      quality: 0.1,
-    });
+    let result = await ImagePicker.launchImageLibraryAsync({});
 
     if (!result.canceled) {
-      setImage(result.assets[0]);
+      const imageManip = await manipulateAsync(result.assets[0].uri, [{resize: {
+        width: 300,
+      }}], {
+        base64: true,
+        compress: 0,
+        format: SaveFormat.PNG,
+      });
+      setImage(imageManip);
     }
   };
   return (
