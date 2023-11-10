@@ -4,6 +4,7 @@ import {
 } from "@react-navigation/bottom-tabs";
 import {
   Archive,
+  Bell,
   BookOpenText,
   ClipboardList,
   ShoppingCart,
@@ -17,7 +18,7 @@ import {
   StoragesScreen,
   TodosScreen,
 } from "@/screens";
-import { Text } from "@/components";
+import { GroupSelector, Text } from "@/components";
 import { TouchableOpacity } from "react-native";
 import { theme } from "@/theme";
 
@@ -38,19 +39,17 @@ export const HomeTab = () => {
   return (
     <Home.Navigator
       screenOptions={({ navigation }) => ({
+        headerTitle: () => <GroupSelector />,
+        headerRightContainerStyle: {
+          paddingRight: 16,
+        },
+        headerTitleAlign: "left",
         headerRight({}) {
           return (
             <TouchableOpacity
-              style={{
-                width: 56,
-                height: 56,
-                // backgroundColor: "red",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
               onPress={() => navigation.navigate("SelectGroup")}
             >
-              <Users2 size={24} color={theme.colors.text} />
+              <Bell size={22} color={theme.colors.text} />
             </TouchableOpacity>
           );
         },
