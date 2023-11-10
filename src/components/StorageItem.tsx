@@ -3,6 +3,7 @@ import { Text } from "./Text";
 import { FC } from "react";
 import { Storage } from "@/lib";
 import { Space } from "./Space";
+import dayjs from "dayjs";
 
 type StorageItemProps = {
   storage: Storage;
@@ -24,11 +25,11 @@ export const StorageItem: FC<StorageItemProps> = (props) => {
       <Row>
         <Text preset="title">{storage.name}</Text>
         <Space />
-        <Text preset="title">{storage.expire_date}</Text>
+        <Text preset="title">{dayjs(storage.expire_date).fromNow()}</Text>
       </Row>
       <Space height={4} />
       <Row>
-        <Text dim>{storage.amount} Kg</Text>
+        <Text dim>{storage.amount}</Text>
         <Space />
         <Text dim>{storage.stored_in}</Text>
       </Row>

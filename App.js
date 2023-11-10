@@ -12,6 +12,7 @@ import { StatusBar } from "expo-status-bar";
 import { useAppStore } from "@/stores/appStore";
 import { useEffect } from "react";
 import { View } from "react-native";
+import "@/utils/configDayjs";
 
 export default function App() {
   let [fontsLoaded, fontError] = useFonts({

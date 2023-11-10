@@ -8,7 +8,12 @@ interface StorageStoreState {
   fetching: boolean;
   initStorageStore: () => void;
   fetchStorages: () => void;
-  createStorage: () => void;
+  createStorage: (data: {
+    name: string;
+    amount: string;
+    storedIn: string;
+    expireDate: Date;
+  }) => Promise<{ error: Error | null }>;
 }
 
 export const useStorageStore = create<StorageStoreState>()((set, get) => ({
@@ -40,5 +45,23 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
       set({ storages });
     }
   },
-  createStorage: () => {},
+  createStorage: async ({ name, amount, storedIn, expireDate }) => {
+    const group_id = useGroupStore.getState().currentGroup?.id;
+    const { data: newStorage, error: storageCreateError } = await supabase
+      .from("storages")
+      .insert({
+        name,
+        amount,
+        stored_in: storedIn,
+        expire_date: expireDate.toISOString(),
+        group_id,
+      })
+      .select()
+      .single();
+    if (storageCreateError)
+      return { error: new Error(storageCreateError.message) };
+
+    set((s) => ({ storages: [newStorage, ...s.storages] }));
+    return { error: null };
+  },
 }));
