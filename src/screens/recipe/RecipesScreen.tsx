@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   ScrollView,
   TouchableOpacity,
@@ -9,9 +9,9 @@ import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { Screen, RecipeItem, Input, Space } from "@/components";
+import { Screen, RecipeItem, Input, Space, ActionButton } from "@/components";
 import { useRecipeStore } from "@/stores";
-import { Search } from "lucide-react-native";
+import { Plus, Search } from "lucide-react-native";
 import { theme } from "@/theme";
 
 const SCREEN_PADDING = 16;
@@ -39,12 +39,25 @@ const Section = styled.View`
   border-radius: 16px;
 `;
 
+const ActionButtonContainer = styled.View`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 16px;
+  align-items: flex-end;
+`;
+
 export const RecipesScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
+  const [search, setSearch] = useState("");
   const initRecipeStore = useRecipeStore((s) => s.initRecipeStore);
   const recipes = useRecipeStore((s) => s.recipes);
   const fetchRecipes = useRecipeStore((s) => s.fetchRecipes);
   const fetching = useRecipeStore((s) => s.fetching);
+
+  const filteredRecipes = recipes.filter(
+    (r) => r.name.toLowerCase().indexOf(search.toLowerCase().trim()) >= 0
+  );
 
   useEffect(() => {
     initRecipeStore();
@@ -55,21 +68,27 @@ export const RecipesScreen: FC<ScreenProps> = (props) => {
       recipe,
     });
   };
+
+  const addRecipe = () => {
+    navigation.navigate("AddRecipe");
+  };
   return (
     <Screen>
+      <Container>
+        <Input
+          placeholder="Search recipe by name"
+          left={<Search color={theme.colors.textDim} />}
+          onChangeText={setSearch}
+        />
+      </Container>
       <ScrollView
         refreshControl={
           <RefreshControl onRefresh={fetchRecipes} refreshing={fetching} />
         }
       >
         <Container onStartShouldSetResponder={() => true}>
-          <Input
-            placeholder="Search recipe by name"
-            left={<Search color={theme.colors.textDim} />}
-          />
-          <Space height={16} />
           <Section>
-            {recipes.map((recipe, index) => (
+            {filteredRecipes.map((recipe, index) => (
               <TouchableOpacity
                 key={recipe.id}
                 onPress={() => viewRecipeDetails(recipe)}
@@ -80,6 +99,13 @@ export const RecipesScreen: FC<ScreenProps> = (props) => {
           </Section>
         </Container>
       </ScrollView>
+      <ActionButtonContainer>
+        <ActionButton
+          label="Thêm"
+          left={<Plus color={theme.colors.textInverted} size={22} />}
+          onPress={addRecipe}
+        />
+      </ActionButtonContainer>
     </Screen>
   );
 };

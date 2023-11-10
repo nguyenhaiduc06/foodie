@@ -15,6 +15,7 @@ import {
   StorageDetailsScreen,
   EditDishScreen,
   AddStorageScreen,
+  AddRecipeScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
@@ -118,6 +119,14 @@ export const MainStack = () => {
       <Main.Screen name="EditDish" component={EditDishScreen} />
 
       <Main.Screen name="RecipeDetails" component={RecipeDetailsScreen} />
+      <Main.Screen
+        name="AddRecipe"
+        component={AddRecipeScreen}
+        options={{
+          title: "Thêm công thức nấu ăn",
+          presentation: "modal",
+        }}
+      />
       <Main.Screen name="StorageDetails" component={StorageDetailsScreen} />
       <Main.Screen
         name="AddStorage"
