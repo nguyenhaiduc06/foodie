@@ -29,7 +29,7 @@ type ScreenProps = CompositeScreenProps<
 >;
 
 const Container = styled.View`
-  padding: 16px;
+  padding: 0 16px;
 `;
 
 const Section = styled.View`
@@ -75,11 +75,13 @@ export const RecipesScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen>
       <Container>
+        <Space height={16} />
         <Input
           placeholder="Search recipe by name"
           left={<Search color={theme.colors.textDim} />}
           onChangeText={setSearch}
         />
+        <Space height={16} />
       </Container>
       <ScrollView
         refreshControl={

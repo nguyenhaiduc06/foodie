@@ -48,7 +48,7 @@ const Divider = styled.View`
 `;
 
 const Container = styled.View`
-  padding: 16px;
+  padding: 0 16px;
 `;
 
 const ActionButtonContainer = styled.View`
@@ -95,7 +95,9 @@ export const DishesScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen>
       <Container>
+        <Space height={16} />
         <DateSelector date={date} onChangeDate={setDate} />
+        <Space height={16} />
       </Container>
       <ScrollView
         refreshControl={

@@ -27,7 +27,7 @@ const Divider = styled.View`
 `;
 
 const Container = styled.View`
-  padding: 16px;
+  padding: 0 16px;
 `;
 
 const ActionButtonContainer = styled.View`
@@ -67,11 +67,13 @@ export const StoragesScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen>
       <Container>
+        <Space height={16} />
         <Input
           placeholder="Tìm kiếm theo tên, nơi cất"
           left={<Search color={theme.colors.textDim} />}
           onChangeText={setSearch}
         />
+        <Space height={16} />
       </Container>
       <ScrollView
         refreshControl={
