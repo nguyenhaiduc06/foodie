@@ -18,6 +18,7 @@ import {
   AddRecipeScreen,
   SignInScreen,
   SignUpScreen,
+  GroupDetailsScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
@@ -55,6 +56,9 @@ export type MainStackParamList = {
 
   SelectGroup: undefined;
   ManageGroup: {
+    groupId: number;
+  };
+  GroupDetails: {
     groupId: number;
   };
 };
@@ -143,6 +147,13 @@ export const MainStack = () => {
         options={{
           title: "Thông tin nhóm",
           presentation: "modal",
+        }}
+      />
+      <Main.Screen
+        name="GroupDetails"
+        component={GroupDetailsScreen}
+        options={{
+          title: "Thông tin nhóm",
         }}
       />
     </Main.Navigator>

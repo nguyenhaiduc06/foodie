@@ -1,13 +1,14 @@
 import { theme } from "@/theme";
 import styled from "styled-components/native";
 import { Text } from "./Text";
-import { Delete, DeleteIcon, Trash, Trash2 } from "lucide-react-native";
+import { Trash2 } from "lucide-react-native";
 import { Space } from "./Space";
-import { Profile } from "@/lib";
+import { Account } from "@/lib";
 import { FC } from "react";
 
 type GroupMemberItemProps = {
-  profile: Profile;
+  account: Account;
+  editable: boolean;
 };
 
 const Container = styled.View`
@@ -28,13 +29,13 @@ const Icon = styled.View`
   justify-content: center;
 `;
 export const GroupMemberItem: FC<GroupMemberItemProps> = (props) => {
-  const { profile } = props;
+  const { account, editable } = props;
   return (
     <Container>
       <Icon />
-      <Text>{profile.name}</Text>
+      <Text>{account.name}</Text>
       <Space />
-      <Trash2 size={20} color={theme.colors.danger} />
+      {editable && <Trash2 size={20} color={theme.colors.danger} />}
     </Container>
   );
 };

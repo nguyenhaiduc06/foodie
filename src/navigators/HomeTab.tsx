@@ -12,6 +12,7 @@ import {
   Users2,
 } from "lucide-react-native";
 import {
+  AccountScreen,
   DishesScreen,
   ProfileScreen,
   RecipesScreen,
@@ -27,7 +28,7 @@ export type HomeTabParamList = {
   Dishes: undefined;
   Storages: undefined;
   Recipes: undefined;
-  Profile: undefined;
+  Account: undefined;
 };
 
 export type HomeTabScreenProps<T extends keyof HomeTabParamList> =
@@ -88,8 +89,8 @@ export const HomeTab = () => {
         }}
       />
       <Home.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Account"
+        component={AccountScreen}
         options={{
           title: "Tài khoản",
           tabBarIcon: ({ color }) => <User color={color} />,

@@ -47,7 +47,7 @@ export const GroupItem: FC<GroupItemProps> = (props) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const manageGroup = () => {
-    navigation.navigate("ManageGroup", {
+    navigation.navigate("GroupDetails", {
       groupId: group.id,
     });
   };
