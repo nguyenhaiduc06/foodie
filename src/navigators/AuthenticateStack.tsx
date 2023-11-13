@@ -2,11 +2,11 @@ import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
-import { CreateProfileScreen, AuthenticateScreen } from "@/screens";
-import { useAuthStore } from "@/stores";
+import { CreateProfileScreen, SignInScreen } from "@/screens";
 
 export type AuthenticateStackParamList = {
-  Account: undefined;
+  SignIn: undefined;
+  SignUp: undefined;
   CreateProfile: undefined;
 };
 
@@ -17,16 +17,10 @@ export type AuthenticateStackScreenProps<
 const Authenticate = createNativeStackNavigator<AuthenticateStackParamList>();
 
 export const AuthenticateStack = () => {
-  const user = useAuthStore((s) => s.user);
   return (
-    <Authenticate.Navigator
-      initialRouteName={user ? "CreateProfile" : "Account"}
-    >
-      <Authenticate.Screen name="Account" component={AuthenticateScreen} />
-      <Authenticate.Screen
-        name="CreateProfile"
-        component={CreateProfileScreen}
-      />
+    <Authenticate.Navigator>
+      <Authenticate.Screen name="SignIn" component={SignInScreen} />
+      <Authenticate.Screen name="SignUp" component={CreateProfileScreen} />
     </Authenticate.Navigator>
   );
 };

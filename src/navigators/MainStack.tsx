@@ -16,6 +16,8 @@ import {
   EditDishScreen,
   AddStorageScreen,
   AddRecipeScreen,
+  SignInScreen,
+  SignUpScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
@@ -23,7 +25,8 @@ import { AuthenticateStack } from "./AuthenticateStack";
 import { Dish, Group, Recipe, Storage } from "@/lib";
 
 export type MainStackParamList = {
-  Authenticate: undefined;
+  SignIn: undefined;
+  SignUp: undefined;
   CreateProfile: undefined;
 
   HomeTab: undefined;
@@ -62,34 +65,24 @@ export type MainStackScreenProps<T extends keyof MainStackParamList> =
 const Main = createNativeStackNavigator<MainStackParamList>();
 
 export const MainStack = () => {
-  const session = useAuthStore((s) => s.session);
-  const profile = useAuthStore((s) => s.profile);
-  const initUserStore = useAuthStore((s) => s.initUserStore);
+  const authed = useAuthStore((s) => s.authed);
 
-  useEffect(() => {
-    initUserStore();
-  }, []);
-
-  const initialRouteName = profile
-    ? "HomeTab"
-    : session && session.user
-    ? "CreateProfile"
-    : "Authenticate";
+  const initialRouteName = authed ? "HomeTab" : "SignIn";
 
   return (
     <Main.Navigator initialRouteName={initialRouteName}>
       <Main.Screen
-        name="Authenticate"
-        component={AuthenticateScreen}
+        name="SignIn"
+        component={SignInScreen}
         options={{
           title: "Đăng nhập",
         }}
       />
       <Main.Screen
-        name="CreateProfile"
-        component={CreateProfileScreen}
+        name="SignUp"
+        component={SignUpScreen}
         options={{
-          title: "Thông tin cá nhân",
+          title: "Đăng Ký",
         }}
       />
       <Main.Screen

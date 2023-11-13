@@ -59,7 +59,7 @@ export const GroupItem: FC<GroupItemProps> = (props) => {
       <View>
         <Text preset="title">{group.name}</Text>
         <Text preset="body" dim>
-          {group.profiles[0].count} thành viên
+          {group.accounts[0].count} thành viên
         </Text>
       </View>
       <Space />

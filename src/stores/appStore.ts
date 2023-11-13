@@ -14,8 +14,8 @@ interface AppStoreState {
 export const useAppStore = create<AppStoreState>()((set) => ({
   initializing: true,
   initStores: async () => {
-    await useAuthStore.getState().initUserStore();
-    useGroupStore.getState().initGroupStore();
+    await useAuthStore.getState().initAuthStore();
+    await useGroupStore.getState().initGroupStore();
     set({ initializing: false });
     // useTodoStore.getState().initTodoStore();
     // useDishStore.getState().initDishStore();

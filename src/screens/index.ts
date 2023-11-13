@@ -1,4 +1,4 @@
-export * from "./user";
+export * from "./account";
 export * from "./plan";
 export * from "./todo";
 export * from "./dish";

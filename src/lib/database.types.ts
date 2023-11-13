@@ -9,6 +9,73 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      accounts: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          id: number
+          name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          id?: number
+          name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          id?: number
+          name?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accounts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      accounts_groups: {
+        Row: {
+          account_id: number
+          created_at: string
+          group_id: number
+          is_admin: boolean | null
+          status: string | null
+        }
+        Insert: {
+          account_id: number
+          created_at?: string
+          group_id: number
+          is_admin?: boolean | null
+          status?: string | null
+        }
+        Update: {
+          account_id?: number
+          created_at?: string
+          group_id?: number
+          is_admin?: boolean | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accounts_groups_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       dishes: {
         Row: {
           date: string | null
@@ -105,39 +172,6 @@ export interface Database {
           }
         ]
       }
-      profiles_groups: {
-        Row: {
-          created_at: string
-          group_id: number
-          profile_id: number
-        }
-        Insert: {
-          created_at?: string
-          group_id: number
-          profile_id: number
-        }
-        Update: {
-          created_at?: string
-          group_id?: number
-          profile_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_groups_group_id_fkey"
-            columns: ["group_id"]
-            isOneToOne: false
-            referencedRelation: "groups"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "profiles_groups_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       recipes: {
         Row: {
           content: string | null
@@ -177,6 +211,7 @@ export interface Database {
         Row: {
           amount: string | null
           created_at: string
+          creator_id: number | null
           expire_date: string | null
           group_id: number | null
           id: number
@@ -186,6 +221,7 @@ export interface Database {
         Insert: {
           amount?: string | null
           created_at?: string
+          creator_id?: number | null
           expire_date?: string | null
           group_id?: number | null
           id?: number
@@ -195,6 +231,7 @@ export interface Database {
         Update: {
           amount?: string | null
           created_at?: string
+          creator_id?: number | null
           expire_date?: string | null
           group_id?: number | null
           id?: number
@@ -202,6 +239,13 @@ export interface Database {
           stored_in?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "storages_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "storages_group_id_fkey"
             columns: ["group_id"]

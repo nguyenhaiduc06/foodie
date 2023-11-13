@@ -5,45 +5,68 @@ import { useAuthStore } from "./authStore";
 interface GroupStoreState {
   groups: Group[];
   currentGroup: Group;
-  initGroupStore: () => void;
-  fetchGroups: () => Promise<{ error?: Error }>;
-  createGroup: (data: { name: string }) => Promise<{ error?: Error }>;
+  initGroupStore: () => Promise<void>;
+  fetchGroups: () => Promise<{ error: Error | null }>;
+  createGroup: (data: { name: string }) => Promise<{ error: Error | null }>;
   activateGroup: (id: number) => void;
 }
 
 export const useGroupStore = create<GroupStoreState>()((set, get) => ({
   groups: [],
   currentGroup: null,
-  initGroupStore: () => {
+  initGroupStore: async () => {
+    await get().fetchGroups();
+
     useAuthStore.subscribe((s) => {
-      if (s.user?.id) {
-        get().fetchGroups();
-      }
+      get().fetchGroups();
     });
   },
   fetchGroups: async () => {
-    const profile_id = useAuthStore.getState().profile?.id;
-    const { data: groups, error } = await supabase
+    const account_id = useAuthStore.getState().account?.id;
+    console.log({ account_id });
+    if (!account_id) return { error: new Error("No user logged in") };
+
+    const { data: groups, error: fetchGroupError } = await supabase
       .from("groups")
-      .select("*, profiles(count)")
-      .eq("profiles.id", profile_id);
-    if (error) return { error: new Error(error.message) };
+      .select("*, accounts(count)")
+      .eq("accounts.id", account_id);
+    console.log({ groups });
+    if (fetchGroupError) return { error: new Error(fetchGroupError.message) };
+
     if (groups.length == 0) {
       get().createGroup({ name: "Nhóm" });
     } else {
       set((s) => ({ groups, currentGroup: s.currentGroup ?? groups[0] }));
     }
+    return { error: null };
   },
   createGroup: async ({ name }) => {
-    const user_id = useAuthStore.getState().user.id;
-    const { data: group, error } = await supabase
+    const account_id = useAuthStore.getState().account?.id;
+    if (!account_id) return { error: new Error("No user logged in") };
+
+    const { data: group, error: createGroupError } = await supabase
       .from("groups")
-      .insert({ name, user_id });
-    if (error) return { error: new Error(error.message) };
+      .insert({ name })
+      .select()
+      .single();
+    if (createGroupError) return { error: new Error(createGroupError.message) };
+
+    const { error: createAccountGroupError } = await supabase
+      .from("accounts_groups")
+      .insert({
+        account_id,
+        group_id: group.id,
+        is_admin: true,
+        status: "active",
+      });
+    if (createAccountGroupError)
+      return { error: new Error(createAccountGroupError.message) };
+
     set((s) => ({
       groups: [...s.groups, group],
       currentGroup: s.currentGroup ?? group,
     }));
+    return { error: null };
   },
   activateGroup: (id: number) => {
     const groupToActivate = get().groups.filter((g) => g.id == id)[0];
