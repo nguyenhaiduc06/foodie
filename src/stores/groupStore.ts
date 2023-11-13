@@ -1,4 +1,4 @@
-import { Account, Group, supabase } from "@/lib";
+import { Account, Group, Member, supabase } from "@/lib";
 import { create } from "zustand";
 import { useAuthStore } from "./authStore";
 import { ImageResult } from "expo-image-manipulator";
@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 interface GroupStoreState {
   groups: Group[];
   currentGroup: Group;
+  fetching: boolean;
   initGroupStore: () => Promise<void>;
   fetchGroups: () => Promise<{ error: Error | null }>;
   createGroup: (data: {
@@ -15,12 +16,25 @@ interface GroupStoreState {
     image?: ImageResult;
     members: Account[];
   }) => Promise<{ error: Error | null }>;
+  updateGroup: (
+    group: Group,
+    data: {
+      newName: string;
+      newImage: ImageResult;
+    }
+  ) => Promise<{ error: Error | null }>;
   activateGroup: (id: number) => void;
+  addMember: (
+    account: Account,
+    group: Group
+  ) => Promise<{ error: Error | null }>;
+  removeMember: (memeber: Member) => Promise<{ error: Error | null }>;
 }
 
 export const useGroupStore = create<GroupStoreState>()((set, get) => ({
   groups: [],
   currentGroup: null,
+  fetching: false,
   initGroupStore: async () => {
     await get().fetchGroups();
 
@@ -29,15 +43,17 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     });
   },
   fetchGroups: async () => {
+    set({ fetching: true });
+
     const account_id = useAuthStore.getState().account?.id;
-    if (!account_id) return { error: new Error("No user logged in") };
 
     const { data, error: fetchAccountGroupError } = await supabase
-      .from("accounts_groups")
+      .from("members")
       .select("group:groups(*)")
       .eq("account_id", account_id);
     if (fetchAccountGroupError)
       return { error: new Error(fetchAccountGroupError.message) };
+
     const groups = data.map((e) => ({
       ...e.group,
     }));
@@ -47,6 +63,8 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     } else {
       set((s) => ({ groups, currentGroup: s.currentGroup ?? groups[0] }));
     }
+
+    set({ fetching: false });
     return { error: null };
   },
   createGroup: async ({ name, image, members }) => {
@@ -82,19 +100,17 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
       status: "invited",
     }));
 
-    const { error: createAccountGroupError } = await supabase
-      .from("accounts_groups")
-      .insert([
-        {
-          account_id,
-          group_id: group.id,
-          is_admin: true,
-          status: "active",
-        },
-        ...accountGroupRows,
-      ]);
-    if (createAccountGroupError)
-      return { error: new Error(createAccountGroupError.message) };
+    const { error: createMemberError } = await supabase.from("members").insert([
+      {
+        account_id,
+        group_id: group.id,
+        is_admin: true,
+        status: "active",
+      },
+      ...accountGroupRows,
+    ]);
+    if (createMemberError)
+      return { error: new Error(createMemberError.message) };
 
     // for each phone number in memberPhones, file and create an invitation for that memeber to join the created group
 
@@ -104,8 +120,51 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     }));
     return { error: null };
   },
+  updateGroup: async (group, { newName, newImage }) => {
+    const account_id = useAuthStore.getState().account.id;
+    const filePath =
+      group.image_url ??
+      `${account_id}/images/group-avatars/${dayjs().toISOString()}.png`;
+
+    let image_url;
+    if (!newImage) {
+      image_url = "";
+    } else {
+      const { publicUrl, error: uploadImageError } = await api.uploadImage({
+        filePath,
+        base64Image: newImage.base64,
+      });
+      if (uploadImageError)
+        return { error: new Error(uploadImageError.message) };
+      image_url = publicUrl;
+    }
+
+    const { error: updateGroupError } = await supabase
+      .from("groups")
+      .update({ name: newName, image_url })
+      .eq("id", group.id);
+    if (updateGroupError) return { error: new Error(updateGroupError.message) };
+    return { error: null };
+  },
   activateGroup: (id: number) => {
     const groupToActivate = get().groups.filter((g) => g.id == id)[0];
     set({ currentGroup: groupToActivate });
+  },
+  addMember: async (account, group) => {
+    const { error: createMemberError } = await supabase.from("members").insert({
+      account_id: account.id,
+      group_id: group.id,
+    });
+    return {
+      error: createMemberError ? new Error(createMemberError.message) : null,
+    };
+  },
+  removeMember: async (member) => {
+    const { error } = await supabase
+      .from("members")
+      .delete()
+      .eq("account_id", member.account_id)
+      .eq("group_id", member.group_id);
+    return { error: error ? new Error(error.message) : null };
   },
 }));

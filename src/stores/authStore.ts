@@ -112,7 +112,7 @@ export const useAuthStore = create<AuthStoreState>()((set, get) => ({
     if (createGroupError) return { error: new Error(createGroupError.message) };
 
     const { error: createAccountGroupError } = await supabase
-      .from("accounts_groups")
+      .from("members")
       .insert({
         account_id: account.id,
         group_id: group.id,

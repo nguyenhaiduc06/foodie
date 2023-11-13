@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import styled from "styled-components/native";
-import { Edit } from "lucide-react-native";
+import { Edit, Info, MoreHorizontal } from "lucide-react-native";
 import { theme } from "@/theme";
 import { Text } from "./Text";
 import { Space } from "./Space";
@@ -49,7 +49,7 @@ export const GroupItem: FC<GroupItemProps> = (props) => {
     useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const manageGroup = () => {
     navigation.navigate("GroupDetails", {
-      groupId: group.id,
+      group,
     });
   };
   return (
@@ -63,7 +63,7 @@ export const GroupItem: FC<GroupItemProps> = (props) => {
       </View>
       <Space />
       <EditButton onPress={manageGroup}>
-        <Edit size={20} color={theme.colors.text} />
+        <Info size={20} color={theme.colors.text} />
       </EditButton>
     </Container>
   );

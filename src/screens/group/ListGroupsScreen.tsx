@@ -3,7 +3,8 @@ import { MainStackScreenProps } from "@/navigators";
 import { useGroupStore } from "@/stores/groupStore";
 import { theme } from "@/theme";
 import { Plus } from "lucide-react-native";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
+import { RefreshControl, ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 const Container = styled.View`
@@ -27,6 +28,7 @@ export const ListGroupsScreen: FC<MainStackScreenProps<"ListGroups">> = (
 ) => {
   const { navigation } = props;
   const groups = useGroupStore((s) => s.groups);
+  const fetching = useGroupStore((s) => s.fetching);
   const fetchGroups = useGroupStore((s) => s.fetchGroups);
   const currentGroup = useGroupStore((s) => s.currentGroup);
   const activateGroup = useGroupStore((s) => s.activateGroup);
@@ -37,20 +39,26 @@ export const ListGroupsScreen: FC<MainStackScreenProps<"ListGroups">> = (
 
   return (
     <Screen safeBottom>
-      <Container>
-        {groups.map((group) => (
-          <GroupItem
-            key={group.id}
-            active={group.id == currentGroup.id}
-            group={group}
-            onSelect={activateGroup}
-          />
-        ))}
-        <AddGroupButton onPress={addGroup}>
-          <Plus size={20} color={theme.colors.text} />
-          <Text>Tạo nhóm mới</Text>
-        </AddGroupButton>
-      </Container>
+      <ScrollView
+        refreshControl={
+          <RefreshControl onRefresh={fetchGroups} refreshing={fetching} />
+        }
+      >
+        <Container onStartShouldSetResponder={() => true}>
+          {groups.map((group) => (
+            <GroupItem
+              key={group.id}
+              active={group.id == currentGroup.id}
+              group={group}
+              onSelect={activateGroup}
+            />
+          ))}
+          <AddGroupButton onPress={addGroup}>
+            <Plus size={20} color={theme.colors.text} />
+            <Text>Tạo nhóm mới</Text>
+          </AddGroupButton>
+        </Container>
+      </ScrollView>
     </Screen>
   );
 };

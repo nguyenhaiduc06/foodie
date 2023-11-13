@@ -54,7 +54,7 @@ export type MainStackParamList = {
 
   ListGroups: undefined;
   GroupDetails: {
-    groupId: number;
+    group: Group;
   };
   AddGroup: undefined;
 };

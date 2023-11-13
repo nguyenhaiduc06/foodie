@@ -51,45 +51,6 @@ export interface Database {
           }
         ]
       }
-      accounts_groups: {
-        Row: {
-          account_id: number
-          created_at: string
-          group_id: number
-          is_admin: boolean | null
-          status: string | null
-        }
-        Insert: {
-          account_id: number
-          created_at?: string
-          group_id: number
-          is_admin?: boolean | null
-          status?: string | null
-        }
-        Update: {
-          account_id?: number
-          created_at?: string
-          group_id?: number
-          is_admin?: boolean | null
-          status?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "accounts_groups_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "accounts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "accounts_groups_group_id_fkey"
-            columns: ["group_id"]
-            isOneToOne: false
-            referencedRelation: "groups"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       dishes: {
         Row: {
           date: string | null
@@ -145,6 +106,45 @@ export interface Database {
           name?: string | null
         }
         Relationships: []
+      }
+      members: {
+        Row: {
+          account_id: number
+          created_at: string
+          group_id: number
+          is_admin: boolean | null
+          status: string | null
+        }
+        Insert: {
+          account_id: number
+          created_at?: string
+          group_id: number
+          is_admin?: boolean | null
+          status?: string | null
+        }
+        Update: {
+          account_id?: number
+          created_at?: string
+          group_id?: number
+          is_admin?: boolean | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "members_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       recipes: {
         Row: {
