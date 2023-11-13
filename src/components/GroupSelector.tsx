@@ -13,7 +13,7 @@ const Container = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const Icon = styled.View`
+const Icon = styled.Image`
   width: 24px;
   height: 24px;
   border-radius: 6px;
@@ -27,11 +27,11 @@ export const GroupSelector = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const openManageGroupScreen = () => {
-    navigation.navigate("SelectGroup");
+    navigation.navigate("ListGroups");
   };
   return (
     <Container onPress={openManageGroupScreen}>
-      <Icon />
+      <Icon source={{ uri: currentGroup?.image_url ?? "" }} />
       <Space width={8} />
       <Text preset="title">{currentGroup?.name}</Text>
       <ChevronRight size={20} color={theme.colors.text} />

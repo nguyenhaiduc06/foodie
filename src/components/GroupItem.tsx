@@ -27,12 +27,14 @@ const Container = styled.TouchableOpacity<{ active: boolean }>`
     p.active ? theme.palette.orange[100] : theme.colors.foreground};
 `;
 
-const Icon = styled.View`
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
+const Image = styled.Image`
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  margin: 12px;
   align-items: center;
   justify-content: center;
+  background-color: rgba(0, 0, 0, 0.1);
 `;
 
 const EditButton = styled.TouchableOpacity`
@@ -43,7 +45,6 @@ const EditButton = styled.TouchableOpacity`
 `;
 export const GroupItem: FC<GroupItemProps> = (props) => {
   const { group, active, onSelect } = props;
-  console.log(group);
   const navigation =
     useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const manageGroup = () => {
@@ -53,14 +54,12 @@ export const GroupItem: FC<GroupItemProps> = (props) => {
   };
   return (
     <Container active={active} onPress={() => onSelect(group.id)}>
-      <Icon>
-        <Text size={30}>🍔</Text>
-      </Icon>
+      <Image source={{ uri: group?.image_url }} />
       <View>
         <Text preset="title">{group.name}</Text>
-        <Text preset="body" dim>
+        {/* <Text preset="body" dim>
           {group.accounts[0].count} thành viên
-        </Text>
+        </Text> */}
       </View>
       <Space />
       <EditButton onPress={manageGroup}>

@@ -45,7 +45,7 @@ export const HomeTab = () => {
           paddingRight: 16,
         },
         headerTitleAlign: "left",
-        headerRight({}) {
+        headerRight: () => {
           return (
             <TouchableOpacity
               onPress={() => navigation.navigate("SelectGroup")}

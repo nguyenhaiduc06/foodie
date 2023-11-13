@@ -19,6 +19,14 @@ class Api {
       },
     });
   }
+  async getAccount({ phone }) {
+    const { data: account, error } = await this.supabase
+      .from("accounts")
+      .select("*")
+      .eq("email", phone)
+      .single();
+    return account;
+  }
   async uploadImage({ filePath, base64Image }) {
     const { error: fileUploadError } = await this.supabase.storage
       .from("files")
@@ -36,7 +44,7 @@ class Api {
     const {
       data: { publicUrl },
     } = this.supabase.storage.from("files").getPublicUrl(filePath);
-    return publicUrl;
+    return { publicUrl, error: null };
   }
 }
 

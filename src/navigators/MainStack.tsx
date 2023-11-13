@@ -4,14 +4,10 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import {
-  AuthenticateScreen,
   AddDishScreen,
   AddTodosScreen,
-  CreateProfileScreen,
   DishDetailsScreen,
-  ManageGroupScreen,
   RecipeDetailsScreen,
-  SelectGroupScreen,
   StorageDetailsScreen,
   EditDishScreen,
   AddStorageScreen,
@@ -19,6 +15,8 @@ import {
   SignInScreen,
   SignUpScreen,
   GroupDetailsScreen,
+  ListGroupsScreen,
+  AddGroupScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
@@ -54,13 +52,11 @@ export type MainStackParamList = {
   AddRecipe: undefined;
   UpdateRecipe: undefined;
 
-  SelectGroup: undefined;
-  ManageGroup: {
-    groupId: number;
-  };
+  ListGroups: undefined;
   GroupDetails: {
     groupId: number;
   };
+  AddGroup: undefined;
 };
 
 export type MainStackScreenProps<T extends keyof MainStackParamList> =
@@ -135,18 +131,10 @@ export const MainStack = () => {
       />
 
       <Main.Screen
-        name="SelectGroup"
-        component={SelectGroupScreen}
+        name="ListGroups"
+        component={ListGroupsScreen}
         options={{
           title: "Chọn nhóm",
-        }}
-      />
-      <Main.Screen
-        name="ManageGroup"
-        component={ManageGroupScreen}
-        options={{
-          title: "Thông tin nhóm",
-          presentation: "modal",
         }}
       />
       <Main.Screen
@@ -154,6 +142,13 @@ export const MainStack = () => {
         component={GroupDetailsScreen}
         options={{
           title: "Thông tin nhóm",
+        }}
+      />
+      <Main.Screen
+        name="AddGroup"
+        component={AddGroupScreen}
+        options={{
+          title: "Tạo nhóm mới",
         }}
       />
     </Main.Navigator>

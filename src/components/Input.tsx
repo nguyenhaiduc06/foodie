@@ -1,4 +1,4 @@
-import { TextInputProps } from "react-native";
+import { TextInputProps, ViewStyle } from "react-native";
 import { theme } from "../theme";
 import React, { FC } from "react";
 import styled from "styled-components/native";
@@ -6,6 +6,7 @@ import styled from "styled-components/native";
 type InputProps = TextInputProps & {
   left?: React.ReactNode;
   right?: React.ReactNode;
+  containerStyle?: ViewStyle;
 };
 
 const Container = styled.View`
@@ -28,9 +29,9 @@ const TextInput = styled.TextInput`
 `;
 
 export const Input: FC<InputProps> = (props) => {
-  const { left, right, children, ...rest } = props;
+  const { left, right, children, containerStyle, ...rest } = props;
   return (
-    <Container>
+    <Container style={containerStyle}>
       {left}
       <TextInput
         placeholderTextColor={theme.palette.gray[400]}
