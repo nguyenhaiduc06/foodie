@@ -77,7 +77,7 @@ export const RecipesScreen: FC<ScreenProps> = (props) => {
       <Container>
         <Space height={16} />
         <Input
-          placeholder="Search recipe by name"
+          placeholder="Tìm kiếm theo tên"
           left={<Search color={theme.colors.textDim} />}
           onChangeText={setSearch}
         />
