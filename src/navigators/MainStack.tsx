@@ -17,6 +17,7 @@ import {
   GroupDetailsScreen,
   ListGroupsScreen,
   AddGroupScreen,
+  UpdateRecipeScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
@@ -50,7 +51,9 @@ export type MainStackParamList = {
     recipe: Recipe;
   };
   AddRecipe: undefined;
-  UpdateRecipe: undefined;
+  UpdateRecipe: {
+    recipe: Recipe;
+  };
 
   ListGroups: undefined;
   GroupDetails: {
@@ -111,7 +114,13 @@ export const MainStack = () => {
       />
       <Main.Screen name="EditDish" component={EditDishScreen} />
 
-      <Main.Screen name="RecipeDetails" component={RecipeDetailsScreen} />
+      <Main.Screen
+        name="RecipeDetails"
+        component={RecipeDetailsScreen}
+        options={{
+          title: "Chi tiết",
+        }}
+      />
       <Main.Screen
         name="AddRecipe"
         component={AddRecipeScreen}
@@ -120,6 +129,15 @@ export const MainStack = () => {
           presentation: "modal",
         }}
       />
+      <Main.Screen
+        name="UpdateRecipe"
+        component={UpdateRecipeScreen}
+        options={{
+          title: "Chỉnh sửa",
+          presentation: "modal",
+        }}
+      />
+
       <Main.Screen name="StorageDetails" component={StorageDetailsScreen} />
       <Main.Screen
         name="AddStorage"

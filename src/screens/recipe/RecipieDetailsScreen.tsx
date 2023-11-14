@@ -5,6 +5,7 @@ import { Screen, Text } from "@/components";
 import { theme } from "@/theme";
 import { CoverImagePicker } from "./CoverImagePicker";
 import { ImageResult } from "expo-image-manipulator";
+import { TouchableOpacity } from "react-native";
 
 type ScreenProps = MainStackScreenProps<"RecipeDetails">;
 
@@ -27,9 +28,19 @@ export const RecipeDetailsScreen: FC<ScreenProps> = (props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <Text>Edit</Text>,
+      headerRight: () => (
+        <TouchableOpacity onPress={updateRecipe}>
+          <Text weight={500} color={theme.colors.primary}>
+            Sửa
+          </Text>
+        </TouchableOpacity>
+      ),
     });
   }, [navigation]);
+
+  const updateRecipe = () => {
+    navigation.navigate("UpdateRecipe", { recipe });
+  };
 
   return (
     <Screen>
