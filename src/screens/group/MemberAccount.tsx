@@ -1,8 +1,7 @@
 import { theme } from "@/theme";
 import styled from "styled-components/native";
-import { Text } from "./Text";
 import { Trash2 } from "lucide-react-native";
-import { Space } from "./Space";
+import { Space, Text } from "@/components";
 import { Account, Group, Member } from "@/lib";
 import { FC } from "react";
 import { TouchableOpacity } from "react-native";
@@ -17,13 +16,9 @@ const BACKGROUND_COLOR_BY_STATUS = {
   invited: theme.palette.yellow[100],
 };
 
-type GroupMemberItemProps = {
-  group: Group;
+type AccountInviteItemProps = {
   account: Account;
-  isAdmin: boolean;
-  status: string;
-  showDeleteButton: boolean;
-  onDeletePress: (member: unknown) => void;
+  onDeletePress: (account: Account) => void;
 };
 
 const Container = styled.View`
@@ -63,19 +58,17 @@ const MemberStatus = ({ status }) => {
   );
 };
 
-export const GroupMemberItem: FC<GroupMemberItemProps> = (props) => {
-  const { group, account, status, showDeleteButton, onDeletePress } = props;
+export const MemberAccount: FC<AccountInviteItemProps> = (props) => {
+  const { account, onDeletePress } = props;
   return (
     <Container>
       <Icon />
       <Text>{account.name}</Text>
       <Space />
-      <MemberStatus status={status} />
-      {showDeleteButton && (
-        <TouchableOpacity onPress={() => onDeletePress(account)}>
-          <Trash2 size={20} color={theme.colors.danger} />
-        </TouchableOpacity>
-      )}
+      <MemberStatus status="invite" />
+      <TouchableOpacity onPress={() => onDeletePress(account)}>
+        <Trash2 size={20} color={theme.colors.danger} />
+      </TouchableOpacity>
     </Container>
   );
 };

@@ -1,25 +1,15 @@
 import React, { FC, useState } from "react";
-import {
-  Button,
-  GroupMemberItem,
-  Input,
-  Screen,
-  Space,
-  Text,
-} from "@/components";
+import { Button, Input, Screen, Space, Text } from "@/components";
 import { MainStackScreenProps } from "@/navigators";
 import styled from "styled-components/native";
 import { theme } from "@/theme";
-import { ImageIcon } from "lucide-react-native";
-import * as ImagePicker from "expo-image-picker";
 import { useAuthStore, useGroupStore } from "@/stores";
 import { Alert } from "react-native";
-import {
-  ImageResult,
-  SaveFormat,
-  manipulateAsync,
-} from "expo-image-manipulator";
-import { api } from "@/lib/api";
+import { ImageResult } from "expo-image-manipulator";
+import { Account } from "@/lib";
+import { AccountSearch } from "./AccountSearch";
+import { AvatarPicker } from "./AvatarPicker";
+import { MemberAccount } from "./MemberAccount";
 
 type ScreenProps = MainStackScreenProps<"AddGroup">;
 
@@ -41,47 +31,11 @@ const Divider = styled.View`
   width: 100%;
 `;
 
-const ImagePlacholder = styled.TouchableOpacity`
-  height: 150px;
-  width: 150px;
-  align-self: center;
-  border-radius: 16px;
-  border: 2px dashed rgba(0, 0, 0, 0.2);
-  flex-direction: row;
-  gap: 4px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Image = styled.Image`
-  height: 150px;
-  width: 150px;
-  border-radius: 16px;
-  align-self: center;
-`;
-
-const Row = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-`;
-
-const AddMemberButton = styled.TouchableOpacity`
-  height: 56px;
-  border-radius: 16px;
-  padding: 0 16px;
-  align-items: center;
-  justify-content: center;
-  background-color: ${theme.colors.primary};
-  border: 1px solid rgba(0, 0, 0, 0.2);
-`;
-
 export const AddGroupScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
   const [name, setName] = useState("");
-  const [image, setImage] = useState<ImageResult>();
-  const [phone, setPhone] = useState("");
-  const [members, setMembers] = useState([]);
+  const [avatar, setAvatar] = useState<ImageResult>();
+  const [memberAccounts, setMemberAccounts] = useState([]);
   const [loading, setLoading] = useState(false);
   const createGroup = useGroupStore((s) => s.createGroup);
 
@@ -89,8 +43,8 @@ export const AddGroupScreen: FC<ScreenProps> = (props) => {
     setLoading(true);
     const { error } = await createGroup({
       name,
-      image,
-      members,
+      image: avatar,
+      memberAccounts,
     });
     setLoading(false);
     if (error) {
@@ -100,72 +54,39 @@ export const AddGroupScreen: FC<ScreenProps> = (props) => {
     navigation.goBack();
   };
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({});
-
-    if (!result.canceled) {
-      const imageManip = await manipulateAsync(
-        result.assets[0].uri,
-        [
-          {
-            resize: {
-              width: 300,
-            },
-          },
-        ],
-        {
-          base64: true,
-          compress: 0,
-          format: SaveFormat.PNG,
-        }
-      );
-      setImage(imageManip);
-    }
-  };
-
-  const findAndAddMember = async () => {
-    const account = await api.getAccount({ phone });
-    if (!account) {
-      Alert.alert(`Không tìm thấy người dùng có số điện thoại ${phone}`);
-      return;
-    }
+  const addMemberAccount = async (accountToAdd: Account) => {
     const account_id = useAuthStore.getState().account.id;
-    if (account.id == account_id) {
+    if (accountToAdd.id == account_id) {
       Alert.alert(`Bạn đang là trưởng nhóm`);
       return;
     }
-    setMembers((s) => [...s, account]);
+    setMemberAccounts((s) => [...s, accountToAdd]);
+  };
+
+  const removeMemberAccount = async (accountToRemove: Account) => {
+    setMemberAccounts((s) =>
+      s.filter((account) => account.id != accountToRemove.id)
+    );
   };
 
   return (
     <Screen safeBottom>
       <Container>
-        {image ? (
-          <Image source={{ uri: image.uri }} />
-        ) : (
-          <ImagePlacholder onPress={pickImage}>
-            <ImageIcon size={16} color={theme.colors.text} />
-            <Text>Chọn ảnh</Text>
-          </ImagePlacholder>
-        )}
+        <AvatarPicker avatar={avatar} onImagePicked={setAvatar} />
         <Input placeholder="Tên nhóm" onChangeText={setName} />
-        <Text>Mời thành viên</Text>
-        <Row>
-          <Input
-            placeholder="Số điện thoại"
-            onChangeText={setPhone}
-            containerStyle={{ flex: 1 }}
-            autoCapitalize="none"
-          />
-          <AddMemberButton onPress={findAndAddMember}>
-            <Text color={theme.colors.textInverted}>Thêm</Text>
-          </AddMemberButton>
-        </Row>
+        <Text preset="title">Mời thành viên</Text>
+        <AccountSearch
+          onAccountFound={addMemberAccount}
+          searchButtonTitle="Thêm"
+        />
         <Section>
-          {members.map((member, index) => (
-            <React.Fragment key={member.id}>
+          {memberAccounts.map((account, index) => (
+            <React.Fragment key={account.id}>
               {index != 0 && <Divider />}
-              <GroupMemberItem account={member} editable={true} />
+              <MemberAccount
+                account={account}
+                onDeletePress={removeMemberAccount}
+              />
             </React.Fragment>
           ))}
         </Section>

@@ -9,6 +9,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { MainStackParamList } from "@/navigators";
 import { FC } from "react";
 import { Group } from "@/lib";
+import { Image } from "expo-image";
 
 type GroupItemProps = {
   group: Group;
@@ -27,7 +28,7 @@ const Container = styled.TouchableOpacity<{ active: boolean }>`
     p.active ? theme.palette.orange[100] : theme.colors.foreground};
 `;
 
-const Image = styled.Image`
+const Avatar = styled(Image)`
   width: 48px;
   height: 48px;
   border-radius: 12px;
@@ -54,7 +55,7 @@ export const GroupItem: FC<GroupItemProps> = (props) => {
   };
   return (
     <Container active={active} onPress={() => onSelect(group.id)}>
-      <Image source={{ uri: group?.image_url }} />
+      <Avatar source={{ uri: group?.image_url }} />
       <View>
         <Text preset="title">{group.name}</Text>
         {/* <Text preset="body" dim>

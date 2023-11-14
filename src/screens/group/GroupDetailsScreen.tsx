@@ -1,26 +1,17 @@
-import {
-  Button,
-  GroupMemberItem,
-  Input,
-  Screen,
-  Space,
-  Text,
-} from "@/components";
+import { Button, Input, Screen, Space, Text } from "@/components";
 import { Account, Member, supabase } from "@/lib";
 import { MainStackScreenProps } from "@/navigators";
 import React from "react";
 import { FC, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Alert } from "react-native";
 import styled from "styled-components/native";
 import { theme } from "@/theme";
 import { useAuthStore, useGroupStore } from "@/stores";
-import {
-  ImageResult,
-  SaveFormat,
-  manipulateAsync,
-} from "expo-image-manipulator";
-import * as ImagePicker from "expo-image-picker";
-import { api } from "@/lib/api";
+import { ImageResult } from "expo-image-manipulator";
+import { Image } from "expo-image";
+import { AvatarPicker } from "./AvatarPicker";
+import { AccountSearch } from "./AccountSearch";
+import { MemberAccount } from "./MemberAccount";
 
 type ScreenProps = MainStackScreenProps<"GroupDetails">;
 
@@ -36,7 +27,7 @@ const Section = styled.View`
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.05);
 `;
 
-const Image = styled.Image`
+const Avatar = styled(Image)`
   width: 100px;
   height: 100px;
   border-radius: 16px;
@@ -70,16 +61,15 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   const { navigation, route } = props;
   const { group } = route.params;
   const [name, setName] = useState(group.name);
-  const [image, setImage] = useState<ImageResult>();
+  const [avatar, setAvatar] = useState<ImageResult>();
   const [members, setMembers] = useState<Array<Member & { account: Account }>>(
     []
   );
-  const [phone, setPhone] = useState("");
   const [updating, setUpdating] = useState(false);
   const [fetchingMembers, setFetchingMembers] = useState(false);
   const updateGroup = useGroupStore((s) => s.updateGroup);
   const removeMember = useGroupStore((s) => s.removeMember);
-  const addMember = useGroupStore((s) => s.addMemberToGroup);
+  const addMember = useGroupStore((s) => s.addMember);
 
   useEffect(() => {
     fetchMembers();
@@ -89,34 +79,11 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
     setUpdating(true);
     const { error } = await updateGroup(group, {
       newName: name,
-      newImage: image,
+      newImage: avatar,
     });
     setUpdating(false);
     if (error) {
       Alert.alert(error.message);
-    }
-  };
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({});
-
-    if (!result.canceled) {
-      const imageManip = await manipulateAsync(
-        result.assets[0].uri,
-        [
-          {
-            resize: {
-              width: 300,
-            },
-          },
-        ],
-        {
-          base64: true,
-          compress: 0,
-          format: SaveFormat.PNG,
-        }
-      );
-      setImage(imageManip);
     }
   };
 
@@ -155,55 +122,39 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
     );
   };
 
-  const findAndAddMember = async () => {
-    const account = await api.getAccount({ phone });
-    if (!account) {
-      Alert.alert(`Không tìm thấy người dùng có số điện thoại ${phone}`);
-      return;
-    }
+  const addMemberAccount = async (accountToAdd: Account) => {
     const account_id = useAuthStore.getState().account.id;
-    if (account.id == account_id) {
+    if (accountToAdd.id == account_id) {
       Alert.alert(`Bạn đang là trưởng nhóm`);
       return;
     }
 
-    await addMember(group, account);
+    await addMember(accountToAdd, group);
     fetchMembers();
   };
 
   return (
     <Screen safeBottom>
       <Container>
-        <TouchableOpacity onPress={pickImage}>
-          <Image source={{ uri: image?.uri ?? group?.image_url }} />
-        </TouchableOpacity>
+        <AvatarPicker avatar={avatar} onImagePicked={setAvatar} />
         <Input
           placeholder="Tên nhóm"
           defaultValue={group?.name}
           onChangeText={setName}
         />
         <Text preset="title">Thành viên</Text>
-        <Row>
-          <Input
-            placeholder="Số điện thoại"
-            onChangeText={setPhone}
-            containerStyle={{ flex: 1 }}
-            autoCapitalize="none"
-          />
-          <AddMemberButton onPress={findAndAddMember}>
-            <Text color={theme.colors.textInverted}>Thêm</Text>
-          </AddMemberButton>
-        </Row>
+        <AccountSearch
+          onAccountFound={addMemberAccount}
+          searchButtonTitle="Thêm"
+        />
         {fetchingMembers && <ActivityIndicator />}
         <Section>
           {members.map((member, index) => (
             <React.Fragment key={`${member.group_id}-${member.account_id}`}>
               {index != 0 && <Divider />}
-              <GroupMemberItem
-                group={group}
-                member={member}
-                showDeleteButton={true}
-                onDeletePress={handleDeleteMemberPress}
+              <MemberAccount
+                account={member.account}
+                onDeletePress={() => handleDeleteMemberPress(member)}
               />
             </React.Fragment>
           ))}
@@ -213,7 +164,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
           preset="primary"
           label="Lưu"
           loading={updating}
-          disabled={name == group.name && !image}
+          disabled={name == group.name && !avatar}
           onPress={submit}
         />
       </Container>

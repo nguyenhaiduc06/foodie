@@ -14,7 +14,7 @@ interface GroupStoreState {
   createGroup: (data: {
     name: string;
     image?: ImageResult;
-    members: Account[];
+    memberAccounts: Account[];
   }) => Promise<{ error: Error | null }>;
   updateGroup: (
     group: Group,
@@ -59,7 +59,7 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     }));
 
     if (groups.length == 0) {
-      get().createGroup({ name: "Nhóm", members: [] });
+      get().createGroup({ name: "Nhóm", memberAccounts: [] });
     } else {
       set((s) => ({ groups, currentGroup: s.currentGroup ?? groups[0] }));
     }
@@ -67,7 +67,7 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     set({ fetching: false });
     return { error: null };
   },
-  createGroup: async ({ name, image, members }) => {
+  createGroup: async ({ name, image, memberAccounts }) => {
     const account_id = useAuthStore.getState().account?.id;
     if (!account_id) return { error: new Error("No user logged in") };
 
@@ -93,7 +93,7 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
       .single();
     if (createGroupError) return { error: new Error(createGroupError.message) };
 
-    const accountGroupRows = members.map((m) => ({
+    const rows = memberAccounts.map((m) => ({
       account_id: m.id,
       group_id: group.id,
       is_admin: false,
@@ -107,7 +107,7 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
         is_admin: true,
         status: "active",
       },
-      ...accountGroupRows,
+      ...rows,
     ]);
     if (createMemberError)
       return { error: new Error(createMemberError.message) };

@@ -15,7 +15,7 @@ export const useAppStore = create<AppStoreState>()((set) => ({
   initializing: true,
   initStores: async () => {
     await useAuthStore.getState().initAuthStore();
-    await useGroupStore.getState().initGroupStore();
+    useGroupStore.getState().initGroupStore();
     set({ initializing: false });
     // useTodoStore.getState().initTodoStore();
     // useDishStore.getState().initDishStore();
