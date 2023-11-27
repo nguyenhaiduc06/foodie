@@ -16,6 +16,7 @@ import {
   Space,
   DateSelector,
   ActionButton,
+  EmptyState,
 } from "@/components";
 import { theme } from "@/theme";
 import { useDishStore } from "@/stores";
@@ -105,44 +106,50 @@ export const DishesScreen: FC<ScreenProps> = (props) => {
         }
       >
         <Container onStartShouldSetResponder={() => true}>
-          <Text preset="title">Bữa sáng</Text>
-          <Space height={8} />
-          <Section>
-            {dishesByMeal.breakfast.map((dish, index) => (
-              <TouchableOpacity
-                key={dish.id}
-                onPress={() => viewDishDetails(dish)}
-              >
-                <DishItem size={DISH_ITEM_SIZE} dish={dish} />
-              </TouchableOpacity>
-            ))}
-          </Section>
-          <Space height={16} />
-          <Text preset="title">Bữa trưa</Text>
-          <Space height={8} />
-          <Section>
-            {dishesByMeal.lunch.map((dish, index) => (
-              <TouchableOpacity
-                key={dish.id}
-                onPress={() => viewDishDetails(dish)}
-              >
-                <DishItem size={DISH_ITEM_SIZE} dish={dish} />
-              </TouchableOpacity>
-            ))}
-          </Section>
-          <Space height={16} />
-          <Text preset="title">Bữa tối</Text>
-          <Space height={8} />
-          <Section>
-            {dishesByMeal.dinner.map((dish, index) => (
-              <TouchableOpacity
-                key={dish.id}
-                onPress={() => viewDishDetails(dish)}
-              >
-                <DishItem size={DISH_ITEM_SIZE} dish={dish} />
-              </TouchableOpacity>
-            ))}
-          </Section>
+          {dishes.length == 0 ? (
+            <EmptyState label="Chưa có món ăn nào trong thực đơn" />
+          ) : (
+            <>
+              <Text preset="title">Bữa sáng</Text>
+              <Space height={8} />
+              <Section>
+                {dishesByMeal.breakfast.map((dish, index) => (
+                  <TouchableOpacity
+                    key={dish.id}
+                    onPress={() => viewDishDetails(dish)}
+                  >
+                    <DishItem size={DISH_ITEM_SIZE} dish={dish} />
+                  </TouchableOpacity>
+                ))}
+              </Section>
+              <Space height={16} />
+              <Text preset="title">Bữa trưa</Text>
+              <Space height={8} />
+              <Section>
+                {dishesByMeal.lunch.map((dish, index) => (
+                  <TouchableOpacity
+                    key={dish.id}
+                    onPress={() => viewDishDetails(dish)}
+                  >
+                    <DishItem size={DISH_ITEM_SIZE} dish={dish} />
+                  </TouchableOpacity>
+                ))}
+              </Section>
+              <Space height={16} />
+              <Text preset="title">Bữa tối</Text>
+              <Space height={8} />
+              <Section>
+                {dishesByMeal.dinner.map((dish, index) => (
+                  <TouchableOpacity
+                    key={dish.id}
+                    onPress={() => viewDishDetails(dish)}
+                  >
+                    <DishItem size={DISH_ITEM_SIZE} dish={dish} />
+                  </TouchableOpacity>
+                ))}
+              </Section>
+            </>
+          )}
 
           {/* Add a space with a height of 72px to avoid being covered by the floating action button */}
           <Space height={72} />
