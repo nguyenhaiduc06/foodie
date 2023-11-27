@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { MainStackScreenProps } from "@/navigators";
 import { Screen, Text, Space } from "@/components";
 import { theme } from "@/theme";
+import { TouchableOpacity } from "react-native";
 
 type ScreenProps = MainStackScreenProps<"StorageDetails">;
 
@@ -22,9 +23,21 @@ export const StorageDetailsScreen: FC<ScreenProps> = (props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <Text>Edit</Text>,
+      headerRight: () => (
+        <TouchableOpacity onPress={openUpdateStorageScreen}>
+          <Text color={theme.colors.primary} weight={500}>
+            Sửa
+          </Text>
+        </TouchableOpacity>
+      ),
     });
   }, [navigation]);
+
+  const openUpdateStorageScreen = () => {
+    navigation.navigate("UpdateStorage", {
+      storage,
+    });
+  };
 
   return (
     <Screen>

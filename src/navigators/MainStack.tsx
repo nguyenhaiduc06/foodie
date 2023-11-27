@@ -43,16 +43,18 @@ export type MainStackParamList = {
     dish: Dish;
   };
 
+  AddStorage: undefined;
   StorageDetails: {
     storage: Storage;
   };
-  AddStorage: undefined;
-  UpdateStorage: undefined;
+  UpdateStorage: {
+    storage: Storage;
+  };
 
+  AddRecipe: undefined;
   RecipeDetails: {
     recipe: Recipe;
   };
-  AddRecipe: undefined;
   UpdateRecipe: {
     recipe: Recipe;
   };
@@ -177,6 +179,7 @@ export const MainStack = () => {
         component={UpdateStorageScreen}
         options={{
           title: "Chỉnh sửa",
+          presentation: "modal",
         }}
       />
 

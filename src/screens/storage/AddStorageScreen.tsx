@@ -8,10 +8,12 @@ import {
   Space,
   Text,
 } from "../../components";
-import { useStorageStore, useTodoStore } from "../../stores";
+import { useStorageStore } from "../../stores";
 import { MainStackScreenProps } from "@/navigators";
 import dayjs from "dayjs";
 import { Alert, View } from "react-native";
+import { CoverImagePicker } from "./CoverImagePicker";
+import { ImageResult } from "expo-image-manipulator";
 
 type ScreenProps = MainStackScreenProps<"AddStorage">;
 
@@ -23,6 +25,7 @@ const Container = styled.View`
 
 export const AddStorageScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
+  const [image, setImage] = useState<ImageResult>();
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [storedIn, setStoredIn] = useState("");
@@ -48,12 +51,15 @@ export const AddStorageScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen safeBottom>
       <Container>
+        <CoverImagePicker image={image} onImagePicked={setImage} />
         <Input placeholder="Tên" onChangeText={setName} />
         <Input placeholder="Số lượng" onChangeText={setAmount} />
         <Input placeholder="Nơi cất" onChangeText={setStoredIn} />
         <View>
-          <Text preset="body">Ngày hết hạn</Text>
-          <Space height={8} />
+          <Text preset="body" weight={500}>
+            Ngày hết hạn
+          </Text>
+          <Space height={4} />
           <DateSelector date={expireDate} onChangeDate={setExpireDate} />
         </View>
         <Space />

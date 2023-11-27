@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import {
   Button,
@@ -8,10 +8,13 @@ import {
   Space,
   Text,
 } from "../../components";
-import { useStorageStore, useTodoStore } from "../../stores";
+import { useStorageStore } from "../../stores";
 import { MainStackScreenProps } from "@/navigators";
 import dayjs from "dayjs";
-import { Alert, View } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
+import { CoverImagePicker } from "./CoverImagePicker";
+import { ImageResult } from "expo-image-manipulator";
+import { theme } from "@/theme";
 
 type ScreenProps = MainStackScreenProps<"UpdateStorage">;
 
@@ -22,47 +25,102 @@ const Container = styled.View`
 `;
 
 export const UpdateStorageScreen: FC<ScreenProps> = (props) => {
-  const { navigation } = props;
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [storedIn, setStoredIn] = useState("");
-  const [expireDate, setExpireDate] = useState(dayjs().toDate());
-  const [loading, setLoading] = useState(false);
+  const { navigation, route } = props;
+  const { storage } = route.params;
+  // @ts-ignore
+  const [image, setImage] = useState<ImageResult>({ uri: storage.image_url });
+  const [name, setName] = useState(storage.name);
+  const [amount, setAmount] = useState(storage.amount);
+  const [storedIn, setStoredIn] = useState(storage.stored_in);
+  const [expireDate, setExpireDate] = useState(
+    dayjs(storage.expire_date).toDate()
+  );
+  const [updating, setUpdating] = useState(false);
   const createStorate = useStorageStore((s) => s.createStorage);
 
-  const submit = async () => {
-    setLoading(true);
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={promptDelete}>
+          <Text color={theme.colors.danger} weight={500}>
+            Xóa
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
+  const promptDelete = () => {
+    Alert.alert(
+      "Xóa lưu trữ",
+      "Bạn có chắc muốn xóa thực phẩm này khỏi lưu trữ?",
+      [
+        {
+          text: "Xóa",
+          style: "destructive",
+        },
+        {
+          text: "Hủy",
+          style: "cancel",
+        },
+      ]
+    );
+  };
+
+  const submitUpdate = async () => {
+    setUpdating(true);
     const { error } = await createStorate({
       name,
       amount,
       storedIn,
       expireDate,
     });
-    setLoading(false);
+    setUpdating(false);
     if (error) {
       Alert.alert(error.message);
       return;
     }
     navigation.goBack();
   };
+
+  const shouldDisableSubmitButton =
+    name == storage.name &&
+    amount == storage.amount &&
+    storedIn == storage.stored_in &&
+    dayjs(expireDate).isSame(dayjs(storage.expire_date));
   return (
     <Screen safeBottom>
       <Container>
-        <Input placeholder="Tên" onChangeText={setName} />
-        <Input placeholder="Số lượng" onChangeText={setAmount} />
-        <Input placeholder="Nơi cất" onChangeText={setStoredIn} />
+        <CoverImagePicker image={image} onImagePicked={setImage} />
+        <Input
+          placeholder="Tên"
+          onChangeText={setName}
+          defaultValue={storage.name}
+        />
+        <Input
+          placeholder="Số lượng"
+          onChangeText={setAmount}
+          defaultValue={storage.amount}
+        />
+        <Input
+          placeholder="Nơi cất"
+          onChangeText={setStoredIn}
+          defaultValue={storage.stored_in}
+        />
         <View>
-          <Text preset="body">Ngày hết hạn</Text>
-          <Space height={8} />
+          <Text preset="body" weight={500}>
+            Ngày hết hạn
+          </Text>
+          <Space height={4} />
           <DateSelector date={expireDate} onChangeDate={setExpireDate} />
         </View>
         <Space />
         <Button
           preset="primary"
-          label="Thêm"
-          disabled={!name || !amount}
-          loading={loading}
-          onPress={submit}
+          label="Cập nhật"
+          disabled={shouldDisableSubmitButton}
+          loading={updating}
+          onPress={submitUpdate}
         />
       </Container>
     </Screen>
