@@ -9,14 +9,16 @@ type EmptyStateProps = {
 const Container = styled.View`
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 16px 32px;
 `;
 
 export const EmptyState: FC<EmptyStateProps> = (props) => {
   const { label } = props;
   return (
     <Container>
-      <Text dim>{label}</Text>
+      <Text dim style={{ textAlign: "center" }}>
+        {label}
+      </Text>
     </Container>
   );
 };

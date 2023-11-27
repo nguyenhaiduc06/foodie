@@ -76,7 +76,9 @@ export const TodosScreen: FC<ScreenProps> = (props) => {
         }
       >
         <Container onStartShouldSetResponder={() => true}>
-          {todos.length == 0 && <EmptyState label="Danh sách trống" />}
+          {todos.length == 0 && (
+            <EmptyState label="Chưa có thực phẩm nào trong danh sách cần mua" />
+          )}
           <Section>
             {todos.map((todo, index) => (
               <React.Fragment key={todo.id}>
