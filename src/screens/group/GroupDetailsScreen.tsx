@@ -3,12 +3,11 @@ import { Account, Member, supabase } from "@/lib";
 import { MainStackScreenProps } from "@/navigators";
 import React from "react";
 import { FC, useEffect, useState } from "react";
-import { ActivityIndicator, Alert } from "react-native";
+import { ActivityIndicator, Alert, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { theme } from "@/theme";
 import { useAuthStore, useGroupStore } from "@/stores";
 import { ImageResult } from "expo-image-manipulator";
-import { Image } from "expo-image";
 import { AvatarPicker } from "./AvatarPicker";
 import { AccountSearch } from "./AccountSearch";
 import { MemberAccount } from "./MemberAccount";
@@ -27,34 +26,10 @@ const Section = styled.View`
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.05);
 `;
 
-const Avatar = styled(Image)`
-  width: 100px;
-  height: 100px;
-  border-radius: 16px;
-  background-color: ${theme.palette.black[10]};
-  align-self: center;
-`;
-
 const Divider = styled.View`
   height: 1px;
   background-color: ${theme.palette.black[10]};
   width: 100%;
-`;
-
-const Row = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-`;
-
-const AddMemberButton = styled.TouchableOpacity`
-  height: 56px;
-  border-radius: 16px;
-  padding: 0 16px;
-  align-items: center;
-  justify-content: center;
-  background-color: ${theme.colors.primary};
-  border: 1px solid rgba(0, 0, 0, 0.2);
 `;
 
 export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
@@ -70,6 +45,24 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   const updateGroup = useGroupStore((s) => s.updateGroup);
   const removeMember = useGroupStore((s) => s.removeMember);
   const addMember = useGroupStore((s) => s.addMember);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={openUpdateGroupScreen}>
+          <Text color={theme.colors.primary} weight={500}>
+            Sửa
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
+  const openUpdateGroupScreen = () => {
+    navigation.navigate("UpdateGroup", {
+      group,
+    });
+  };
 
   useEffect(() => {
     fetchMembers();

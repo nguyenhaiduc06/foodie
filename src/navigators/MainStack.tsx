@@ -209,6 +209,7 @@ export const MainStack = () => {
         component={UpdateGroupScreen}
         options={{
           title: "Chỉnh sửa",
+          presentation: "modal",
         }}
       />
     </Main.Navigator>

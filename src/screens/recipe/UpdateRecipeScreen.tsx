@@ -32,7 +32,7 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={promptDelete}>
-          <Text color={theme.colors.danger} size={16}>
+          <Text color={theme.colors.danger} weight={500}>
             Xóa
           </Text>
         </TouchableOpacity>
@@ -77,16 +77,8 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
     });
   };
 
-  const submitDelete = async () => {
-    setDeleting(true);
-    const { error } = await deleteRecipe(recipe);
-    setDeleting(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
-    }
-    navigation.navigate("HomeTab");
-  };
+  const shouldDisableSubmitButton =
+    name == recipe.name && content == recipe.content;
 
   return (
     <Screen safeBottom>
@@ -107,10 +99,7 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
           preset="primary"
           label="Cập nhật"
           onPress={submitUpdate}
-          disabled={
-            (name == recipe.name && content == recipe.content && !image) ||
-            deleting
-          }
+          disabled={shouldDisableSubmitButton}
           loading={updating}
         />
         {/* <Button
