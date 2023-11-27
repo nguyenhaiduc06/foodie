@@ -18,11 +18,13 @@ import {
   ListGroupsScreen,
   AddGroupScreen,
   UpdateRecipeScreen,
+  UpdateStorageScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
 import { AuthenticateStack } from "./AuthenticateStack";
 import { Dish, Group, Recipe, Storage } from "@/lib";
+import { UpdateGroupScreen } from "@/screens/group/UpdateGroupScreen";
 
 export type MainStackParamList = {
   SignIn: undefined;
@@ -55,11 +57,14 @@ export type MainStackParamList = {
     recipe: Recipe;
   };
 
+  AddGroup: undefined;
   ListGroups: undefined;
   GroupDetails: {
     group: Group;
   };
-  AddGroup: undefined;
+  UpdateGroup: {
+    group: Group;
+  };
 };
 
 export type MainStackScreenProps<T extends keyof MainStackParamList> =
@@ -103,7 +108,7 @@ export const MainStack = () => {
           presentation: "modal",
         }}
       />
-      <Main.Screen name="DishDetails" component={DishDetailsScreen} />
+
       <Main.Screen
         name="AddDish"
         component={AddDishScreen}
@@ -112,21 +117,35 @@ export const MainStack = () => {
           presentation: "modal",
         }}
       />
-      <Main.Screen name="EditDish" component={EditDishScreen} />
-
       <Main.Screen
-        name="RecipeDetails"
-        component={RecipeDetailsScreen}
+        name="DishDetails"
+        component={DishDetailsScreen}
         options={{
           title: "Chi tiết",
         }}
       />
+      <Main.Screen
+        name="EditDish"
+        component={EditDishScreen}
+        options={{
+          title: "Chỉnh sửa",
+          presentation: "modal",
+        }}
+      />
+
       <Main.Screen
         name="AddRecipe"
         component={AddRecipeScreen}
         options={{
           title: "Thêm công thức nấu ăn",
           presentation: "modal",
+        }}
+      />
+      <Main.Screen
+        name="RecipeDetails"
+        component={RecipeDetailsScreen}
+        options={{
+          title: "Chi tiết",
         }}
       />
       <Main.Screen
@@ -138,7 +157,6 @@ export const MainStack = () => {
         }}
       />
 
-      <Main.Screen name="StorageDetails" component={StorageDetailsScreen} />
       <Main.Screen
         name="AddStorage"
         component={AddStorageScreen}
@@ -147,7 +165,28 @@ export const MainStack = () => {
           presentation: "modal",
         }}
       />
+      <Main.Screen
+        name="StorageDetails"
+        component={StorageDetailsScreen}
+        options={{
+          title: "Chi tiết",
+        }}
+      />
+      <Main.Screen
+        name="UpdateStorage"
+        component={UpdateStorageScreen}
+        options={{
+          title: "Chỉnh sửa",
+        }}
+      />
 
+      <Main.Screen
+        name="AddGroup"
+        component={AddGroupScreen}
+        options={{
+          title: "Tạo nhóm mới",
+        }}
+      />
       <Main.Screen
         name="ListGroups"
         component={ListGroupsScreen}
@@ -159,14 +198,14 @@ export const MainStack = () => {
         name="GroupDetails"
         component={GroupDetailsScreen}
         options={{
-          title: "Thông tin nhóm",
+          title: "Chi tiết",
         }}
       />
       <Main.Screen
-        name="AddGroup"
-        component={AddGroupScreen}
+        name="UpdateGroup"
+        component={UpdateGroupScreen}
         options={{
-          title: "Tạo nhóm mới",
+          title: "Chỉnh sửa",
         }}
       />
     </Main.Navigator>

@@ -1,11 +1,12 @@
-import { FC, useState } from "react";
-import { Button, Input, Screen, Space } from "@/components";
+import { FC, useEffect, useState } from "react";
+import { Button, Input, Screen, Space, Text } from "@/components";
 import { MainStackScreenProps } from "@/navigators";
 import styled from "styled-components/native";
 import { useRecipeStore } from "@/stores";
-import { Alert } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import { ImageResult } from "expo-image-manipulator";
 import { CoverImagePicker } from "./CoverImagePicker";
+import { theme } from "@/theme";
 
 type ScreenProps = MainStackScreenProps<"UpdateRecipe">;
 
@@ -26,6 +27,35 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
   const [deleting, setDeleting] = useState(false);
   const updateRecipe = useRecipeStore((s) => s.updateRecipe);
   const deleteRecipe = useRecipeStore((s) => s.deleteRecipe);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={promptDelete}>
+          <Text color={theme.colors.danger} size={16}>
+            Xóa
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  });
+
+  const promptDelete = () => {
+    Alert.alert(
+      "Xóa công thức nấu ăn",
+      "Bạn có chắc muốn xóa công thức nấu ăn này?",
+      [
+        {
+          text: "Xóa",
+          style: "destructive",
+        },
+        {
+          text: "Hủy",
+          style: "cancel",
+        },
+      ]
+    );
+  };
 
   const submitUpdate = async () => {
     setUpdating(true);
@@ -83,13 +113,13 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
           }
           loading={updating}
         />
-        <Button
+        {/* <Button
           preset="secondary"
           label="Xóa"
           onPress={submitDelete}
           disabled={updating}
           loading={deleting}
-        />
+        /> */}
       </Container>
     </Screen>
   );

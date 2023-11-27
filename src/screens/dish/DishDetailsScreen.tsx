@@ -5,6 +5,12 @@ import { Screen, Text, Space } from "@/components";
 import { theme } from "@/theme";
 import { TouchableOpacity } from "react-native";
 
+const DESCRIPTION_BY_MEAL = {
+  breakfast: "Bữa sáng",
+  lunch: "Bữa trưa",
+  dinner: "Bữa tối",
+};
+
 type ScreenProps = MainStackScreenProps<"DishDetails">;
 
 const CoverImage = styled.Image`
@@ -46,7 +52,7 @@ export const DishDetailsScreen: FC<ScreenProps> = (props) => {
         <Space height={8} />
         <Text preset="title">{dish.name}</Text>
         <Space height={16} />
-        <Text>{dish.meal}</Text>
+        <Text>{DESCRIPTION_BY_MEAL[dish.meal]}</Text>
       </Container>
     </Screen>
   );

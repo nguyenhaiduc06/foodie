@@ -47,7 +47,7 @@ export const AddRecipeScreen: FC<ScreenProps> = (props) => {
         <Space />
         <Button
           preset="primary"
-          label="Tạo"
+          label="Thêm"
           onPress={submitCreate}
           disabled={!name || !content}
           loading={creating}

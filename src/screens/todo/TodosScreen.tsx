@@ -7,6 +7,7 @@ import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
 import {
   ActionButton,
   DateSelector,
+  EmptyState,
   Header,
   Screen,
   Space,
@@ -75,6 +76,7 @@ export const TodosScreen: FC<ScreenProps> = (props) => {
         }
       >
         <Container onStartShouldSetResponder={() => true}>
+          {todos.length == 0 && <EmptyState label="Danh sách trống" />}
           <Section>
             {todos.map((todo, index) => (
               <React.Fragment key={todo.id}>
