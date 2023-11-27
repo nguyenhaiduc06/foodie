@@ -6,6 +6,9 @@ import { Todo } from "@/lib";
 import { Text } from "./Text";
 import { Space } from "./Space";
 import { theme } from "@/theme";
+import { useNavigation } from "@react-navigation/native";
+import { MainStackParamList } from "@/navigators";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type TodoItemProps = {
   todo: Todo;
@@ -19,6 +22,7 @@ const Container = styled.TouchableOpacity`
 `;
 
 export const TodoItem: FC<TodoItemProps> = (props) => {
+  const navigation = useNavigation();
   const { todo } = props;
   const [checked, setChecked] = useState(todo.checked);
 
@@ -32,8 +36,18 @@ export const TodoItem: FC<TodoItemProps> = (props) => {
     setTodoChecked(todo.id, checked);
   }, [checked]);
 
+  const openUpdateTodoScreen = () => {
+    navigation.navigate("UpdateTodo", {
+      todo,
+    });
+  };
+
   return (
-    <Container onPress={toggleChecked} style={{ opacity: checked ? 0.4 : 1 }}>
+    <Container
+      onPress={toggleChecked}
+      onLongPress={openUpdateTodoScreen}
+      style={{ opacity: checked ? 0.4 : 1 }}
+    >
       {checked ? (
         <CheckCircle2 color={theme.colors.text} />
       ) : (

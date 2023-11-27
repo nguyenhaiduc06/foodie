@@ -19,11 +19,12 @@ import {
   AddGroupScreen,
   UpdateRecipeScreen,
   UpdateStorageScreen,
+  UpdateTodoScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
 import { AuthenticateStack } from "./AuthenticateStack";
-import { Dish, Group, Recipe, Storage } from "@/lib";
+import { Dish, Group, Recipe, Storage, Todo } from "@/lib";
 import { UpdateGroupScreen } from "@/screens/group/UpdateGroupScreen";
 
 export type MainStackParamList = {
@@ -34,6 +35,9 @@ export type MainStackParamList = {
   HomeTab: undefined;
 
   AddTodo: undefined;
+  UpdateTodo: {
+    todo: Todo;
+  };
 
   AddDish: undefined;
   DishDetails: {
@@ -107,6 +111,14 @@ export const MainStack = () => {
         component={AddTodosScreen}
         options={{
           title: "Thêm thực phẩm cần mua",
+          presentation: "modal",
+        }}
+      />
+      <Main.Screen
+        name="UpdateTodo"
+        component={UpdateTodoScreen}
+        options={{
+          title: "Chỉnh sửa",
           presentation: "modal",
         }}
       />
