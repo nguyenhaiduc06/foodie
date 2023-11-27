@@ -18,6 +18,15 @@ interface DishStoreState {
     meal: string;
     image: ImagePicker.ImagePickerAsset;
   }) => Promise<{ error: Error | null }>;
+  updateDish: (
+    id: string,
+    data: {
+      name: string;
+      date: Date;
+      meal: string;
+      image: ImagePicker.ImagePickerAsset;
+    }
+  ) => Promise<{ error: Error | null }>;
   setDate: (date: Date) => void;
 }
 
@@ -70,6 +79,9 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
     if (dishCreateError) return { error: new Error(dishCreateError.message) };
 
     set((s) => ({ dishes: [newDish, ...s.dishes] }));
+    return { error: null };
+  },
+  updateDish: async (id, { name, meal, date, image }) => {
     return { error: null };
   },
   setDate: (date) => {

@@ -9,7 +9,7 @@ import {
   DishDetailsScreen,
   RecipeDetailsScreen,
   StorageDetailsScreen,
-  EditDishScreen,
+  UpdateDishScreen,
   AddStorageScreen,
   AddRecipeScreen,
   SignInScreen,
@@ -35,11 +35,11 @@ export type MainStackParamList = {
 
   AddTodo: undefined;
 
+  AddDish: undefined;
   DishDetails: {
     dish: Dish;
   };
-  AddDish: undefined;
-  EditDish: {
+  UpdateDish: {
     dish: Dish;
   };
 
@@ -125,8 +125,8 @@ export const MainStack = () => {
         }}
       />
       <Main.Screen
-        name="EditDish"
-        component={EditDishScreen}
+        name="UpdateDish"
+        component={UpdateDishScreen}
         options={{
           title: "Chỉnh sửa",
           presentation: "modal",

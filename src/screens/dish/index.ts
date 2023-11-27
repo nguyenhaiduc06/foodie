@@ -1,4 +1,4 @@
 export * from "./DishesScreen";
 export * from "./DishDetailsScreen";
 export * from "./AddDishScreen";
-export * from "./EditDishScreen";
+export * from "./UpdateDish";

@@ -28,7 +28,7 @@ export const DishDetailsScreen: FC<ScreenProps> = (props) => {
   const { dish } = route.params;
 
   const openEditDishScreen = () => {
-    navigation.navigate("EditDish", {
+    navigation.navigate("UpdateDish", {
       dish,
     });
   };
@@ -37,7 +37,7 @@ export const DishDetailsScreen: FC<ScreenProps> = (props) => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={openEditDishScreen}>
-          <Text size={18} weight={500} color={theme.colors.text}>
+          <Text color={theme.colors.primary} weight={500}>
             Sửa
           </Text>
         </TouchableOpacity>
