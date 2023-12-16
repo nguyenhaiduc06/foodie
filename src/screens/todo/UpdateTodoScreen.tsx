@@ -93,7 +93,7 @@ export const UpdateTodoScreen: FC<ScreenProps> = (props) => {
         <Space />
         <Button
           preset="primary"
-          label="Thêm"
+          label="Cập nhật"
           disabled={shouldDisableSubmitButton}
           loading={updating}
           onPress={submitUpdate}

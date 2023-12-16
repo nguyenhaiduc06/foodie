@@ -17,6 +17,7 @@ const Container = styled.View<{ size: number }>`
   background-color: white;
   border-radius: 12px;
   align-items: start;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.05);
 `;
 

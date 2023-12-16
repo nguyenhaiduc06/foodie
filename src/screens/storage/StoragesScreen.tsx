@@ -4,7 +4,14 @@ import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { Screen, StorageItem, Input, Space, ActionButton } from "@/components";
+import {
+  Screen,
+  StorageItem,
+  Input,
+  Space,
+  ActionButton,
+  EmptyState,
+} from "@/components";
 import { theme } from "@/theme";
 import { useStorageStore } from "@/stores";
 import { Plus, Search } from "lucide-react-native";
@@ -81,6 +88,9 @@ export const StoragesScreen: FC<ScreenProps> = (props) => {
         }
       >
         <Container onStartShouldSetResponder={() => true}>
+          {filteredStorages.length == 0 && (
+            <EmptyState label="Chưa có thực phẩm nào đang lưu trữ" />
+          )}
           <Section>
             {filteredStorages.map((storage, index) => (
               <React.Fragment key={storage.id}>

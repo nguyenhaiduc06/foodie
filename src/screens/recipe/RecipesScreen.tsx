@@ -9,7 +9,14 @@ import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
-import { Screen, RecipeItem, Input, Space, ActionButton } from "@/components";
+import {
+  Screen,
+  RecipeItem,
+  Input,
+  Space,
+  ActionButton,
+  EmptyState,
+} from "@/components";
 import { useRecipeStore } from "@/stores";
 import { Plus, Search } from "lucide-react-native";
 import { theme } from "@/theme";
@@ -89,6 +96,9 @@ export const RecipesScreen: FC<ScreenProps> = (props) => {
         }
       >
         <Container onStartShouldSetResponder={() => true}>
+          {filteredRecipes.length == 0 && (
+            <EmptyState label="Chưa có công thức nấu ăn nào" />
+          )}
           <Section>
             {filteredRecipes.map((recipe, index) => (
               <TouchableOpacity
