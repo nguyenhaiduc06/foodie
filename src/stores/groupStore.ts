@@ -123,9 +123,9 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
   updateGroup: async (group, { newName, newImage }) => {
     const account_id = useAuthStore.getState().account.id;
     const filePath =
-      group.image_url ??
-      `${account_id}/images/group-avatars/${dayjs().toISOString()}.png`;
-
+      group.image_url != ""
+        ? group.image_url
+        : `${account_id}/images/group_avatars/${dayjs().toISOString()}.png`;
     let image_url;
     if (!newImage) {
       image_url = "";
