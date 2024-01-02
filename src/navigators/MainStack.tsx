@@ -200,6 +200,7 @@ export const MainStack = () => {
         component={AddGroupScreen}
         options={{
           title: "Tạo nhóm mới",
+          presentation: "modal",
         }}
       />
       <Main.Screen
