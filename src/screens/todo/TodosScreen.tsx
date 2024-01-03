@@ -77,17 +77,18 @@ export const TodosScreen: FC<ScreenProps> = (props) => {
         }
       >
         <Container onStartShouldSetResponder={() => true}>
-          {todos.length == 0 && (
+          {todos.length == 0 ? (
             <EmptyState label="Chưa có thực phẩm nào trong danh sách cần mua" />
+          ) : (
+            <Section>
+              {todos.map((todo, index) => (
+                <React.Fragment key={todo.id}>
+                  {index != 0 && <Divider />}
+                  <TodoItem todo={todo} />
+                </React.Fragment>
+              ))}
+            </Section>
           )}
-          <Section>
-            {todos.map((todo, index) => (
-              <React.Fragment key={todo.id}>
-                {index != 0 && <Divider />}
-                <TodoItem todo={todo} />
-              </React.Fragment>
-            ))}
-          </Section>
 
           {/* Add a space with a height of 72px to avoid being covered by the floating action button */}
           <Space height={72} />
