@@ -13,6 +13,7 @@ import { useAppStore } from "@/stores/appStore";
 import { useEffect } from "react";
 import { View } from "react-native";
 import "@/utils/configDayjs";
+import registerNNPushToken from "native-notify";
 
 export default function App() {
   let [fontsLoaded, fontError] = useFonts({
@@ -24,6 +25,7 @@ export default function App() {
 
   const initializing = useAppStore((s) => s.initializing);
   const initStores = useAppStore((s) => s.initStores);
+  registerNNPushToken(16830, "pfmJDM3vOB3bFiBRbbMmrk");
 
   useEffect(() => {
     initStores();
