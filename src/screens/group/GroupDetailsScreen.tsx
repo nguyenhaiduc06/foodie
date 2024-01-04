@@ -36,22 +36,23 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   const { navigation, route } = props;
   const { group } = route.params;
   const [name, setName] = useState(group.name);
-  const [avatar, setAvatar] = useState<ImageResult>();
+  const [avatar, setAvatar] = useState<ImageResult>({ uri: group.image_url });
   const [members, setMembers] = useState<Array<Member & { account: Account }>>(
     []
   );
   const [updating, setUpdating] = useState(false);
   const [fetchingMembers, setFetchingMembers] = useState(false);
   const updateGroup = useGroupStore((s) => s.updateGroup);
+  const deleteGroup = useGroupStore((s) => s.deleteGroup);
   const removeMember = useGroupStore((s) => s.removeMember);
   const addMember = useGroupStore((s) => s.addMember);
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={openUpdateGroupScreen}>
+        <TouchableOpacity onPress={confirmDeleteGroup}>
           <Text color={theme.colors.primary} weight={500}>
-            Sửa
+            Xóa
           </Text>
         </TouchableOpacity>
       ),
@@ -124,6 +125,29 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
 
     await addMember(accountToAdd, group);
     fetchMembers();
+  };
+
+  const confirmDeleteGroup = () => {
+    Alert.alert(
+      "Xóa nhóm",
+      `Bạn có chắc bạn muốn xóa nhóm ${group.name}?`,
+      [
+        {
+          text: "Xóa",
+          onPress: () => {
+            deleteGroup(group);
+          },
+          style: "destructive",
+        },
+        {
+          text: "Hủy",
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
   };
 
   return (

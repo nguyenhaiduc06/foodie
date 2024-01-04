@@ -6,6 +6,7 @@ import { FC, useState } from "react";
 import { HomeTabScreenProps, MainStackParamList } from "@/navigators";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AvatarPicker } from "./AvatarPicker";
 
 type ScreenProps = CompositeScreenProps<
   HomeTabScreenProps<"Account">,
@@ -40,6 +41,7 @@ export const AccountScreen: FC<ScreenProps> = (props) => {
     <Screen>
       <Container>
         <Avatar />
+        <AvatarPicker />
         <Text preset="title" style={{ textAlign: "center" }}>
           {account?.name}
         </Text>

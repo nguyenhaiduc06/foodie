@@ -29,12 +29,12 @@ const SearchButton = styled.TouchableOpacity`
 
 export const AccountSearch: FC<AccountSearchProps> = (props) => {
   const { onAccountFound, searchButtonTitle = "Tìm" } = props;
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
 
   const handleSearchPress = async () => {
-    const account = await api.getAccount({ phone });
+    const { data: account, error } = await api.getAccount({ email });
     if (!account) {
-      Alert.alert(`Không tìm thấy người dùng có số điện thoại ${phone}`);
+      Alert.alert(`Không tìm thấy người dùng có email ${email}`);
       return;
     }
     onAccountFound(account);
@@ -42,8 +42,8 @@ export const AccountSearch: FC<AccountSearchProps> = (props) => {
   return (
     <Row>
       <Input
-        placeholder="Số điện thoại"
-        onChangeText={setPhone}
+        placeholder="Email"
+        onChangeText={setEmail}
         containerStyle={{ flex: 1 }}
         autoCapitalize="none"
       />

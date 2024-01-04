@@ -19,13 +19,13 @@ class Api {
       },
     });
   }
-  async getAccount({ phone }) {
-    const { data: account, error } = await this.supabase
+  async getAccount({ email }) {
+    const { data, error } = await this.supabase
       .from("accounts")
       .select("*")
-      .eq("email", phone)
+      .eq("email", email)
       .single();
-    return account;
+    return { data, error };
   }
   async uploadImage({ filePath, base64Image }) {
     const { error: fileUploadError } = await this.supabase.storage

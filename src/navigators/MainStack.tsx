@@ -20,12 +20,12 @@ import {
   UpdateRecipeScreen,
   UpdateStorageScreen,
   UpdateTodoScreen,
+  ListNotificationsScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
 import { AuthenticateStack } from "./AuthenticateStack";
 import { Dish, Group, Recipe, Storage, Todo } from "@/lib";
-import { UpdateGroupScreen } from "@/screens/group/UpdateGroupScreen";
 
 export type MainStackParamList = {
   SignIn: undefined;
@@ -71,6 +71,8 @@ export type MainStackParamList = {
   UpdateGroup: {
     group: Group;
   };
+
+  ListNotifications: undefined;
 };
 
 export type MainStackScreenProps<T extends keyof MainStackParamList> =
@@ -215,14 +217,15 @@ export const MainStack = () => {
         component={GroupDetailsScreen}
         options={{
           title: "Chi tiết",
+          presentation: "modal",
         }}
       />
+
       <Main.Screen
-        name="UpdateGroup"
-        component={UpdateGroupScreen}
+        name="ListNotifications"
+        component={ListNotificationsScreen}
         options={{
-          title: "Chỉnh sửa",
-          presentation: "modal",
+          title: "Thông báo",
         }}
       />
     </Main.Navigator>

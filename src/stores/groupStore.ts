@@ -23,6 +23,7 @@ interface GroupStoreState {
       newImage: ImageResult;
     }
   ) => Promise<{ error: Error | null }>;
+  deleteGroup: (group: Group) => Promise<{ error: Error | null }>;
   activateGroup: (id: number) => void;
   addMember: (
     account: Account,
@@ -144,6 +145,13 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
       .update({ name: newName, image_url })
       .eq("id", group.id);
     if (updateGroupError) return { error: new Error(updateGroupError.message) };
+    return { error: null };
+  },
+  deleteGroup: async (group: Group) => {
+    // check if can delete
+    // delete from api
+    // update state
+    // set new group
     return { error: null };
   },
   activateGroup: (id: number) => {

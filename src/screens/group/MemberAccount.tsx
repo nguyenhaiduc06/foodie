@@ -65,7 +65,7 @@ export const MemberAccount: FC<AccountInviteItemProps> = (props) => {
       <Icon />
       <Text>{account.name}</Text>
       <Space />
-      <MemberStatus status="invite" />
+      {/* <MemberStatus status="invite" /> */}
       <TouchableOpacity onPress={() => onDeletePress(account)}>
         <Trash2 size={20} color={theme.colors.danger} />
       </TouchableOpacity>

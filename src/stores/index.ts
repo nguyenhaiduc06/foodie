@@ -4,3 +4,4 @@ export * from "./dishStore";
 export * from "./storageStore";
 export * from "./recipeStore";
 export * from "./groupStore";
+export * from "./notificationStore";

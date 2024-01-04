@@ -48,7 +48,7 @@ export const HomeTab = () => {
         headerRight: () => {
           return (
             <TouchableOpacity
-              onPress={() => navigation.navigate("SelectGroup")}
+              onPress={() => navigation.navigate("ListNotifications")}
             >
               <Bell size={22} color={theme.colors.text} />
             </TouchableOpacity>
