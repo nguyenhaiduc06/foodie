@@ -8,8 +8,8 @@ import { Alert } from "react-native";
 import { ImageResult } from "expo-image-manipulator";
 import { Account } from "@/lib";
 import { AccountSearch } from "./AccountSearch";
-import { AvatarPicker } from "./AvatarPicker";
 import { MemberAccount } from "./MemberAccount";
+import { GroupAvatar } from "./GroupAvatar";
 
 type ScreenProps = MainStackScreenProps<"AddGroup">;
 
@@ -48,7 +48,7 @@ export const AddGroupScreen: FC<ScreenProps> = (props) => {
     });
     setLoading(false);
     if (error) {
-      Alert.alert(error.message);
+      Alert.alert(error);
       return;
     }
     navigation.goBack();
@@ -72,7 +72,7 @@ export const AddGroupScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen safeBottom>
       <Container>
-        <AvatarPicker avatar={avatar} onImagePicked={setAvatar} />
+        <GroupAvatar avatar={avatar} onChangedAvatar={setAvatar} />
         <Input placeholder="Tên nhóm" onChangeText={setName} />
         <Text preset="title">Mời thành viên</Text>
         <AccountSearch

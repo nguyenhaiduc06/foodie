@@ -8,7 +8,7 @@ import { TouchableOpacity } from "react-native";
 
 const LABEL_BY_STATUS = {
   admin: "Trưởng nhóm",
-  invited: "Đã gửi lời mời",
+  member: "Thành viên",
 };
 
 const BACKGROUND_COLOR_BY_STATUS = {
@@ -65,7 +65,7 @@ export const MemberAccount: FC<AccountInviteItemProps> = (props) => {
       <Icon />
       <Text>{account.name}</Text>
       <Space />
-      {/* <MemberStatus status="invite" /> */}
+      <MemberStatus status={"admin"} />
       <TouchableOpacity onPress={() => onDeletePress(account)}>
         <Trash2 size={20} color={theme.colors.danger} />
       </TouchableOpacity>

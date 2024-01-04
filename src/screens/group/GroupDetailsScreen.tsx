@@ -8,9 +8,9 @@ import styled from "styled-components/native";
 import { theme } from "@/theme";
 import { useAuthStore, useGroupStore } from "@/stores";
 import { ImageResult } from "expo-image-manipulator";
-import { AvatarPicker } from "./AvatarPicker";
 import { AccountSearch } from "./AccountSearch";
 import { MemberAccount } from "./MemberAccount";
+import { GroupAvatar } from "./GroupAvatar";
 
 type ScreenProps = MainStackScreenProps<"GroupDetails">;
 
@@ -36,6 +36,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   const { navigation, route } = props;
   const { group } = route.params;
   const [name, setName] = useState(group.name);
+  //@ts-ignore
   const [avatar, setAvatar] = useState<ImageResult>({ uri: group.image_url });
   const [members, setMembers] = useState<Array<Member & { account: Account }>>(
     []
@@ -44,8 +45,8 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   const [fetchingMembers, setFetchingMembers] = useState(false);
   const updateGroup = useGroupStore((s) => s.updateGroup);
   const deleteGroup = useGroupStore((s) => s.deleteGroup);
-  const removeMember = useGroupStore((s) => s.removeMember);
-  const addMember = useGroupStore((s) => s.addMember);
+  const removeMemberFromGroup = useGroupStore((s) => s.removeMemberFromGroup);
+  const addMemberToGroup = useGroupStore((s) => s.addMemberToGroup);
 
   useEffect(() => {
     navigation.setOptions({
@@ -59,25 +60,19 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
     });
   }, [navigation]);
 
-  const openUpdateGroupScreen = () => {
-    navigation.navigate("UpdateGroup", {
-      group,
-    });
-  };
-
   useEffect(() => {
     fetchMembers();
   }, [group]);
 
   const submit = async () => {
     setUpdating(true);
-    const { error } = await updateGroup(group, {
-      newName: name,
-      newImage: avatar,
+    const { error } = await updateGroup(group.id, {
+      name,
+      image: avatar,
     });
     setUpdating(false);
     if (error) {
-      Alert.alert(error.message);
+      Alert.alert(error);
     }
   };
 
@@ -87,21 +82,25 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
       .from("members")
       .select("*, account:account_id(*)")
       .eq("group_id", group.id);
+    //@ts-ignore
     setMembers(data);
     setFetchingMembers(false);
   };
 
-  const handleDeleteMemberPress = (member: Member) => {
+  const deleteMember = (member: Member) => {
     Alert.alert(
       "Xóa thành viên",
       "Bạn có chắc bạn muốn xóa thành viên này khỏi nhóm",
       [
         {
           text: "Xóa",
-          onPress: () => {
-            removeMember(member)
-              .then(fetchMembers)
-              .catch((e) => Alert.alert(e.message));
+          onPress: async () => {
+            const { error } = await removeMemberFromGroup(
+              member.account_id,
+              member.group_id
+            );
+            if (error) Alert.alert(error);
+            fetchMembers();
           },
           style: "destructive",
         },
@@ -123,7 +122,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
       return;
     }
 
-    await addMember(accountToAdd, group);
+    await addMemberToGroup(accountToAdd.id, group.id);
     fetchMembers();
   };
 
@@ -135,7 +134,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
         {
           text: "Xóa",
           onPress: () => {
-            deleteGroup(group);
+            deleteGroup(group.id);
           },
           style: "destructive",
         },
@@ -153,7 +152,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen safeBottom>
       <Container>
-        <AvatarPicker avatar={avatar} onImagePicked={setAvatar} />
+        <GroupAvatar avatar={avatar} onChangedAvatar={setAvatar} />
         <Input
           placeholder="Tên nhóm"
           defaultValue={group?.name}
@@ -171,7 +170,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
               {index != 0 && <Divider />}
               <MemberAccount
                 account={member.account}
-                onDeletePress={() => handleDeleteMemberPress(member)}
+                onDeletePress={() => deleteMember(member)}
               />
             </React.Fragment>
           ))}

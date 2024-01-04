@@ -16,3 +16,4 @@ export * from "./Options";
 export * from "./Header";
 export * from "./EmptyState";
 export * from "./NotificationItem";
+export * from "./PickImageButton";

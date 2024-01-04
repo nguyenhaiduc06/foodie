@@ -9,8 +9,8 @@ type InputProps = TextInputProps & {
   containerStyle?: ViewStyle;
 };
 
-const Container = styled.View`
-  height: 56px;
+const Container = styled.View<{ height: number }>`
+  height: ${(p) => p.height}px;
   border-radius: 16px;
   background-color: ${theme.colors.foreground};
   padding: 0 16px;
@@ -20,22 +20,26 @@ const Container = styled.View`
   border: 1px solid rgba(0, 0, 0, 0.05);
 `;
 
-const TextInput = styled.TextInput`
+const TextInput = styled.TextInput<{ height: number }>`
   font-size: 16px;
-  height: 56px;
+  height: ${(p) => p.height}px;
   font-family: "Inter_500Medium";
   color: ${theme.colors.text};
   flex: 1;
 `;
 
 export const Input: FC<InputProps> = (props) => {
-  const { left, right, children, containerStyle, ...rest } = props;
+  const { left, right, children, containerStyle, multiline, ...rest } = props;
+  const containerHeight = multiline ? 232 : 56;
+  const textInputHeight = multiline ? 200 : 56;
   return (
-    <Container style={containerStyle}>
+    <Container style={containerStyle} height={containerHeight}>
       {left}
       <TextInput
+        height={textInputHeight}
         placeholderTextColor={theme.palette.gray[400]}
         clearButtonMode="while-editing"
+        multiline={multiline}
         {...rest}
       />
       {right}
