@@ -5,6 +5,8 @@ import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import { useGroupStore } from "./groupStore";
 import dayjs from "dayjs";
+import { api } from "@/lib/api";
+import { Alert } from "react-native";
 
 interface DishStoreState {
   dishes: Dish[];
@@ -17,7 +19,7 @@ interface DishStoreState {
     date: Date;
     meal: string;
     image: ImagePicker.ImagePickerAsset;
-  }) => Promise<{ error: Error | null }>;
+  }) => void;
   updateDish: (
     id: string,
     data: {
@@ -26,7 +28,8 @@ interface DishStoreState {
       meal: string;
       image: ImagePicker.ImagePickerAsset;
     }
-  ) => Promise<{ error: Error | null }>;
+  ) => void;
+  deleteDish: (id: string) => void;
   setDate: (date: Date) => void;
 }
 
@@ -45,44 +48,42 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
   },
   fetchDishes: async () => {
     set({ fetching: true });
-
-    const group_id = useGroupStore.getState().currentGroup?.id;
-    if (!group_id) return;
-
-    const date = get().date;
-    const startOfDate = dayjs(date).startOf("date").toISOString();
-    const endOfDate = dayjs(date).endOf("date").toISOString();
-
-    const { data: dishes, error } = await supabase
-      .from("dishes")
-      .select("*")
-      .lte("date", endOfDate)
-      .gte("date", startOfDate)
-      .eq("group_id", group_id);
-
+    const { dishes, error } = await api.getDishes(
+      useGroupStore.getState().currentGroup?.id,
+      get().date
+    );
     set({ fetching: false });
-
-    if (!error) {
-      set({ dishes });
-    }
+    if (error) return Alert.alert(error.message);
+    set({ dishes });
   },
   createDish: async ({ name, meal, date, image }) => {
-    const group_id = useGroupStore.getState().currentGroup?.id;
-
-    const image_url = image ? ((await uploadImage(image)) as string) : "";
-
-    const { data: newDish, error: dishCreateError } = await supabase
-      .from("dishes")
-      .insert({ name, meal, image_url, date: date.toISOString(), group_id })
-      .select()
-      .single();
-    if (dishCreateError) return { error: new Error(dishCreateError.message) };
-
-    set((s) => ({ dishes: [newDish, ...s.dishes] }));
-    return { error: null };
+    const { dish, error } = await api.createDish({
+      group_id: useGroupStore.getState().currentGroup?.id,
+      date,
+      name,
+      meal,
+      image_url: "",
+    });
+    if (error) return Alert.alert(error.message);
+    const newDishes = [dish, ...get().dishes];
+    set({ dishes: newDishes });
   },
   updateDish: async (id, { name, meal, date, image }) => {
-    return { error: null };
+    const { dish, error } = await api.updateDish(id, {
+      date,
+      name,
+      meal,
+      image_url: "",
+    });
+    if (error) return Alert.alert(error.message);
+    const newDishes = [dish, ...get().dishes];
+    set({ dishes: newDishes });
+  },
+  deleteDish: async (id) => {
+    const { error } = await api.deleteDishs(id);
+    if (error) return Alert.alert(error.message);
+    const newDishes = get().dishes.filter((dish) => dish.id != id);
+    set({ dishes: newDishes });
   },
   setDate: (date) => {
     set({ date });

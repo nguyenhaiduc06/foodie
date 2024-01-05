@@ -49,6 +49,43 @@ class Api {
     const { error } = res.data;
     return { error };
   }
+
+  async getDishes(group_id, date) {
+    if (!group_id || !date) return;
+    const res = await this.axios.get(
+      `/dishes?group_id=${group_id}&date=${date}`
+    );
+    const { data, error } = res.data;
+    return { dishes: data, error };
+  }
+  async createDish({ group_id, date, name, meal, image_url }) {
+    if (!group_id || !date || !name || !meal) return;
+    const res = await this.axios.post(`/dishes`, {
+      group_id,
+      date,
+      name,
+      meal,
+      image_url,
+    });
+    const { data, error } = res.data;
+    return { dish: data, error };
+  }
+  async updateDish(id, { date, name, meal, image_url }) {
+    if (!date || !name || !meal) return;
+    const res = await this.axios.put(`/dishes/${id}`, {
+      date,
+      name,
+      meal,
+      image_url,
+    });
+    const { data, error } = res.data;
+    return { dish: data, error };
+  }
+  async deleteDishs(id) {
+    const res = await this.axios.delete(`/dishes/${id}`);
+    const { error } = res.data;
+    return { error };
+  }
   async getAccount({ email }) {
     // const { data, error } = await this.supabase
     //   .from("accounts")
