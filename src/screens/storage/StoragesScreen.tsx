@@ -58,7 +58,7 @@ export const StoragesScreen: FC<ScreenProps> = (props) => {
   }, []);
 
   const viewStorageDetails = (storage) => {
-    navigation.navigate("StorageDetails", {
+    navigation.navigate("UpdateStorage", {
       storage,
     });
   };

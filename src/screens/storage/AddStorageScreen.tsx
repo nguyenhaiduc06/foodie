@@ -34,19 +34,13 @@ export const AddStorageScreen: FC<ScreenProps> = (props) => {
   const createStorate = useStorageStore((s) => s.createStorage);
 
   const submit = async () => {
-    setLoading(true);
-    const { error } = await createStorate({
+    createStorate({
       name,
       amount,
       storedIn,
       expireDate,
     });
-    setLoading(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
-    }
-    navigation.goBack();
+    navigation.pop();
   };
   return (
     <Screen safeBottom>

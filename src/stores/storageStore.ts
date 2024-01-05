@@ -44,7 +44,7 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
       group_id: useGroupStore.getState().currentGroup?.id,
       name,
       amount,
-      stored_at: storedIn,
+      stored_in: storedIn,
       expire_date: expireDate,
       image_url: "",
     });
@@ -69,11 +69,11 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
     // set((s) => ({ storages: [newStorage, ...s.storages] }));
     // return { error: null };
   },
-  updateStorage: async (id, { name, amount, stored_at, expire_date }) => {
+  updateStorage: async (id, { name, amount, stored_in, expire_date }) => {
     const { storage: updatedStorage, error } = await api.updateStorage(id, {
       name,
       amount,
-      stored_at,
+      stored_in,
       expire_date,
       image_url: "",
     });

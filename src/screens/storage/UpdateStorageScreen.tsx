@@ -36,7 +36,8 @@ export const UpdateStorageScreen: FC<ScreenProps> = (props) => {
     dayjs(storage.expire_date).toDate()
   );
   const [updating, setUpdating] = useState(false);
-  const createStorate = useStorageStore((s) => s.createStorage);
+  const updateStorage = useStorageStore((s) => s.updateStorage);
+  const deleteStorage = useStorageStore((s) => s.deleteStorage);
 
   useEffect(() => {
     navigation.setOptions({
@@ -58,6 +59,7 @@ export const UpdateStorageScreen: FC<ScreenProps> = (props) => {
         {
           text: "Xóa",
           style: "destructive",
+          onPress: submitDelete,
         },
         {
           text: "Hủy",
@@ -67,20 +69,19 @@ export const UpdateStorageScreen: FC<ScreenProps> = (props) => {
     );
   };
 
+  const submitDelete = async () => {
+    deleteStorage(storage.id);
+    navigation.pop();
+  };
+
   const submitUpdate = async () => {
-    setUpdating(true);
-    const { error } = await createStorate({
+    updateStorage(storage.id, {
       name,
       amount,
       storedIn,
       expireDate,
     });
-    setUpdating(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
-    }
-    navigation.goBack();
+    navigation.pop();
   };
 
   const shouldDisableSubmitButton =

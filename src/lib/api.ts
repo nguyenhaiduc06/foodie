@@ -97,29 +97,29 @@ class Api {
     group_id,
     name,
     amount,
-    stored_at,
+    stored_in,
     expire_date,
     image_url,
   }) {
-    if (!group_id || !name || !amount || !stored_at || !expire_date) return;
+    if (!group_id || !name || !amount || !stored_in || !expire_date) return;
     const res = await this.axios.post(`/storages`, {
       group_id,
       name,
       amount,
-      stored_at,
+      stored_in,
       expire_date,
       image_url,
     });
     const { data, error } = res.data;
     return { storage: data, error };
   }
-  async updateStorage(id, { name, amount, stored_at, expire_date, image_url }) {
-    if (!name || !amount || !stored_at || !expire_date) return;
+  async updateStorage(id, { name, amount, stored_in, expire_date, image_url }) {
+    if (!name || !amount || !stored_in || !expire_date) return;
 
     const res = await this.axios.put(`/storages/${id}`, {
       name,
       amount,
-      stored_at,
+      stored_in,
       expire_date,
       image_url,
     });
@@ -127,7 +127,7 @@ class Api {
     return { storage: data, error };
   }
   async deleteStorage(id) {
-    const res = await this.axios.delete(`/storage/${id}`);
+    const res = await this.axios.delete(`/storages/${id}`);
     const { error } = res.data;
     return { error };
   }

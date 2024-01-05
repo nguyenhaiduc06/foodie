@@ -1,5 +1,5 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { MainStack } from "./src/navigators";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { MainStack, navigationRef } from "./src/navigators";
 import {
   useFonts,
   Inter_600SemiBold,
@@ -10,10 +10,13 @@ import {
 import { theme } from "./src/theme";
 import { StatusBar } from "expo-status-bar";
 import { useAppStore } from "@/stores/appStore";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { View } from "react-native";
 import "@/utils/configDayjs";
 import registerNNPushToken from "native-notify";
+import { configNotification } from "@/services/notification";
+
+configNotification();
 
 export default function App() {
   let [fontsLoaded, fontError] = useFonts({
@@ -25,7 +28,7 @@ export default function App() {
 
   const initializing = useAppStore((s) => s.initializing);
   const initStores = useAppStore((s) => s.initStores);
-  registerNNPushToken(16830, "pfmJDM3vOB3bFiBRbbMmrk");
+  // registerNNPushToken(16830, "pfmJDM3vOB3bFiBRbbMmrk");
 
   useEffect(() => {
     initStores();
@@ -40,7 +43,7 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer theme={theme}>
+    <NavigationContainer theme={theme} ref={navigationRef}>
       <StatusBar style="auto" />
       <MainStack />
     </NavigationContainer>

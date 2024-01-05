@@ -5,6 +5,7 @@ import { useStorageStore } from "./storageStore";
 import { useTodoStore } from "./todoStore";
 import { useDishStore } from "./dishStore";
 import { useGroupStore } from "./groupStore";
+import { useNotificationStore } from "./notificationStore";
 
 interface AppStoreState {
   initializing: boolean;
@@ -15,6 +16,7 @@ export const useAppStore = create<AppStoreState>()((set) => ({
   initializing: true,
   initStores: async () => {
     await useAuthStore.getState().initAuthStore();
+    useNotificationStore.getState().initNotificationStore();
     useGroupStore.getState().initGroupStore();
     set({ initializing: false });
     // useTodoStore.getState().initTodoStore();

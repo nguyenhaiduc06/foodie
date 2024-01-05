@@ -26,6 +26,8 @@ import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
 import { AuthenticateStack } from "./AuthenticateStack";
 import { Dish, Group, Recipe, Storage, Todo } from "@/lib";
+import * as Notifications from "expo-notifications";
+import { navigate } from "./utils";
 
 export type MainStackParamList = {
   SignIn: undefined;
@@ -85,6 +87,21 @@ export const MainStack = () => {
 
   const initialRouteName = authed ? "HomeTab" : "SignIn";
 
+  useEffect(() => {
+    Notifications.addNotificationReceivedListener((notification) => {
+      console.log(notification);
+    });
+
+    Notifications.addNotificationResponseReceivedListener((response) => {
+      if (
+        response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER
+      ) {
+        navigate("ListNotifications");
+      }
+      console.log(response.notification.request.content.data);
+    });
+  });
+
   return (
     <Main.Navigator initialRouteName={initialRouteName}>
       <Main.Screen
@@ -138,6 +155,7 @@ export const MainStack = () => {
         component={DishDetailsScreen}
         options={{
           title: "Chi tiết",
+          presentation: "modal",
         }}
       />
       <Main.Screen

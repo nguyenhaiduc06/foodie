@@ -10,6 +10,7 @@ import {
 } from "@/navigators";
 import {
   ActionButton,
+  Button,
   DateSelector,
   EmptyState,
   Header,
@@ -20,7 +21,8 @@ import {
 } from "@/components";
 import { theme } from "@/theme";
 import { useNotificationStore, useTodoStore } from "@/stores";
-import { Plus } from "lucide-react-native";
+import axios from "axios";
+import dayjs from "dayjs";
 
 type ScreenProps = MainStackScreenProps<"ListNotifications">;
 
@@ -60,9 +62,37 @@ export const ListNotificationsScreen: FC<ScreenProps> = (props) => {
     initNotificationStore();
   }, []);
 
+  const createNoti = () => {
+    const dateToSendNotification = dayjs().add(10, "seconds").toDate();
+    const push_token = useNotificationStore.getState().pushToken;
+    axios
+      .post("http://192.168.31.60:3000/notifications", {
+        id: "id",
+        push_token,
+        title: "Thực phẩm sắp hết hạn",
+        body: "Còn 3 ngày nữa là món gà trong tủ lạnh sẽ hết hạn",
+        date: dateToSendNotification,
+      })
+      .then((res) => console.log(res.data))
+      .catch((e) => console.log(e.message));
+  };
+
+  const updateNoti = () => {
+    const dateToSendNotification = dayjs().add(5, "seconds");
+    axios
+      .put("http://192.168.31.60:3000/notifications", {
+        id: "id",
+        date: dateToSendNotification.toDate(),
+      })
+      .then((res) => console.log(res.data))
+      .catch((e) => console.log(e.message));
+  };
+
   return (
     <Screen>
       <ScrollView>
+        <Button onPress={createNoti} label="Create" />
+        <Button onPress={updateNoti} label="Update" />
         <Container onStartShouldSetResponder={() => true}>
           {notifications.length == 0 ? (
             <EmptyState label="Bạn không có thông báo nào" />
