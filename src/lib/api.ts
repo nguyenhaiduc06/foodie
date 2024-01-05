@@ -3,6 +3,7 @@ import { decode } from "base64-arraybuffer";
 import { Database } from "./database.types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { Axios } from "axios";
+import dayjs from "dayjs";
 
 const supabaseUrl = "https://vfacmpirjrvdgusdxgfo.supabase.co";
 const supabaseAnonKey =
@@ -10,9 +11,18 @@ const supabaseAnonKey =
 
 class Api {
   private axios: Axios;
+  private supabase;
   constructor(baseURL) {
     this.axios = axios.create({
       baseURL,
+    });
+    this.supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        storage: AsyncStorage,
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: false,
+      },
     });
   }
   async getTodos(group_id, date) {
@@ -81,7 +91,7 @@ class Api {
     const { data, error } = res.data;
     return { dish: data, error };
   }
-  async deleteDishs(id) {
+  async deleteDish(id) {
     const res = await this.axios.delete(`/dishes/${id}`);
     const { error } = res.data;
     return { error };
@@ -173,23 +183,49 @@ class Api {
     //   .single();
     // return { data, error };
   }
-  async uploadImage({ filePath, base64Image }) {
-    // const { error: fileUploadError } = await this.supabase.storage
-    //   .from("files")
-    //   .upload(filePath, decode(base64Image), {
-    //     contentType: "image/png",
-    //     upsert: true,
-    //   });
-    // if (fileUploadError)
-    //   return {
-    //     error: new Error(
-    //       "Error when uploading image: " + fileUploadError.message
-    //     ),
-    //   };
-    // const {
-    //   data: { publicUrl },
-    // } = this.supabase.storage.from("files").getPublicUrl(filePath);
-    // return { publicUrl, error: null };
+  async uploadDishImage(base64Image) {
+    const fileName = dayjs().toISOString();
+    const filePath = `dish/${fileName}.png`;
+    return this.uploadImage(filePath, base64Image);
+  }
+
+  async uploadStorageImage(base64Image) {
+    const fileName = dayjs().toISOString();
+    const filePath = `storage/${fileName}.png`;
+    return this.uploadImage(filePath, base64Image);
+  }
+
+  async uploadRecipieImage(base64Image) {
+    const fileName = dayjs().toISOString();
+    const filePath = `recipe/${fileName}.png`;
+    return this.uploadImage(filePath, base64Image);
+  }
+
+  async uploadGroupAvatar(base64Image) {
+    const fileName = dayjs().toISOString();
+    const filePath = `group/${fileName}.png`;
+    return this.uploadImage(filePath, base64Image);
+  }
+
+  async uploadUserAvatar(base64Image) {
+    const fileName = dayjs().toISOString();
+    const filePath = `avatar/${fileName}.png`;
+    return this.uploadImage(filePath, base64Image);
+  }
+
+  async uploadImage(filePath, image) {
+    const { error } = await this.supabase.storage
+      .from("images")
+      .upload(filePath, decode(image), {
+        contentType: "image/png",
+        upsert: true,
+      });
+    console.log("Upload dish image error", error);
+    if (error) return null;
+    const {
+      data: { publicUrl },
+    } = this.supabase.storage.from("images").getPublicUrl(filePath);
+    return publicUrl;
   }
 }
 
