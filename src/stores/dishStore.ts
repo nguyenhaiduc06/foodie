@@ -36,7 +36,7 @@ interface DishStoreState {
 export const useDishStore = create<DishStoreState>()((set, get) => ({
   dishes: [],
   fetching: false,
-  date: new Date(Date.now()),
+  date: dayjs().toDate(),
   initDishStore: async () => {
     get().fetchDishes();
 
@@ -69,7 +69,9 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
     set((s) => ({ dishes: [dish, ...s.dishes] }));
   },
   updateDish: async (id, { name, meal, date, image }) => {
-    const image_url = image ? await api.uploadDishImage(image.base64) : null;
+    const image_url = image?.base64
+      ? await api.uploadDishImage(image.base64)
+      : image.uri;
     const { dish: updatedDish, error } = await api.updateDish(id, {
       date,
       name,

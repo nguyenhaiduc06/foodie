@@ -66,7 +66,9 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     set((s) => ({ groups: [group, ...s.groups] }));
   },
   updateGroup: async (group_id, { name, image }) => {
-    const image_url = image ? await api.uploadGroupAvatar(image.base64) : null;
+    const image_url = image?.base64
+      ? await api.uploadGroupAvatar(image.base64)
+      : image.uri;
     const { group: updatedGroup, error } = await api.updateGroup(group_id, {
       name,
       image_url,
