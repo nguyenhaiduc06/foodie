@@ -7,6 +7,7 @@ import {
   Bell,
   BookOpenText,
   ClipboardList,
+  Settings,
   ShoppingCart,
   User,
   Users2,
@@ -91,10 +92,21 @@ export const HomeTab = () => {
       <Home.Screen
         name="Account"
         component={AccountScreen}
-        options={{
+        options={({ navigation }) => ({
           title: "Tài khoản",
           tabBarIcon: ({ color }) => <User color={color} />,
-        }}
+          headerTitle: "Tài khoản",
+          headerTitleAlign: "center",
+          headerRight: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ListNotifications")}
+              >
+                <Settings size={22} color={theme.colors.text} />
+              </TouchableOpacity>
+            );
+          },
+        })}
       />
     </Home.Navigator>
   );
