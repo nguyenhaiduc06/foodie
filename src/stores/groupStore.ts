@@ -48,7 +48,7 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
   fetchGroups: async () => {
     set({ fetching: true });
     const { groups, error } = await api.getGroups(
-      useAuthStore.getState().account?.id
+      useAuthStore.getState().account.id
     );
     set({ fetching: false });
     if (error) return Alert.alert(error.message);

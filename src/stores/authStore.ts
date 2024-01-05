@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { Account } from "@/lib";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "@/lib/api";
+import { Alert } from "react-native";
 
 interface AuthStoreState {
   authed: boolean;
