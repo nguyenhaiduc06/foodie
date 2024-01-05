@@ -34,7 +34,7 @@ export const AddStorageScreen: FC<ScreenProps> = (props) => {
   const createStorate = useStorageStore((s) => s.createStorage);
 
   const submit = async () => {
-    createStorate({
+    await createStorate({
       name,
       amount,
       storedIn,

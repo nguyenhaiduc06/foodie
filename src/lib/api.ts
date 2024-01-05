@@ -161,7 +161,8 @@ class Api {
     return { storage: data, error };
   }
   async updateStorage(id, { name, amount, stored_in, expire_date, image_url }) {
-    if (!name || !amount || !stored_in || !expire_date) return;
+    if (!name || !amount || !stored_in || !expire_date)
+      return { error: new Error("Invalid update storage data") };
 
     const res = await this.axios.put(`/storages/${id}`, {
       name,

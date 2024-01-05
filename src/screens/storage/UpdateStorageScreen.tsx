@@ -70,16 +70,16 @@ export const UpdateStorageScreen: FC<ScreenProps> = (props) => {
   };
 
   const submitDelete = async () => {
-    deleteStorage(storage.id);
+    await deleteStorage(storage.id);
     navigation.pop();
   };
 
   const submitUpdate = async () => {
-    updateStorage(storage.id, {
+    await updateStorage(storage.id, {
       name,
       amount,
-      storedIn,
-      expireDate,
+      stored_in: storedIn,
+      expire_date: expireDate,
     });
     navigation.pop();
   };

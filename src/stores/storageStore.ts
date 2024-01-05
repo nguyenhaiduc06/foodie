@@ -13,9 +13,9 @@ interface StorageStoreState {
   fetching: boolean;
   initStorageStore: () => void;
   fetchStorages: () => void;
-  createStorage: (data: any) => void;
-  updateStorage: (id: number, data: any) => void;
-  deleteStorage: (id: number) => void;
+  createStorage: (data: any) => Promise<void>;
+  updateStorage: (id: number, data: any) => Promise<void>;
+  deleteStorage: (id: number) => Promise<void>;
 }
 
 export const useStorageStore = create<StorageStoreState>()((set, get) => ({
@@ -51,23 +51,6 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
     if (error) return Alert.alert(error.message);
     const newStorages = [storage, ...get().storages];
     set({ storages: newStorages });
-
-    // schedule
-    // const dateToSendNotification = dayjs().add(2, "seconds").toDate();
-    // const push_token = useNotificationStore.getState().pushToken;
-    // axios
-    //   .post("http://192.168.31.60:3000/notifications", {
-    //     id: newStorage.id.toString(),
-    //     push_token: push_token,
-    //     title: "Thực phẩm sắp hết hạn",
-    //     body: "Còn 3 ngày nữa là món gà trong tủ lạnh sẽ hết hạn",
-    //     date: dateToSendNotification,
-    //   })
-    //   .then((res) => console.log(res.data))
-    //   .catch((e) => console.log(e.message));
-
-    // set((s) => ({ storages: [newStorage, ...s.storages] }));
-    // return { error: null };
   },
   updateStorage: async (id, { name, amount, stored_in, expire_date }) => {
     const { storage: updatedStorage, error } = await api.updateStorage(id, {

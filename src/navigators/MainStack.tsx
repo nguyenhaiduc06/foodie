@@ -7,7 +7,6 @@ import {
   AddDishScreen,
   AddTodosScreen,
   RecipeDetailsScreen,
-  StorageDetailsScreen,
   UpdateDishScreen,
   AddStorageScreen,
   AddRecipeScreen,
@@ -188,13 +187,6 @@ export const MainStack = () => {
         options={{
           title: "Thêm thực phẩm đang lưu trữ",
           presentation: "modal",
-        }}
-      />
-      <Main.Screen
-        name="StorageDetails"
-        component={StorageDetailsScreen}
-        options={{
-          title: "Chi tiết",
         }}
       />
       <Main.Screen
