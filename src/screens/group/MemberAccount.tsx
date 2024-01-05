@@ -18,6 +18,7 @@ const BACKGROUND_COLOR_BY_STATUS = {
 
 type AccountInviteItemProps = {
   account: Account;
+  is_admin: boolean;
   onDeletePress: (account: Account) => void;
 };
 
@@ -59,13 +60,13 @@ const MemberStatus = ({ status }) => {
 };
 
 export const MemberAccount: FC<AccountInviteItemProps> = (props) => {
-  const { account, onDeletePress } = props;
+  const { account, is_admin, onDeletePress } = props;
   return (
     <Container>
       <Icon />
       <Text>{account.name}</Text>
       <Space />
-      <MemberStatus status={"admin"} />
+      <MemberStatus status={is_admin ? "admin" : "member"} />
       <TouchableOpacity onPress={() => onDeletePress(account)}>
         <Trash2 size={20} color={theme.colors.danger} />
       </TouchableOpacity>

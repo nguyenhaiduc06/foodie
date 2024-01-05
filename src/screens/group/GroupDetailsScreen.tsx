@@ -41,6 +41,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   const [members, setMembers] = useState<Array<Member & { account: Account }>>(
     []
   );
+  console.log(members);
   const [updating, setUpdating] = useState(false);
   const [fetchingMembers, setFetchingMembers] = useState(false);
   const updateGroup = useGroupStore((s) => s.updateGroup);
@@ -169,6 +170,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
               {index != 0 && <Divider />}
               <MemberAccount
                 account={member.account}
+                is_admin={member.is_admin}
                 onDeletePress={() => deleteMember(member)}
               />
             </React.Fragment>
