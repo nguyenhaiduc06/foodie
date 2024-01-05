@@ -65,7 +65,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   }, [group]);
 
   const submitUpdate = async () => {
-    updateGroup(group.id, {
+    await updateGroup(group.id, {
       name,
       image: avatar.uri ? avatar : null,
     });
@@ -73,7 +73,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   };
 
   const submitDelete = async () => {
-    deleteGroup(group.id);
+    await deleteGroup(group.id);
     navigation.pop();
   };
 
@@ -177,7 +177,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
         <Space />
         <Button
           preset="primary"
-          label="Lưu asdasd"
+          label="Lưu"
           loading={updating}
           disabled={name == group.name && !avatar}
           onPress={submitUpdate}

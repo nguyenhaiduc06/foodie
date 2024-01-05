@@ -39,12 +39,14 @@ export const AddDishScreen: FC<ScreenProps> = (props) => {
   const createDish = useDishStore((s) => s.createDish);
 
   const submitCreate = async () => {
+    setCreating(true);
     await createDish({
       name,
       date,
       image,
       meal,
     });
+    setCreating(false);
     navigation.pop();
   };
   return (

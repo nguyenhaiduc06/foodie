@@ -55,11 +55,14 @@ export const AddGroupScreen: FC<ScreenProps> = (props) => {
   };
 
   const submit = async () => {
-    createGroup({
+    setLoading(true);
+    await createGroup({
       name,
       image: avatar,
       member_ids: memberAccounts.map((a) => a.id),
     });
+    setLoading(false);
+    navigation.pop();
   };
 
   return (
