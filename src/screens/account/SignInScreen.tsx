@@ -13,24 +13,20 @@ const Container = styled.View`
 
 export const SignInScreen: FC<MainStackScreenProps<"SignIn">> = (props) => {
   const { navigation } = props;
-  const [email, setEmail] = useState("nguyenhaiduc06@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const signIn = useAuthStore((s) => s.signIn);
 
   const submit = async () => {
     setLoading(true);
-    const { account, error } = await signIn({ email, password });
+    const { error } = await signIn({ username, password });
     setLoading(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
+    if (!error) {
+      navigation.replace("HomeTab");
+    } else {
+      Alert.alert(error);
     }
-    if (!account) {
-      Alert.alert("No account");
-      return;
-    }
-    navigation.replace("HomeTab");
   };
 
   const signUp = () => {
@@ -41,13 +37,13 @@ export const SignInScreen: FC<MainStackScreenProps<"SignIn">> = (props) => {
       <Container>
         <Input
           placeholder={"Email"}
-          onChangeText={setEmail}
+          onChangeText={setUsername}
           autoCapitalize="none"
         />
         <Input placeholder={"Mật khẩu"} onChangeText={setPassword} />
         <Button
           preset="primary"
-          disabled={!email || !password}
+          disabled={!username || !password}
           loading={loading}
           label={"Đăng nhập"}
           onPress={submit}

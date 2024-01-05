@@ -14,7 +14,7 @@ const Container = styled.View`
 export const SignUpScreen: FC<MainStackScreenProps<"SignUp">> = (props) => {
   const { navigation } = props;
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -22,13 +22,13 @@ export const SignUpScreen: FC<MainStackScreenProps<"SignUp">> = (props) => {
 
   const submit = async () => {
     setLoading(true);
-    const { error } = await signUp({ name, email, password });
+    const { error } = await signUp({ name, username, password });
     setLoading(false);
     if (error) {
-      Alert.alert(error.message);
-      return;
+      Alert.alert(error);
+    } else {
+      navigation.replace("HomeTab");
     }
-    navigation.replace("HomeTab");
   };
 
   const signIn = () => {
@@ -43,14 +43,14 @@ export const SignUpScreen: FC<MainStackScreenProps<"SignUp">> = (props) => {
           autoCapitalize="words"
         />
         <Input
-          placeholder={"Email"}
-          onChangeText={setEmail}
+          placeholder={"Username"}
+          onChangeText={setUsername}
           autoCapitalize="none"
         />
         <Input placeholder={"Mật khẩu"} onChangeText={setPassword} />
         <Button
           preset="primary"
-          disabled={!email || !password}
+          disabled={!name || !username || !password}
           loading={loading}
           label={"Đăng ký"}
           onPress={submit}

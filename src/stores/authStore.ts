@@ -1,161 +1,64 @@
 import { create } from "zustand";
-import { supabase, Account } from "@/lib";
+import { Account } from "@/lib";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { api } from "@/lib/api";
 
 interface AuthStoreState {
   authed: boolean;
   account: Account | null;
-  initAuthStore: () => Promise<void>;
+  initAuthStore: () => void;
   signIn: (data: {
-    email: string;
+    username: string;
     password: string;
-  }) => Promise<{ account: Account | null; error: Error | null }>;
+  }) => Promise<{ error?: string }>;
   signUp: (data: {
     name: string;
-    email: string;
+    username: string;
     password: string;
-  }) => Promise<{ error: Error | null }>;
+  }) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
-  createAccount: (data: { name: string }) => Promise<{ error: Error | null }>;
-  updateAccount: (date: { name: string }) => Promise<{ error: Error | null }>;
 }
 
 export const useAuthStore = create<AuthStoreState>()((set, get) => ({
   authed: false,
   account: null,
   initAuthStore: async () => {
-    supabase.auth.onAuthStateChange(async (_event, session) => {
-      const user = session?.user ?? null;
-      const user_id = user?.id;
-      if (!user_id) {
-        set({ authed: false });
-        return;
-      }
-
-      const { data: account } = await supabase
-        .from("accounts")
-        .select("*")
-        .eq("user_id", user_id)
-        .single();
-      const authed = session && user && account ? true : false;
-      set({ authed, account });
-    });
-
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const user_id = user?.id;
-    if (!user_id) {
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
       set({ authed: false });
-      return;
+    } else {
+      const { account, error } = await api.getUserAccount(token);
+      if (error) {
+      } else {
+        set({ authed: true, account });
+      }
     }
-
-    const { data: account } = await supabase
-      .from("accounts")
-      .select("*")
-      .eq("user_id", user_id)
-      .single();
-    const authed = session && user && account ? true : false;
-    set({ authed, account });
   },
-  signIn: async ({ email, password }) => {
-    const {
-      data: { user },
-      error: signInError,
-    } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-    if (signInError)
-      return { account: null, error: new Error(signInError.message) };
-
-    const { data: account, error: getAccountError } = await supabase
-      .from("accounts")
-      .select("*")
-      .eq("user_id", user.id)
-      .maybeSingle();
-    if (getAccountError)
-      return { account: null, error: new Error(getAccountError.message) };
-
-    return { account, error: null };
+  signIn: async ({ username, password }) => {
+    const { account, token, error } = await api.signIn({ username, password });
+    if (error) {
+      return { error };
+    } else {
+      AsyncStorage.setItem("token", token);
+      set({ authed: true, account });
+      return { error: null };
+    }
   },
-  signUp: async ({ name, email, password }) => {
-    const {
-      data: { user },
-      error: signUpError,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
+  signUp: async ({ name, username, password }) => {
+    const { account, token, error } = await api.signUp({
+      name,
+      username,
+      password,
     });
-    if (signUpError) return { error: new Error(signUpError.message) };
-
-    const { data: account, error: createAccountError } = await supabase
-      .from("accounts")
-      .insert({
-        name,
-        user_id: user.id,
-      })
-      .select()
-      .single();
-    if (createAccountError)
-      return { error: new Error(createAccountError.message) };
-
-    const { data: group, error: createGroupError } = await supabase
-      .from("groups")
-      .insert({
-        name,
-      })
-      .select()
-      .single();
-    if (createGroupError) return { error: new Error(createGroupError.message) };
-
-    const { error: createAccountGroupError } = await supabase
-      .from("members")
-      .insert({
-        account_id: account.id,
-        group_id: group.id,
-        is_admin: true,
-        status: "active",
-      })
-      .select()
-      .single();
-    if (createAccountGroupError)
-      return { error: new Error(createAccountGroupError.message) };
+    if (error) {
+      return { error };
+    } else {
+      AsyncStorage.setItem("token", token);
+      set({ authed: true, account });
+      return { error: null };
+    }
   },
   signOut: async () => {
-    await supabase.auth.signOut();
-  },
-  createAccount: async ({ name }) => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const user_id = user?.id;
-    if (!user_id) return { error: new Error("No user logged in") };
-
-    const { data: account, error } = await supabase
-      .from("accounts")
-      .insert({ name, email: user?.email, avatar_url: "", user_id })
-      .select()
-      .single();
-    set({ account });
-    return { error: error ? new Error(error.message) : null };
-  },
-  updateAccount: async ({ name }) => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const user_id = user?.id;
-    if (!user_id) return { error: new Error("No user logged in") };
-
-    const { data: account, error } = await supabase
-      .from("accounts")
-      .update({ name })
-      .eq("id", get().account.id)
-      .select()
-      .single();
-    set({ account });
-    return { error: error ? new Error(error.message) : null };
+    AsyncStorage.removeItem("token");
   },
 }));

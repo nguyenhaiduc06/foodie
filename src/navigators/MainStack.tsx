@@ -21,7 +21,6 @@ import {
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
-import { AuthenticateStack } from "./AuthenticateStack";
 import { Dish, Group, Recipe, Storage, Todo } from "@/lib";
 import * as Notifications from "expo-notifications";
 import { navigate } from "./utils";

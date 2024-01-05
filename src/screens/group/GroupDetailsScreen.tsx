@@ -67,7 +67,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   const submitUpdate = async () => {
     await updateGroup(group.id, {
       name,
-      image: avatar.uri ? avatar : null,
+      image: avatar,
     });
     navigation.pop();
   };

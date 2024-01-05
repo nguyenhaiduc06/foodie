@@ -15,7 +15,7 @@ import { LogBox, View } from "react-native";
 import "@/utils/configDayjs";
 import registerNNPushToken from "native-notify";
 import { configNotification } from "@/services/notification";
-LogBox.ignoreAllLogs();
+import { api } from "@/lib/api";
 
 configNotification();
 

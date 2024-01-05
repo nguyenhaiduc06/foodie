@@ -1,7 +1,7 @@
-import { SupabaseClient, createClient } from "@supabase/supabase-js";
+import "react-native-url-polyfill/auto";
+import { createClient } from "@supabase/supabase-js";
 import { decode } from "base64-arraybuffer";
 import { Database } from "./database.types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { Axios } from "axios";
 import dayjs from "dayjs";
 
@@ -16,22 +16,40 @@ class Api {
     this.axios = axios.create({
       baseURL,
     });
-    this.supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        storage: AsyncStorage,
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: false,
-      },
-    });
+    this.supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
   }
-  async getAccount(email) {
-    const res = await this.axios.get(`/users?email=${email}`);
+  async signUp({ name, username, password }) {
+    const res = await this.axios.post(`/users/sign-up`, {
+      name,
+      username,
+      password,
+    });
+    const { account, token, error } = res.data;
+    return { account, token, error };
+  }
+  async signIn({ username, password }) {
+    const res = await this.axios.post(`/users/sign-in`, {
+      username,
+      password,
+    });
+    const { account, token, error } = res.data;
+    return { account, token, error };
+  }
+  async getUserAccount(token) {
+    const res = await this.axios.post(`/users/account`, {
+      token,
+    });
+    const { account, error } = res.data;
+    return { account, error };
+  }
+  async findUser(username) {
+    const res = await this.axios.get(`/users?username=${username}`);
     const { data, error } = res.data;
     return { account: data, error };
   }
   async getGroups(account_id) {
     if (!account_id) return;
+    console.log("get group with account id", account_id);
     const res = await this.axios.get(`/groups?account_id=${account_id}`);
     const { data, error } = res.data;
     return { groups: data, error };
