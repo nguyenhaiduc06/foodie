@@ -29,7 +29,7 @@ export const UpdateTodoScreen: FC<ScreenProps> = (props) => {
   const [name, setName] = useState(todo.name);
   const [amount, setAmount] = useState(todo.amount);
   const [updating, setUpdating] = useState(false);
-  const addTodo = useTodoStore((s) => s.addTodo);
+  const updateTodo = useTodoStore((s) => s.updateTodo);
 
   useEffect(() => {
     navigation.setOptions({
@@ -62,12 +62,8 @@ export const UpdateTodoScreen: FC<ScreenProps> = (props) => {
 
   const submitUpdate = async () => {
     setUpdating(true);
-    const { error } = await addTodo({ name, amount, date });
+    await updateTodo(todo.id, { date, name, amount });
     setUpdating(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
-    }
     navigation.goBack();
   };
 
