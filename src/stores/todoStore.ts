@@ -75,6 +75,7 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
     set({ todos: newTodos });
   },
   setTodoChecked: async (id, checked) => {
+    //@ts-ignore
     const { todo, error } = await api.updateTodo(id, {
       checked,
     });
