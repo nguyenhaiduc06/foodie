@@ -59,12 +59,12 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
   };
 
   const submitDelete = async () => {
-    deleteRecipe(recipe.id);
+    await deleteRecipe(recipe.id);
     navigation.pop();
   };
 
   const submitUpdate = async () => {
-    updateRecipe(recipe.id, {
+    await updateRecipe(recipe.id, {
       name,
       content,
     });

@@ -51,40 +51,23 @@ export const useRecipeStore = create<RecipeStoreState>()((set, get) => ({
     const newRecipes = [recipe, ...get().recipes];
     set({ recipes: newRecipes });
   },
-  updateRecipe: async (recipe, { name, content }) => {
-    const group_id = useGroupStore.getState().currentGroup?.id;
-    if (!group_id) return;
-
-    const { data: updatedRecipe, error: updateRecipeError } = await supabase
-      .from("recipes")
-      .update({ name, content })
-      .eq("id", recipe.id)
-      .select()
-      .single();
-    if (updateRecipeError) {
-      return { error: new Error(updateRecipeError.message) };
-    }
-
-    set((s) => ({
-      recipes: s.recipes.map((recipe) =>
-        recipe.id == updatedRecipe.id ? updatedRecipe : recipe
-      ),
-    }));
-    return { error: null };
+  updateRecipe: async (id, { name, content }) => {
+    const { recipe: updatedRecipe, error } = await api.updateRecipe(id, {
+      name,
+      content,
+      image_url: null,
+    });
+    if (error) return Alert.alert(error.message);
+    const newRecipes = get().recipes.map((recipe) =>
+      recipe.id == updatedRecipe.id ? updatedRecipe : recipe
+    );
+    set({ recipes: newRecipes });
   },
-  deleteRecipe: async (recipeToDelete) => {
-    const { error: deleteRecipeError } = await supabase
-      .from("recipes")
-      .delete()
-      .eq("id", recipeToDelete.id);
-    if (deleteRecipeError) {
-      return { error: new Error(deleteRecipeError.message) };
-    }
-
-    set((s) => ({
-      recipes: s.recipes.filter((recipe) => recipe.id != recipeToDelete.id),
-    }));
-    return { error: null };
+  deleteRecipe: async (id) => {
+    const { error } = await api.deleteRecipe(id);
+    if (error) return Alert.alert(error.message);
+    const newRecipes = get().recipes.filter((recipe) => recipe.id != id);
+    set({ recipes: newRecipes });
   },
   setDate: () => {},
 }));
