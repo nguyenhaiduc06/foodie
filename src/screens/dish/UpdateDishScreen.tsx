@@ -63,10 +63,7 @@ export const UpdateDishScreen: FC<ScreenProps> = (props) => {
         {
           text: "Xóa",
           style: "destructive",
-          onPress: () => {
-            deleteDish(dish.id);
-            navigation.pop();
-          },
+          onPress: submitDelete,
         },
         {
           text: "Hủy",
@@ -78,14 +75,19 @@ export const UpdateDishScreen: FC<ScreenProps> = (props) => {
 
   const submitUpdate = async () => {
     setUpdating(true);
-    updateDish(dish.id, {
+    await updateDish(dish.id, {
       name,
       date,
-      image,
+      image: image.uri ? image : null,
       meal,
     });
     setUpdating(false);
     navigation.goBack();
+  };
+
+  const submitDelete = async () => {
+    await deleteDish(dish.id);
+    navigation.pop();
   };
 
   const shouldDisableSubmitButton =

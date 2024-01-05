@@ -39,19 +39,13 @@ export const AddDishScreen: FC<ScreenProps> = (props) => {
   const createDish = useDishStore((s) => s.createDish);
 
   const submitCreate = async () => {
-    setCreating(true);
-    const { error } = await createDish({
+    createDish({
       name,
       date,
       image,
       meal,
     });
-    setCreating(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
-    }
-    navigation.goBack();
+    navigation.pop();
   };
   return (
     <Screen safeBottom>

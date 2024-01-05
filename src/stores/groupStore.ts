@@ -4,6 +4,7 @@ import { useAuthStore } from "./authStore";
 import { ImageResult } from "expo-image-manipulator";
 import { api } from "@/lib/api";
 import dayjs from "dayjs";
+import { Alert } from "react-native";
 
 type ActionResult = Promise<{ error?: string }>;
 
@@ -12,20 +13,20 @@ interface GroupStoreState {
   currentGroup: Group;
   fetching: boolean;
   initGroupStore: () => Promise<void>;
-  fetchGroups: () => ActionResult;
+  fetchGroups: () => Promise<void>;
   createGroup: (data: {
     name: string;
     image?: ImageResult;
-    memberAccounts: Account[];
-  }) => ActionResult;
+    member_ids: string[];
+  }) => Promise<void>;
   updateGroup: (
     group_id: number,
     data: {
       name: string;
       image?: ImageResult;
     }
-  ) => ActionResult;
-  deleteGroup: (group_id: number) => ActionResult;
+  ) => Promise<void>;
+  deleteGroup: (group_id: number) => Promise<void>;
   activateGroup: (group_id: number) => void;
   addMemberToGroup: (account_id: number, group_id: number) => ActionResult;
   removeMemberFromGroup: (account_id: number, group_id: number) => ActionResult;
@@ -39,99 +40,47 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     await get().fetchGroups();
 
     useAuthStore.subscribe((s) => {
-      get().fetchGroups();
+      if (s.account?.id) {
+        get().fetchGroups();
+      }
     });
   },
   fetchGroups: async () => {
     set({ fetching: true });
-
-    const account_id = useAuthStore.getState().account?.id;
-
-    const { data, error: fetchAccountGroupError } = await supabase
-      .from("members")
-      .select("group:groups(*)")
-      .eq("account_id", account_id);
-    if (fetchAccountGroupError)
-      return { error: fetchAccountGroupError.message };
-
-    const groups = data.map((e) => ({
-      ...e.group,
-    }));
-
-    if (groups.length == 0) {
-      get().createGroup({ name: "Nhóm", memberAccounts: [] });
-    } else {
-      set((s) => ({ groups, currentGroup: s.currentGroup ?? groups[0] }));
-    }
-
+    const { groups, error } = await api.getGroups(
+      useAuthStore.getState().account?.id
+    );
     set({ fetching: false });
+    if (error) return Alert.alert(error.message);
+    set({ groups, currentGroup: groups[0] });
   },
-  createGroup: async ({ name, image, memberAccounts }) => {
-    const account_id = useAuthStore.getState().account.id;
-    const filePath = `${account_id}/images/group-avatars/${dayjs().toISOString()}.png`;
-    const image_url = await uploadAndGetImageURL(filePath, image);
-
-    const { data: group, error: createGroupError } = await supabase
-      .from("groups")
-      .insert({ name, image_url })
-      .select()
-      .single();
-    if (createGroupError) return { error: createGroupError.message };
-
-    const rows = memberAccounts.map((m) => ({
-      account_id: m.id,
-      group_id: group.id,
-      is_admin: false,
-      status: "invited",
-    }));
-
-    const { error: createMemberError } = await supabase.from("members").insert([
-      {
-        account_id,
-        group_id: group.id,
-        is_admin: true,
-        status: "active",
-      },
-      ...rows,
-    ]);
-    if (createMemberError) return { error: createMemberError.message };
-
-    // for each phone number in memberPhones, file and create an invitation for that memeber to join the created group
-
-    set((s) => ({
-      groups: [...s.groups, group],
-      currentGroup: s.currentGroup ?? group,
-    }));
+  createGroup: async ({ name, image, member_ids }) => {
+    const image_url = image ? await api.uploadGroupAvatar(image.base64) : null;
+    const { group, error } = await api.createGroup({
+      name,
+      image_url,
+      manager_id: useAuthStore.getState().account.id,
+      member_ids,
+    });
+    if (error) return Alert.alert(error.message);
+    set((s) => ({ groups: [group, ...s.groups] }));
   },
   updateGroup: async (group_id, { name, image }) => {
-    const account_id = useAuthStore.getState().account.id;
-    const filePath = `${account_id}/images/group-avatars/${dayjs().toISOString()}.png`;
-    const image_url = await uploadAndGetImageURL(filePath, image);
-
-    const { error: updateGroupError } = await supabase
-      .from("groups")
-      .update({ name, image_url })
-      .eq("id", group_id);
-    if (updateGroupError) return { error: updateGroupError.message };
-
-    // set state
+    const image_url = image ? await api.uploadGroupAvatar(image.base64) : null;
+    const { group: updatedGroup, error } = await api.updateGroup(group_id, {
+      name,
+      image_url,
+    });
+    const newGroups = get().groups.map((group) =>
+      group.id == updatedGroup.id ? updatedGroup : group
+    );
+    set({ groups: newGroups });
   },
   deleteGroup: async (group_id: number) => {
-    // check if can delete
-    // delete from api
-    // update state
-    // set new group
-    const { error: deleteGroupError } = await supabase
-      .from("groups")
-      .delete()
-      .eq("id", group_id);
-    if (deleteGroupError) return { error: deleteGroupError.message };
-    const { error: deleteGroupMemberError } = await supabase
-      .from("members")
-      .delete()
-      .eq("group_id", group_id);
-    if (deleteGroupMemberError)
-      return { error: deleteGroupMemberError.message };
+    const { error } = await api.deleteGroup(group_id);
+    if (error) return Alert.alert(error.message);
+    const newGroups = get().groups.filter((group) => group.id != group_id);
+    set({ groups: newGroups });
   },
   activateGroup: (group_id: number) => {
     const groupToActivate = get().groups.filter((g) => g.id == group_id)[0];
@@ -153,13 +102,3 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     if (error) return { error: error.message };
   },
 }));
-
-const uploadAndGetImageURL = async (filePath, image) => {
-  if (!image) return "";
-  const { publicUrl, error } = await api.uploadImage({
-    filePath,
-    base64Image: image.base64,
-  });
-  if (error) return "";
-  return publicUrl;
-};

@@ -28,8 +28,8 @@ interface DishStoreState {
       meal: string;
       image: ImagePicker.ImagePickerAsset;
     }
-  ) => void;
-  deleteDish: (id: string) => void;
+  ) => Promise<void>;
+  deleteDish: (id: string) => Promise<void>;
   setDate: (date: Date) => void;
 }
 
@@ -57,33 +57,36 @@ export const useDishStore = create<DishStoreState>()((set, get) => ({
     set({ dishes });
   },
   createDish: async ({ name, meal, date, image }) => {
+    const image_url = image ? await api.uploadDishImage(image.base64) : null;
     const { dish, error } = await api.createDish({
       group_id: useGroupStore.getState().currentGroup?.id,
       date,
       name,
       meal,
-      image_url: "",
+      image_url,
     });
     if (error) return Alert.alert(error.message);
-    const newDishes = [dish, ...get().dishes];
-    set({ dishes: newDishes });
+    set((s) => {
+      const newDishes = [dish, ...s.dishes];
+      return { dishes: newDishes };
+    });
   },
   updateDish: async (id, { name, meal, date, image }) => {
+    const image_url = image ? await api.uploadDishImage(image.base64) : null;
     const { dish, error } = await api.updateDish(id, {
       date,
       name,
       meal,
-      image_url: "",
+      image_url,
     });
     if (error) return Alert.alert(error.message);
     const newDishes = [dish, ...get().dishes];
     set({ dishes: newDishes });
   },
   deleteDish: async (id) => {
-    const { error } = await api.deleteDishs(id);
-    if (error) return Alert.alert(error.message);
-    const newDishes = get().dishes.filter((dish) => dish.id != id);
-    set({ dishes: newDishes });
+    const { error } = await api.deleteDish(id);
+    // const newDishes = get().dishes.filter((dish) => dish.id != id);
+    set({ dishes: [] });
   },
   setDate: (date) => {
     set({ date });

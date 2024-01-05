@@ -25,6 +25,43 @@ class Api {
       },
     });
   }
+  async getAccount(email) {
+    const res = await this.axios.get(`/users?email=${email}`);
+    const { data, error } = res.data;
+    return { account: data, error };
+  }
+  async getGroups(account_id) {
+    if (!account_id) return;
+    const res = await this.axios.get(`/groups?account_id=${account_id}`);
+    const { data, error } = res.data;
+    return { groups: data, error };
+  }
+  async createGroup({ name, image_url, manager_id, member_ids }) {
+    if (!name) return;
+    const res = await this.axios.post(`/groups`, {
+      name,
+      image_url,
+      manager_id,
+      member_ids,
+    });
+    const { data, error } = res.data;
+    return { group: data, error };
+  }
+  async updateGroup(id, { name, image_url }) {
+    if (!name) return;
+    const res = await this.axios.put(`/groups/${id}`, {
+      name,
+      image_url,
+    });
+    const { data, error } = res.data;
+    return { group: data, error };
+  }
+  async deleteGroup(id) {
+    const res = await this.axios.delete(`/groups/${id}`);
+    const { error } = res.data;
+    return { error };
+  }
+
   async getTodos(group_id, date) {
     if (!group_id || !date) return;
     const res = await this.axios.get(
@@ -175,14 +212,6 @@ class Api {
     const { error } = res.data;
     return { error };
   }
-  async getAccount({ email }) {
-    // const { data, error } = await this.supabase
-    //   .from("accounts")
-    //   .select("*")
-    //   .eq("email", email)
-    //   .single();
-    // return { data, error };
-  }
   async uploadDishImage(base64Image) {
     const fileName = dayjs().toISOString();
     const filePath = `dish/${fileName}.png`;
@@ -220,7 +249,6 @@ class Api {
         contentType: "image/png",
         upsert: true,
       });
-    console.log("Upload dish image error", error);
     if (error) return null;
     const {
       data: { publicUrl },

@@ -11,10 +11,11 @@ import { theme } from "./src/theme";
 import { StatusBar } from "expo-status-bar";
 import { useAppStore } from "@/stores/appStore";
 import { useEffect, useState, useRef } from "react";
-import { View } from "react-native";
+import { LogBox, View } from "react-native";
 import "@/utils/configDayjs";
 import registerNNPushToken from "native-notify";
 import { configNotification } from "@/services/notification";
+LogBox.ignoreAllLogs();
 
 configNotification();
 

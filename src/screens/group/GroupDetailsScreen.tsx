@@ -51,7 +51,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={confirmDeleteGroup}>
+        <TouchableOpacity onPress={promptDelete}>
           <Text color={theme.colors.primary} weight={500}>
             Xóa
           </Text>
@@ -64,16 +64,17 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
     fetchMembers();
   }, [group]);
 
-  const submit = async () => {
-    setUpdating(true);
-    const { error } = await updateGroup(group.id, {
+  const submitUpdate = async () => {
+    updateGroup(group.id, {
       name,
-      image: avatar,
+      image: avatar.uri ? avatar : null,
     });
-    setUpdating(false);
-    if (error) {
-      Alert.alert(error);
-    }
+    navigation.pop();
+  };
+
+  const submitDelete = async () => {
+    deleteGroup(group.id);
+    navigation.pop();
   };
 
   const fetchMembers = async () => {
@@ -126,17 +127,15 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
     fetchMembers();
   };
 
-  const confirmDeleteGroup = () => {
+  const promptDelete = () => {
     Alert.alert(
       "Xóa nhóm",
       `Bạn có chắc bạn muốn xóa nhóm ${group.name}?`,
       [
         {
           text: "Xóa",
-          onPress: () => {
-            deleteGroup(group.id);
-          },
           style: "destructive",
+          onPress: submitDelete,
         },
         {
           text: "Hủy",
@@ -178,10 +177,10 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
         <Space />
         <Button
           preset="primary"
-          label="Lưu"
+          label="Lưu asdasd"
           loading={updating}
           disabled={name == group.name && !avatar}
-          onPress={submit}
+          onPress={submitUpdate}
         />
       </Container>
     </Screen>

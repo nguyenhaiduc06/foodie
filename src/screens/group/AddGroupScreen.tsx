@@ -39,21 +39,6 @@ export const AddGroupScreen: FC<ScreenProps> = (props) => {
   const [loading, setLoading] = useState(false);
   const createGroup = useGroupStore((s) => s.createGroup);
 
-  const submit = async () => {
-    setLoading(true);
-    const { error } = await createGroup({
-      name,
-      image: avatar,
-      memberAccounts,
-    });
-    setLoading(false);
-    if (error) {
-      Alert.alert(error);
-      return;
-    }
-    navigation.goBack();
-  };
-
   const addMemberAccount = async (accountToAdd: Account) => {
     const account_id = useAuthStore.getState().account.id;
     if (accountToAdd.id == account_id) {
@@ -67,6 +52,14 @@ export const AddGroupScreen: FC<ScreenProps> = (props) => {
     setMemberAccounts((s) =>
       s.filter((account) => account.id != accountToRemove.id)
     );
+  };
+
+  const submit = async () => {
+    createGroup({
+      name,
+      image: avatar,
+      member_ids: memberAccounts.map((a) => a.id),
+    });
   };
 
   return (
