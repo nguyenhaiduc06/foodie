@@ -59,20 +59,25 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
   };
 
   const submitDelete = async () => {
+    setDeleting(true);
     await deleteRecipe(recipe.id);
+    setDeleting(false);
     navigation.pop();
   };
 
   const submitUpdate = async () => {
+    setUpdating(true);
     await updateRecipe(recipe.id, {
       name,
       content,
+      image,
     });
+    setUpdating(false);
     navigation.pop();
   };
 
   const shouldDisableSubmitButton =
-    name == recipe.name && content == recipe.content;
+    name == recipe.name && content == recipe.content && !image.base64;
 
   return (
     <Screen safeBottom>

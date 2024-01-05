@@ -1,13 +1,10 @@
 import { FC, useState } from "react";
-import { TextInput as RNInput } from "react-native";
 import { Button, Input, Screen, Space } from "@/components";
 import { MainStackScreenProps } from "@/navigators";
 import styled from "styled-components/native";
 import { useRecipeStore } from "@/stores";
-import { Alert } from "react-native";
 import { ImageResult } from "expo-image-manipulator";
 import { CoverImagePicker } from "./CoverImagePicker";
-import { theme } from "@/theme";
 
 type ScreenProps = MainStackScreenProps<"AddRecipe">;
 
@@ -15,14 +12,6 @@ const Container = styled.View`
   flex: 1;
   padding: 16px;
   gap: 16px;
-`;
-
-const MultilineInput = styled.TextInput`
-  font-size: 16px;
-  height: 56px;
-  font-family: "Inter_500Medium";
-  color: ${theme.colors.text};
-  flex: 1;
 `;
 
 export const AddRecipeScreen: FC<ScreenProps> = (props) => {
@@ -35,7 +24,7 @@ export const AddRecipeScreen: FC<ScreenProps> = (props) => {
 
   const submitCreate = async () => {
     setCreating(true);
-    createRecipe({
+    await createRecipe({
       name,
       content,
       image,
