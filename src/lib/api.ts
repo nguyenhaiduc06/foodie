@@ -86,6 +86,85 @@ class Api {
     const { error } = res.data;
     return { error };
   }
+
+  async getStorages(group_id) {
+    if (!group_id) return;
+    const res = await this.axios.get(`/storages?group_id=${group_id}`);
+    const { data, error } = res.data;
+    return { storages: data, error };
+  }
+  async createStorage({
+    group_id,
+    name,
+    amount,
+    stored_at,
+    expire_date,
+    image_url,
+  }) {
+    if (!group_id || !name || !amount || !stored_at || !expire_date) return;
+    const res = await this.axios.post(`/storages`, {
+      group_id,
+      name,
+      amount,
+      stored_at,
+      expire_date,
+      image_url,
+    });
+    const { data, error } = res.data;
+    return { storage: data, error };
+  }
+  async updateStorage(id, { name, amount, stored_at, expire_date, image_url }) {
+    if (!name || !amount || !stored_at || !expire_date) return;
+
+    const res = await this.axios.put(`/storages/${id}`, {
+      name,
+      amount,
+      stored_at,
+      expire_date,
+      image_url,
+    });
+    const { data, error } = res.data;
+    return { storage: data, error };
+  }
+  async deleteStorage(id) {
+    const res = await this.axios.delete(`/storage/${id}`);
+    const { error } = res.data;
+    return { error };
+  }
+
+  async getRecipes(group_id) {
+    if (!group_id) return;
+    const res = await this.axios.get(`/recipes?group_id=${group_id}`);
+    const { data, error } = res.data;
+    return { recipes: data, error };
+  }
+  async createRecipe({ group_id, name, content, image_url }) {
+    if (!group_id || !name || !content) return;
+    const res = await this.axios.post(`/recipes`, {
+      group_id,
+      name,
+      content,
+      image_url,
+    });
+    const { data, error } = res.data;
+    return { recipe: data, error };
+  }
+  async updateRecipe(id, { name, content, image_url }) {
+    if (!name || !content) return;
+
+    const res = await this.axios.put(`/recipes/${id}`, {
+      name,
+      content,
+      image_url,
+    });
+    const { data, error } = res.data;
+    return { recipe: data, error };
+  }
+  async deleteRecipe(id) {
+    const res = await this.axios.delete(`/recipes/${id}`);
+    const { error } = res.data;
+    return { error };
+  }
   async getAccount({ email }) {
     // const { data, error } = await this.supabase
     //   .from("accounts")
