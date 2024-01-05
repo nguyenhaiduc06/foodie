@@ -41,6 +41,7 @@ export const UpdateDishScreen: FC<ScreenProps> = (props) => {
   const [image, setImage] = useState<ImageResult>({ uri: dish.image_url });
   const [updating, setUpdating] = useState(false);
   const updateDish = useDishStore((s) => s.updateDish);
+  const deleteDish = useDishStore((s) => s.deleteDish);
 
   useEffect(() => {
     navigation.setOptions({
@@ -62,6 +63,10 @@ export const UpdateDishScreen: FC<ScreenProps> = (props) => {
         {
           text: "Xóa",
           style: "destructive",
+          onPress: () => {
+            deleteDish(dish.id);
+            navigation.pop();
+          },
         },
         {
           text: "Hủy",
@@ -73,17 +78,13 @@ export const UpdateDishScreen: FC<ScreenProps> = (props) => {
 
   const submitUpdate = async () => {
     setUpdating(true);
-    const { error } = await updateDish(dish.id, {
+    updateDish(dish.id, {
       name,
       date,
       image,
       meal,
     });
     setUpdating(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
-    }
     navigation.goBack();
   };
 

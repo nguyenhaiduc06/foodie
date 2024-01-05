@@ -48,6 +48,7 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
         {
           text: "Xóa",
           style: "destructive",
+          onPress: submitDelete,
         },
         {
           text: "Hủy",
@@ -57,24 +58,17 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
     );
   };
 
+  const submitDelete = async () => {
+    deleteRecipe(recipe.id);
+    navigation.pop();
+  };
+
   const submitUpdate = async () => {
-    setUpdating(true);
-    const { error } = await updateRecipe(recipe, {
+    updateRecipe(recipe.id, {
       name,
       content,
     });
-    setUpdating(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
-    }
-    navigation.navigate("RecipeDetails", {
-      recipe: {
-        ...recipe,
-        name,
-        content,
-      },
-    });
+    navigation.pop();
   };
 
   const shouldDisableSubmitButton =
@@ -93,6 +87,7 @@ export const UpdateRecipeScreen: FC<ScreenProps> = (props) => {
           placeholder="Nội dung"
           defaultValue={recipe.content}
           onChangeText={setContent}
+          multiline
         />
         <Space />
         <Button

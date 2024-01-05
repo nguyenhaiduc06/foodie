@@ -35,16 +35,12 @@ export const AddRecipeScreen: FC<ScreenProps> = (props) => {
 
   const submitCreate = async () => {
     setCreating(true);
-    const { error } = await createRecipe({
+    createRecipe({
       name,
       content,
       image,
     });
     setCreating(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
-    }
     navigation.goBack();
   };
 

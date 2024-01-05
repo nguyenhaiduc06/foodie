@@ -5,6 +5,7 @@ import { ImageResult } from "expo-image-manipulator";
 import { api } from "@/lib/api";
 import { useAuthStore } from "./authStore";
 import dayjs from "dayjs";
+import { Alert } from "react-native";
 
 interface RecipeStoreState {
   recipes: Recipe[];
@@ -12,19 +13,9 @@ interface RecipeStoreState {
   fetching: boolean;
   initRecipeStore: () => void;
   fetchRecipes: () => void;
-  createRecipe: (data: {
-    name: string;
-    content: string;
-    image: ImageResult;
-  }) => Promise<{ error: Error | null }>;
-  updateRecipe: (
-    recipe: Recipe,
-    data: {
-      name: string;
-      content: string;
-    }
-  ) => Promise<{ error: Error | null }>;
-  deleteRecipe: (recipe: Recipe) => Promise<{ error: Error | null }>;
+  createRecipe: (data: any) => void;
+  updateRecipe: (id: number, data: any) => void;
+  deleteRecipe: (id: number) => void;
   setDate: () => void;
 }
 export const useRecipeStore = create<RecipeStoreState>()((set, get) => ({
@@ -42,53 +33,23 @@ export const useRecipeStore = create<RecipeStoreState>()((set, get) => ({
   },
   fetchRecipes: async () => {
     set({ fetching: true });
-
-    const group_id = useGroupStore.getState().currentGroup?.id;
-    if (!group_id) return;
-
-    const { data: recipes, error } = await supabase
-      .from("recipes")
-      .select("*")
-      .eq("group_id", group_id);
-
+    const { recipes, error } = await api.getRecipes(
+      useGroupStore.getState().currentGroup?.id
+    );
     set({ fetching: false });
-
-    if (!error) {
-      set({ recipes });
-    }
+    if (error) return Alert.alert(error.message);
+    set({ recipes });
   },
   createRecipe: async ({ name, content, image }) => {
-    const group_id = useGroupStore.getState().currentGroup?.id;
-    const account_id = useAuthStore.getState().account?.id;
-    if (!group_id) return;
-
-    const filePath = `${group_id}/images/recipes/${account_id}-${dayjs().toISOString()}.png`;
-
-    let image_url;
-    if (!image) {
-      image_url = "";
-    } else {
-      const { publicUrl, error: uploadImageError } = await api.uploadImage({
-        filePath,
-        base64Image: image.base64,
-      });
-      if (uploadImageError)
-        return { error: new Error(uploadImageError.message) };
-      image_url = publicUrl;
-    }
-
-    const { data: newRecipe, error: createRecipeError } = await supabase
-      .from("recipes")
-      .insert({ name, content, image_url, group_id })
-      .select()
-      .single();
-
-    if (createRecipeError) {
-      return { error: new Error(createRecipeError.message) };
-    }
-
-    set((s) => ({ recipes: [newRecipe, ...s.recipes] }));
-    return { error: null };
+    const { recipe, error } = await api.createRecipe({
+      group_id: useGroupStore.getState().currentGroup.id,
+      name,
+      content,
+      image_url: "",
+    });
+    if (error) return Alert.alert(error.message);
+    const newRecipes = [recipe, ...get().recipes];
+    set({ recipes: newRecipes });
   },
   updateRecipe: async (recipe, { name, content }) => {
     const group_id = useGroupStore.getState().currentGroup?.id;

@@ -71,7 +71,7 @@ export const RecipesScreen: FC<ScreenProps> = (props) => {
   }, []);
 
   const viewRecipeDetails = (recipe) => {
-    navigation.navigate("RecipeDetails", {
+    navigation.navigate("UpdateRecipe", {
       recipe,
     });
   };
