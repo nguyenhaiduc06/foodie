@@ -86,7 +86,7 @@ export const DishesScreen: FC<ScreenProps> = (props) => {
   );
 
   const viewDishDetails = (dish) => {
-    navigation.navigate("DishDetails", { dish });
+    navigation.navigate("UpdateDish", { dish });
   };
 
   const addDish = () => {

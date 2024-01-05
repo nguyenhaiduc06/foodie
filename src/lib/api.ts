@@ -243,6 +243,7 @@ class Api {
   }
 
   async uploadImage(filePath, image) {
+    if (!image) return null;
     const { error } = await this.supabase.storage
       .from("images")
       .upload(filePath, decode(image), {

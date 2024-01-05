@@ -39,7 +39,7 @@ export const AddDishScreen: FC<ScreenProps> = (props) => {
   const createDish = useDishStore((s) => s.createDish);
 
   const submitCreate = async () => {
-    createDish({
+    await createDish({
       name,
       date,
       image,
