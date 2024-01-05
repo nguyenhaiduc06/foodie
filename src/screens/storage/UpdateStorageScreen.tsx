@@ -80,6 +80,7 @@ export const UpdateStorageScreen: FC<ScreenProps> = (props) => {
       amount,
       stored_in: storedIn,
       expire_date: expireDate,
+      image,
     });
     navigation.pop();
   };
@@ -88,7 +89,8 @@ export const UpdateStorageScreen: FC<ScreenProps> = (props) => {
     name == storage.name &&
     amount == storage.amount &&
     storedIn == storage.stored_in &&
-    dayjs(expireDate).isSame(dayjs(storage.expire_date));
+    dayjs(expireDate).isSame(dayjs(storage.expire_date)) &&
+    !image.base64;
   return (
     <Screen safeBottom>
       <Container>

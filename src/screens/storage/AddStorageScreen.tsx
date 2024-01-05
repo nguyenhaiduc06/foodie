@@ -34,12 +34,15 @@ export const AddStorageScreen: FC<ScreenProps> = (props) => {
   const createStorate = useStorageStore((s) => s.createStorage);
 
   const submit = async () => {
+    setLoading(true);
     await createStorate({
       name,
       amount,
       storedIn,
       expireDate,
+      image,
     });
+    setLoading(false);
     navigation.pop();
   };
   return (
@@ -60,7 +63,7 @@ export const AddStorageScreen: FC<ScreenProps> = (props) => {
         <Button
           preset="primary"
           label="Thêm"
-          disabled={!name || !amount}
+          disabled={!name || !amount || !storedIn}
           loading={loading}
           onPress={submit}
         />

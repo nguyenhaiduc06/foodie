@@ -39,26 +39,33 @@ export const useStorageStore = create<StorageStoreState>()((set, get) => ({
     if (error) return Alert.alert(error.message);
     set({ storages });
   },
-  createStorage: async ({ name, amount, storedIn, expireDate }) => {
+  createStorage: async ({ name, amount, storedIn, expireDate, image }) => {
+    const image_url = image ? await api.uploadStorageImage(image.base64) : null;
     const { storage, error } = await api.createStorage({
       group_id: useGroupStore.getState().currentGroup?.id,
       name,
       amount,
       stored_in: storedIn,
       expire_date: expireDate,
-      image_url: "",
+      image_url,
     });
     if (error) return Alert.alert(error.message);
     const newStorages = [storage, ...get().storages];
     set({ storages: newStorages });
   },
-  updateStorage: async (id, { name, amount, stored_in, expire_date }) => {
+  updateStorage: async (
+    id,
+    { name, amount, stored_in, expire_date, image }
+  ) => {
+    const image_url = image?.base64
+      ? await api.uploadRecipieImage(image.base64)
+      : image.uri;
     const { storage: updatedStorage, error } = await api.updateStorage(id, {
       name,
       amount,
       stored_in,
       expire_date,
-      image_url: "",
+      image_url,
     });
     if (error) return Alert.alert(error.message);
     const newStorages = get().storages.map((storage) =>
