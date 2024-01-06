@@ -300,4 +300,4 @@ class Api {
   }
 }
 
-export const api = new Api("http://192.168.31.60:3000/");
+export const api = new Api("");
