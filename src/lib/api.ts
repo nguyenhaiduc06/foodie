@@ -35,6 +35,13 @@ class Api {
     const { account, token, error } = res.data;
     return { account, token, error };
   }
+  async signInWithToken(token) {
+    const res = await this.axios.post(`/users/sign-in/token`, {
+      token,
+    });
+    const { account, token: newToken, error } = res.data;
+    return { account, token: newToken, error };
+  }
   async getUserAccount(token) {
     const res = await this.axios.post(`/users/account`, {
       token,

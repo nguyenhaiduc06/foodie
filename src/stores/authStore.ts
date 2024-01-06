@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthStoreState>()((set, get) => ({
     if (!token) {
       set({ authed: false });
     } else {
-      const { account, error } = await api.getUserAccount(token);
+      const { account, error } = await api.signInWithToken(token);
       if (error) {
       } else {
         set({ authed: true, account });

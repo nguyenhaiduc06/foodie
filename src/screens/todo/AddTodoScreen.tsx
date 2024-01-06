@@ -31,12 +31,8 @@ export const AddTodosScreen: FC<ScreenProps> = (props) => {
 
   const submit = async () => {
     setLoading(true);
-    const { error } = await addTodo({ name, amount, date });
+    await addTodo({ name, amount, date });
     setLoading(false);
-    if (error) {
-      Alert.alert(error.message);
-      return;
-    }
     navigation.goBack();
   };
   return (
