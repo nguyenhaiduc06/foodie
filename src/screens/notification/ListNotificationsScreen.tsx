@@ -60,7 +60,6 @@ const ActionButtonContainer = styled.View`
 export const ListNotificationsScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
   const notifications = useNotificationStore((s) => s.notifications);
-  console.log(notifications);
   const initNotificationStore = useNotificationStore(
     (s) => s.initNotificationStore
   );

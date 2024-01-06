@@ -65,7 +65,6 @@ class Api {
   }
   async getGroups(account_id) {
     if (!account_id) return;
-    console.log("get group with account id", account_id);
     const res = await this.axios.get(`/groups?account_id=${account_id}`);
     const { data, error } = res.data;
     return { groups: data, error };

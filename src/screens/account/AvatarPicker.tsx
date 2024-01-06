@@ -42,7 +42,6 @@ export const AvatarPicker: FC<AvatarPickerProps> = (props) => {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({});
-    console.log({ result });
 
     if (!result.canceled) {
       const imageManip = await manipulateAsync(

@@ -39,7 +39,6 @@ export const AccountScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
   const [loading, setLoading] = useState(false);
   const account = useAuthStore((s) => s.account);
-  console.log({ account });
   const signOut = useAuthStore((s) => s.signOut);
 
   useEffect(() => {

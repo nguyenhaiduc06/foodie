@@ -107,7 +107,6 @@ const uploadImage = async (image) => {
       contentType: "image/png",
       upsert: true,
     });
-  console.log({ fileUploadError });
   if (fileUploadError) return { error: new Error(fileUploadError.message) };
 
   const {

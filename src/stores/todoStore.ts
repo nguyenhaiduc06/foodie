@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Todo } from "@/lib";
+import { Todo, supabase } from "@/lib";
 import { useGroupStore } from "./groupStore";
 import { api } from "@/lib/api";
 import { Alert } from "react-native";
@@ -32,6 +32,27 @@ export const useTodoStore = create<TodoStoreState>()((set, get) => ({
         get().fetchTodos();
       }
     });
+
+    const channels = supabase
+      .channel("custom-all-channel")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "todos" },
+        (payload) => {
+          console.log("Change received!", payload);
+          const { eventType, new: newTodo } = payload;
+          const { group_id, id } = newTodo;
+          if (eventType == "UPDATE") {
+            if (group_id == useGroupStore.getState().currentGroup?.id) {
+              const newTodos = get().todos.map((todo) =>
+                todo.id == id ? newTodo : todo
+              );
+              set({ todos: newTodos });
+            }
+          }
+        }
+      )
+      .subscribe();
   },
   fetchTodos: async () => {
     set({ fetching: true });

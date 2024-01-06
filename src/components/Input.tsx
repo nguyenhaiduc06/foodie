@@ -13,7 +13,6 @@ const Container = styled.View<{ height: number }>`
   height: ${(p) => p.height}px;
   border-radius: 16px;
   background-color: ${theme.colors.foreground};
-  padding: 0 16px;
   gap: 8px;
   flex-direction: row;
   align-items: center;
@@ -26,6 +25,7 @@ const TextInput = styled.TextInput<{ height: number }>`
   font-family: "Inter_500Medium";
   color: ${theme.colors.text};
   flex: 1;
+  padding: 0 16px;
 `;
 
 export const Input: FC<InputProps> = (props) => {
