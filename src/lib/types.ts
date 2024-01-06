@@ -7,4 +7,4 @@ export type Storage = Database["public"]["Tables"]["storages"]["Row"];
 export type Dish = Database["public"]["Tables"]["dishes"]["Row"];
 export type Group = Database["public"]["Tables"]["groups"]["Row"];
 export type Member = Database["public"]["Tables"]["members"]["Row"];
-export type Notification = unknown;
+export type Notification = Database["public"]["Tables"]["notifications"]["Row"];

@@ -247,6 +247,14 @@ class Api {
     const { error } = res.data;
     return { error };
   }
+
+  async getNotifications(group_id) {
+    const { data, error } = await this.supabase
+      .from("notifications")
+      .select("*")
+      .eq("group_id", group_id);
+    return { data, error };
+  }
   async uploadDishImage(base64Image) {
     const fileName = dayjs().toISOString();
     const filePath = `dish/${fileName}.png`;

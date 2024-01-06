@@ -22,7 +22,7 @@ import {
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
-import { Dish, Group, Recipe, Storage, Todo } from "@/lib";
+import { Dish, Group, Recipe, Storage, Todo, supabase } from "@/lib";
 import * as Notifications from "expo-notifications";
 import { navigate } from "./utils";
 
@@ -95,9 +95,19 @@ export const MainStack = () => {
       if (
         response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER
       ) {
-        // navigate("ListNotifications");
+        const { storage_id } = response.notification.request.content.data;
+        if (!storage_id) return;
+        supabase
+          .from("storages")
+          .select("*")
+          .eq("id", storage_id)
+          .single()
+          .then(({ data, error }) => {
+            if (!error) {
+              navigate("UpdateStorage", { storage: data });
+            }
+          });
       }
-      console.log(response.notification.request.content.data);
     });
   });
 

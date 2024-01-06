@@ -66,10 +66,12 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   }, [group]);
 
   const submitUpdate = async () => {
+    setUpdating(true);
     await updateGroup(group.id, {
       name,
       image: avatar,
     });
+    setUpdating(false);
     navigation.pop();
   };
 
@@ -152,7 +154,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
   return (
     <Screen safeBottom>
       <Container>
-        <GroupAvatar avatar={avatar} onChangedAvatar={setAvatar} />
+        <GroupAvatar image={avatar} onImagePicked={setAvatar} />
         <Input
           placeholder="Tên nhóm"
           defaultValue={group?.name}

@@ -1,5 +1,10 @@
 import React, { FC, useEffect } from "react";
-import { ScrollView, RefreshControl, View } from "react-native";
+import {
+  ScrollView,
+  RefreshControl,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import styled from "styled-components/native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -23,6 +28,7 @@ import { theme } from "@/theme";
 import { useNotificationStore, useTodoStore } from "@/stores";
 import axios from "axios";
 import dayjs from "dayjs";
+import { supabase } from "@/lib";
 
 type ScreenProps = MainStackScreenProps<"ListNotifications">;
 
@@ -54,54 +60,47 @@ const ActionButtonContainer = styled.View`
 export const ListNotificationsScreen: FC<ScreenProps> = (props) => {
   const { navigation } = props;
   const notifications = useNotificationStore((s) => s.notifications);
+  console.log(notifications);
   const initNotificationStore = useNotificationStore(
     (s) => s.initNotificationStore
   );
+  const fetchNotifications = useNotificationStore((s) => s.fetchNotifications);
+  const fetching = useNotificationStore((s) => s.fetching);
 
   useEffect(() => {
     initNotificationStore();
   }, []);
 
-  const createNoti = () => {
-    const dateToSendNotification = dayjs().add(10, "seconds").toDate();
-    const push_token = useNotificationStore.getState().pushToken;
-    axios
-      .post("http://192.168.31.60:3000/notifications", {
-        id: "id",
-        push_token,
-        title: "Thực phẩm sắp hết hạn",
-        body: "Còn 3 ngày nữa là món gà trong tủ lạnh sẽ hết hạn",
-        date: dateToSendNotification,
-      })
-      .then((res) => console.log(res.data))
-      .catch((e) => console.log(e.message));
-  };
-
-  const updateNoti = () => {
-    const dateToSendNotification = dayjs().add(5, "seconds");
-    axios
-      .put("http://192.168.31.60:3000/notifications", {
-        id: "id",
-        date: dateToSendNotification.toDate(),
-      })
-      .then((res) => console.log(res.data))
-      .catch((e) => console.log(e.message));
+  const openStorageDetails = async (storage_id) => {
+    const { data, error } = await supabase
+      .from("storages")
+      .select("*")
+      .eq("id", storage_id)
+      .single();
+    navigation.navigate("UpdateStorage", { storage: data });
   };
 
   return (
     <Screen>
-      <ScrollView>
-        <Button onPress={createNoti} label="Create" />
-        <Button onPress={updateNoti} label="Update" />
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            onRefresh={fetchNotifications}
+            refreshing={fetching}
+          />
+        }
+      >
         <Container onStartShouldSetResponder={() => true}>
           {notifications.length == 0 ? (
             <EmptyState label="Bạn không có thông báo nào" />
           ) : (
-            <Section>
-              {notifications.map((notification, index) => (
-                <NotificationItem />
-              ))}
-            </Section>
+            notifications.map((notification, index) => (
+              <TouchableOpacity
+                onPress={() => openStorageDetails(notification.storage_id)}
+              >
+                <NotificationItem notification={notification} />
+              </TouchableOpacity>
+            ))
           )}
 
           {/* Add a space with a height of 72px to avoid being covered by the floating action button */}

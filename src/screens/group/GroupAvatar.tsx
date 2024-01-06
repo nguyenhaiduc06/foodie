@@ -3,18 +3,19 @@ import {
   SaveFormat,
   manipulateAsync,
 } from "expo-image-manipulator";
-import { FC, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { FC } from "react";
+import { TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import styled from "styled-components/native";
 import { ImageIcon } from "lucide-react-native";
-import { PickImageButton, Text } from "@/components";
+import { Text } from "@/components";
 import { theme } from "@/theme";
-import { Image } from "expo-image";
+import { Image as ExpoImage } from "expo-image";
 
-type GroupAvatarProps = {
-  avatar: ImageResult;
-  onChangedAvatar: (avatar: ImageResult) => void;
+type AvatarPickerProps = {
+  base64?: string;
+  image: ImageResult;
+  onImagePicked: (image: ImageResult) => void;
 };
 
 const ImagePlacholder = styled.View`
@@ -29,23 +30,49 @@ const ImagePlacholder = styled.View`
   justify-content: center;
 `;
 
-const Avatar = styled(Image)`
+const Image = styled(ExpoImage)`
   height: 150px;
   width: 150px;
   border-radius: 16px;
   align-self: center;
-  background-color: gray;
 `;
 
-export const GroupAvatar: FC<GroupAvatarProps> = (props) => {
-  const { avatar, onChangedAvatar } = props;
+export const GroupAvatar: FC<AvatarPickerProps> = (props) => {
+  const { image, onImagePicked } = props;
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({});
+    console.log({ result });
+
+    if (!result.canceled) {
+      const imageManip = await manipulateAsync(
+        result.assets[0].uri,
+        [
+          {
+            resize: {
+              width: 300,
+            },
+          },
+        ],
+        {
+          base64: true,
+          compress: 0,
+          format: SaveFormat.PNG,
+        }
+      );
+      onImagePicked(imageManip);
+    }
+  };
   return (
-    <View style={{ alignSelf: "center" }}>
-      <Avatar source={{ uri: avatar?.uri }} />
-      <PickImageButton
-        onImagePicked={onChangedAvatar}
-        style={{ position: "absolute", bottom: -4, right: -4 }}
-      />
-    </View>
+    <TouchableOpacity onPress={pickImage}>
+      {image && image.uri ? (
+        <Image source={{ uri: image.uri }} />
+      ) : (
+        <ImagePlacholder>
+          <ImageIcon size={16} color={theme.colors.text} />
+          <Text>Chọn ảnh</Text>
+        </ImagePlacholder>
+      )}
+    </TouchableOpacity>
   );
 };

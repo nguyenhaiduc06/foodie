@@ -76,13 +76,22 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     const newGroups = get().groups.map((group) =>
       group.id == updatedGroup.id ? updatedGroup : group
     );
-    set({ groups: newGroups });
+    const newCurrentGroup =
+      get().currentGroup.id == updatedGroup.id
+        ? updatedGroup
+        : get().currentGroup;
+    set({ groups: newGroups, currentGroup: newCurrentGroup });
   },
   deleteGroup: async (group_id: number) => {
+    if (get().groups.length == 1) {
+      return Alert.alert("Bạn không thể xóa nhóm này");
+    }
     const { error } = await api.deleteGroup(group_id);
     if (error) return Alert.alert(error.message);
     const newGroups = get().groups.filter((group) => group.id != group_id);
-    set({ groups: newGroups });
+    const newCurrentGroup =
+      get().currentGroup.id == group_id ? newGroups[0] : get().currentGroup;
+    set({ groups: newGroups, currentGroup: newCurrentGroup });
   },
   activateGroup: (group_id: number) => {
     const groupToActivate = get().groups.filter((g) => g.id == group_id)[0];

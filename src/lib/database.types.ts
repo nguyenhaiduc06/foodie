@@ -133,21 +133,37 @@ export interface Database {
       }
       notifications: {
         Row: {
+          body: string | null
           created_at: string
+          group_id: number | null
           id: number
           storage_id: number | null
+          title: string | null
         }
         Insert: {
+          body?: string | null
           created_at?: string
+          group_id?: number | null
           id?: number
           storage_id?: number | null
+          title?: string | null
         }
         Update: {
+          body?: string | null
           created_at?: string
+          group_id?: number | null
           id?: number
           storage_id?: number | null
+          title?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "notifications_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "notifications_storage_id_fkey"
             columns: ["storage_id"]
