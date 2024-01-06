@@ -36,11 +36,15 @@ export const SignInScreen: FC<MainStackScreenProps<"SignIn">> = (props) => {
     <Screen safeBottom>
       <Container>
         <Input
-          placeholder={"Email"}
+          placeholder={"Tên tài khoản"}
           onChangeText={setUsername}
           autoCapitalize="none"
         />
-        <Input placeholder={"Mật khẩu"} onChangeText={setPassword} />
+        <Input
+          placeholder={"Mật khẩu"}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+        />
         <Button
           preset="primary"
           disabled={!username || !password}

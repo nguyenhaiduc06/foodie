@@ -43,11 +43,15 @@ export const SignUpScreen: FC<MainStackScreenProps<"SignUp">> = (props) => {
           autoCapitalize="words"
         />
         <Input
-          placeholder={"Username"}
+          placeholder={"Tên tài khoản"}
           onChangeText={setUsername}
           autoCapitalize="none"
         />
-        <Input placeholder={"Mật khẩu"} onChangeText={setPassword} />
+        <Input
+          placeholder={"Mật khẩu"}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+        />
         <Button
           preset="primary"
           disabled={!name || !username || !password}

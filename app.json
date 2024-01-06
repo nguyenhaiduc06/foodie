@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "food",
-    "slug": "food",
+    "slug": "foodie",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -44,8 +44,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "77bd3f84-fa8f-4dc9-926b-4c20be2c5a66"
+        "projectId": "3e879451-039a-4a29-b9c4-26a0f4006811"
       }
-    }
+    },
+    "owner": "foodie-org"
   }
 }
