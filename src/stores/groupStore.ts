@@ -12,6 +12,7 @@ interface GroupStoreState {
   groups: Group[];
   currentGroup: Group;
   fetching: boolean;
+  groupReport: unknown;
   initGroupStore: () => Promise<void>;
   fetchGroups: () => Promise<void>;
   createGroup: (data: {
@@ -30,12 +31,14 @@ interface GroupStoreState {
   activateGroup: (group_id: number) => void;
   addMemberToGroup: (account_id: number, group_id: number) => ActionResult;
   removeMemberFromGroup: (account_id: number, group_id: number) => ActionResult;
+  fetchGroupReport: () => Promise<void>;
 }
 
 export const useGroupStore = create<GroupStoreState>()((set, get) => ({
   groups: [],
   currentGroup: null,
   fetching: false,
+  groupReport: {},
   initGroupStore: async () => {
     await get().fetchGroups();
 
@@ -52,7 +55,10 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
     );
     set({ fetching: false });
     if (error) return Alert.alert(error.message);
-    set({ groups, currentGroup: groups[0] });
+    const currentGroup = groups[0];
+    set({ groups, currentGroup });
+
+    get().fetchGroupReport();
   },
   createGroup: async ({ name, image, member_ids }) => {
     const image_url = image ? await api.uploadGroupAvatar(image.base64) : null;
@@ -93,9 +99,11 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
       get().currentGroup.id == group_id ? newGroups[0] : get().currentGroup;
     set({ groups: newGroups, currentGroup: newCurrentGroup });
   },
-  activateGroup: (group_id: number) => {
+  activateGroup: async (group_id: number) => {
     const groupToActivate = get().groups.filter((g) => g.id == group_id)[0];
     set({ currentGroup: groupToActivate });
+
+    get().fetchGroupReport();
   },
   addMemberToGroup: async (account_id, group_id) => {
     const { error } = await supabase.from("members").insert({
@@ -111,5 +119,36 @@ export const useGroupStore = create<GroupStoreState>()((set, get) => ({
       .eq("account_id", account_id)
       .eq("group_id", group_id);
     if (error) return { error: error.message };
+  },
+  fetchGroupReport: async () => {
+    const currentGroup = get().currentGroup;
+    // create groupReport
+    const { data: storages } = await supabase
+      .from("storages")
+      .select("*")
+      .eq("group_id", currentGroup.id);
+
+    const { data: recipes } = await supabase
+      .from("recipes")
+      .select("*")
+      .eq("group_id", currentGroup.id);
+    const { data: todos } = await supabase
+      .from("todos")
+      .select("*")
+      .eq("group_id", currentGroup?.id);
+
+    const chartData = [0, 0, 0, 0, 0, 0, 0];
+    for (const todo of todos) {
+      const { date } = todo;
+      const dayOfWeek = dayjs(date).day();
+      chartData[dayOfWeek] = chartData[dayOfWeek] + 1;
+    }
+    set({
+      groupReport: {
+        storageCount: storages.length,
+        recipeCount: recipes.length,
+        chartData,
+      },
+    });
   },
 }));

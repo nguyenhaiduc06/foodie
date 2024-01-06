@@ -42,7 +42,7 @@ export const AccountSearch: FC<AccountSearchProps> = (props) => {
   return (
     <Row>
       <Input
-        placeholder="Username"
+        placeholder="Tên tài khoản"
         onChangeText={setUsername}
         containerStyle={{ flex: 1 }}
         autoCapitalize="none"

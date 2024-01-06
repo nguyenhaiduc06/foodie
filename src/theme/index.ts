@@ -33,8 +33,8 @@ export const lightTheme: Theme = {
   dark: false,
   statusBarStyle: "dark",
   colors: {
-    background: "#fefefe",
-    foreground: "#f5f5f5",
+    background: "#fbf6fa",
+    foreground: "#f0edf1",
     text: palette.black[90],
     textDim: palette.black[50],
     textInverted: palette.white[100],
@@ -45,7 +45,7 @@ export const lightTheme: Theme = {
     warning: palette.yellow[500],
     info: palette.blue[500],
 
-    card: "#f5f5f5",
+    card: "#f4f1f4",
     primary: palette.orange[500],
     border: palette.black[30],
     notification: palette.blue[500],

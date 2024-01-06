@@ -43,40 +43,7 @@ const SmallSection = styled.View`
 `;
 
 export const ProfileReport = () => {
-  const [chartData, setChartData] = useState([]);
-  const [recipeCount, setRecipeCount] = useState(0);
-  const [storageCount, setStorageCount] = useState(0);
-  const currentGroup = useGroupStore((s) => s.currentGroup);
-  useEffect(() => {
-    supabase
-      .from("storages")
-      .select("*")
-      .eq("group_id", currentGroup?.id)
-      .then(({ data, error }) => {
-        setStorageCount(data.length);
-      });
-    supabase
-      .from("recipes")
-      .select("*")
-      .eq("group_id", currentGroup?.id)
-      .then(({ data, error }) => {
-        setRecipeCount(data.length);
-      });
-    supabase
-      .from("todos")
-      .select("*")
-      .eq("group_id", currentGroup?.id)
-      .then(({ data, error }) => {
-        // title = [sunday, monday]
-        const chartData = [0, 0, 0, 0, 0, 0, 0];
-        for (const todo of data) {
-          const { date } = todo;
-          const dayOfWeek = dayjs(date).day();
-          chartData[dayOfWeek] = chartData[dayOfWeek] + 1;
-        }
-        setChartData(chartData);
-      });
-  }, []);
+  const groupReport = useGroupStore((s) => s.groupReport);
   return (
     <View>
       <BigSection>
@@ -91,7 +58,7 @@ export const ProfileReport = () => {
               labels: ["Chủ nhật", "Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy"],
               datasets: [
                 {
-                  data: chartData,
+                  data: groupReport.chartData ?? [],
                 },
               ],
             }}
@@ -132,7 +99,7 @@ export const ProfileReport = () => {
             <Text preset="title">Công thức</Text>
           </Row>
           <Text size={32} weight={600} color={theme.colors.primary}>
-            {recipeCount}
+            {groupReport.recipeCount}
           </Text>
         </SmallSection>
         <SmallSection>
@@ -141,7 +108,7 @@ export const ProfileReport = () => {
             <Text preset="title">Lưu trữ</Text>
           </Row>
           <Text size={32} weight={600} color={theme.colors.primary}>
-            {storageCount}
+            {groupReport.storageCount}
           </Text>
         </SmallSection>
       </Row>

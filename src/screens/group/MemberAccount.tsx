@@ -52,11 +52,17 @@ const MemberStatus = ({ status }) => {
   const label = LABEL_BY_STATUS[status];
   const backgroundColor = BACKGROUND_COLOR_BY_STATUS[status];
   return (
-    <StatusContainer backgroundColor={backgroundColor}>
-      <Text size={13} weight={500}>
-        {label}
-      </Text>
-    </StatusContainer>
+    // <StatusContainer backgroundColor={backgroundColor}>
+    <Text
+      size={13}
+      weight={500}
+      color={
+        status == "admin" ? theme.colors.success : theme.palette.amber[500]
+      }
+    >
+      {label}
+    </Text>
+    // </StatusContainer>
   );
 };
 
@@ -68,8 +74,14 @@ export const MemberAccount: FC<AccountInviteItemProps> = (props) => {
       <Text>{account.name}</Text>
       <Space />
       <MemberStatus status={is_admin ? "admin" : "member"} />
-      <TouchableOpacity onPress={() => onDeletePress(account)}>
-        <Trash2 size={20} color={theme.colors.danger} />
+      <TouchableOpacity
+        onPress={() => onDeletePress(account)}
+        disabled={is_admin}
+      >
+        <Trash2
+          size={20}
+          color={is_admin ? theme.colors.textDim : theme.colors.danger}
+        />
       </TouchableOpacity>
     </Container>
   );

@@ -52,7 +52,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={promptDelete}>
-          <Text color={theme.colors.primary} weight={500}>
+          <Text color={theme.colors.danger} weight={500}>
             Xóa
           </Text>
         </TouchableOpacity>
@@ -182,7 +182,7 @@ export const GroupDetailsScreen: FC<ScreenProps> = (props) => {
           preset="primary"
           label="Lưu"
           loading={updating}
-          disabled={name == group.name && !avatar}
+          disabled={name == group.name && !avatar.base64}
           onPress={submitUpdate}
         />
       </Container>
