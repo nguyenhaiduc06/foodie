@@ -13,36 +13,28 @@ export interface Database {
         Row: {
           avatar_url: string | null
           created_at: string
-          email: string | null
           id: number
           name: string | null
-          user_id: string | null
+          password: string | null
+          username: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
-          email?: string | null
           id?: number
           name?: string | null
-          user_id?: string | null
+          password?: string | null
+          username?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
-          email?: string | null
           id?: number
           name?: string | null
-          user_id?: string | null
+          password?: string | null
+          username?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "accounts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       dishes: {
         Row: {
@@ -208,6 +200,7 @@ export interface Database {
           expire_date: string | null
           group_id: number | null
           id: number
+          image_url: string | null
           name: string | null
           stored_in: string | null
         }
@@ -218,6 +211,7 @@ export interface Database {
           expire_date?: string | null
           group_id?: number | null
           id?: number
+          image_url?: string | null
           name?: string | null
           stored_in?: string | null
         }
@@ -228,6 +222,7 @@ export interface Database {
           expire_date?: string | null
           group_id?: number | null
           id?: number
+          image_url?: string | null
           name?: string | null
           stored_in?: string | null
         }

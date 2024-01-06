@@ -18,6 +18,7 @@ interface AuthStoreState {
     password: string;
   }) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
+  updateAccount: (data: any) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthStoreState>()((set, get) => ({
@@ -61,5 +62,21 @@ export const useAuthStore = create<AuthStoreState>()((set, get) => ({
   },
   signOut: async () => {
     AsyncStorage.removeItem("token");
+  },
+  updateAccount: async ({ name, username, image }) => {
+    const avatar_url = image?.base64
+      ? await api.uploadRecipieImage(image.base64)
+      : image.uri;
+    const { account, token, error } = await api.updateAccount(
+      get().account.id,
+      {
+        name,
+        username,
+        avatar_url,
+      }
+    );
+    if (error) return Alert.alert(error);
+    AsyncStorage.setItem("token", token);
+    set({ account });
   },
 }));

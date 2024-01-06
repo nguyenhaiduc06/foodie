@@ -1,6 +1,5 @@
 export * from "./AuthenticateScreen";
-export * from "./CreateProfileScreen";
-export * from "./ProfileScreen";
 export * from "./SignInScreen";
 export * from "./SignUpScreen";
 export * from "./AccountScreen";
+export * from "./UpdateAccountScreen";

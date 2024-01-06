@@ -18,6 +18,7 @@ import {
   UpdateStorageScreen,
   UpdateTodoScreen,
   ListNotificationsScreen,
+  UpdateAccountScreen,
 } from "@/screens";
 import { useAuthStore } from "@/stores";
 import { HomeTab } from "./HomeTab";
@@ -71,6 +72,8 @@ export type MainStackParamList = {
   };
 
   ListNotifications: undefined;
+
+  UpdateAccount: undefined;
 };
 
 export type MainStackScreenProps<T extends keyof MainStackParamList> =
@@ -92,7 +95,7 @@ export const MainStack = () => {
       if (
         response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER
       ) {
-        navigate("ListNotifications");
+        // navigate("ListNotifications");
       }
       console.log(response.notification.request.content.data);
     });
@@ -218,6 +221,14 @@ export const MainStack = () => {
         component={ListNotificationsScreen}
         options={{
           title: "Thông báo",
+        }}
+      />
+      <Main.Screen
+        name="UpdateAccount"
+        component={UpdateAccountScreen}
+        options={{
+          title: "Chỉnh sửa",
+          presentation: "modal",
         }}
       />
     </Main.Navigator>

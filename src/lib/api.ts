@@ -42,6 +42,15 @@ class Api {
     const { account, error } = res.data;
     return { account, error };
   }
+  async updateAccount(id, { name, username, avatar_url }) {
+    const res = await this.axios.put(`/users/${id}`, {
+      name,
+      username,
+      avatar_url,
+    });
+    const { account, token, error } = res.data;
+    return { account, token, error };
+  }
   async findUser(username) {
     const res = await this.axios.get(`/users?username=${username}`);
     const { data, error } = res.data;

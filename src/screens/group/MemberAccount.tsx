@@ -5,6 +5,7 @@ import { Space, Text } from "@/components";
 import { Account, Group, Member } from "@/lib";
 import { FC } from "react";
 import { TouchableOpacity } from "react-native";
+import { Image } from "expo-image";
 
 const LABEL_BY_STATUS = {
   admin: "Trưởng nhóm",
@@ -31,7 +32,7 @@ const Container = styled.View`
   align-items: center;
 `;
 
-const Icon = styled.View`
+const Avatar = styled(Image)`
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -63,7 +64,7 @@ export const MemberAccount: FC<AccountInviteItemProps> = (props) => {
   const { account, is_admin, onDeletePress } = props;
   return (
     <Container>
-      <Icon />
+      <Avatar source={{ uri: account?.avatar_url ?? null }} />
       <Text>{account.name}</Text>
       <Space />
       <MemberStatus status={is_admin ? "admin" : "member"} />

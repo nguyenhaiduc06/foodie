@@ -19,8 +19,8 @@ type AvatarPickerProps = {
 };
 
 const ImagePlacholder = styled.View`
-  height: 200px;
-  width: 100%;
+  height: 150px;
+  width: 150px;
   align-self: center;
   border-radius: 16px;
   border: 2px dashed rgba(0, 0, 0, 0.2);
@@ -31,8 +31,8 @@ const ImagePlacholder = styled.View`
 `;
 
 const Image = styled(ExpoImage)`
-  height: 200px;
-  width: 100%;
+  height: 150px;
+  width: 150px;
   border-radius: 16px;
   align-self: center;
 `;
