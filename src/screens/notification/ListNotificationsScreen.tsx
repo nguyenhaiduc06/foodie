@@ -70,6 +70,10 @@ export const ListNotificationsScreen: FC<ScreenProps> = (props) => {
     initNotificationStore();
   }, []);
 
+  useEffect(() => {
+    fetchNotifications();
+  }, [navigation]);
+
   const openStorageDetails = async (storage_id) => {
     const { data, error } = await supabase
       .from("storages")
