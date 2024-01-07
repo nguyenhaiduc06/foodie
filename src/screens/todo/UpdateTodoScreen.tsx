@@ -30,6 +30,7 @@ export const UpdateTodoScreen: FC<ScreenProps> = (props) => {
   const [amount, setAmount] = useState(todo.amount);
   const [updating, setUpdating] = useState(false);
   const updateTodo = useTodoStore((s) => s.updateTodo);
+  const deleteTodo = useTodoStore((s) => s.deleteTodo);
 
   useEffect(() => {
     navigation.setOptions({
@@ -51,6 +52,7 @@ export const UpdateTodoScreen: FC<ScreenProps> = (props) => {
         {
           text: "Xóa",
           style: "destructive",
+          onPress: submitDelete,
         },
         {
           text: "Hủy",
@@ -64,7 +66,12 @@ export const UpdateTodoScreen: FC<ScreenProps> = (props) => {
     setUpdating(true);
     await updateTodo(todo.id, { date, name, amount });
     setUpdating(false);
-    navigation.goBack();
+    navigation.pop();
+  };
+
+  const submitDelete = async () => {
+    await deleteTodo(todo.id);
+    navigation.pop();
   };
 
   const shouldDisableSubmitButton =

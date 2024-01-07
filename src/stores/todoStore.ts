@@ -11,10 +11,7 @@ interface TodoStoreState {
   initTodoStore: () => void;
   fetchTodos: () => void;
   addTodo: (data: { name: string; amount: string; date: Date }) => void;
-  updateTodo: (
-    id: number,
-    data: { date: Date; name: string; amount: string; checked: boolean }
-  ) => void;
+  updateTodo: (id: number, data: any) => void;
   deleteTodo: (id: number) => void;
   setTodoChecked: (id: number, checked: boolean) => void;
   setDate: (date: Date) => void;

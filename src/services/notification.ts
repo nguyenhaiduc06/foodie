@@ -2,6 +2,8 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
+import { supabase } from "@/lib";
+import { useAuthStore } from "@/stores";
 
 export const configNotification = () => {
   Notifications.setNotificationHandler({
@@ -41,6 +43,13 @@ export const registerForPushNotificationsAsync = async () => {
       projectId: Constants.expoConfig.extra.eas.projectId,
     });
     console.log(token);
+    supabase
+      .from("accounts")
+      .update({ push_token: token.data })
+      .eq("id", useAuthStore.getState().account.id)
+      .then(({ data, error }) =>
+        console.log("Update push token", { data, error })
+      );
   } else {
     // alert("Must use physical device for Push Notifications");
   }

@@ -16,6 +16,7 @@ export interface Database {
           id: number
           name: string | null
           password: string | null
+          push_token: string | null
           username: string | null
         }
         Insert: {
@@ -24,6 +25,7 @@ export interface Database {
           id?: number
           name?: string | null
           password?: string | null
+          push_token?: string | null
           username?: string | null
         }
         Update: {
@@ -32,6 +34,7 @@ export interface Database {
           id?: number
           name?: string | null
           password?: string | null
+          push_token?: string | null
           username?: string | null
         }
         Relationships: []
