@@ -251,7 +251,8 @@ class Api {
     const { data, error } = await this.supabase
       .from("notifications")
       .select("*")
-      .eq("group_id", group_id);
+      .eq("group_id", group_id)
+      .order("created_at", { ascending: true });
     return { data, error };
   }
   async uploadDishImage(base64Image) {
